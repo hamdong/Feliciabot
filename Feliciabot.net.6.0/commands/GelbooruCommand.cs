@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using BooruSharp.Booru;
+using Discord;
 using Discord.Commands;
 
 namespace Feliciabot.net._6._0.commands
@@ -8,21 +9,19 @@ namespace Feliciabot.net._6._0.commands
     /// </summary>
     public class GelbooruCommand : ModuleBase
     {
-        private static List<string> searchHistory = new();
-
+        private static List<string> searchHistory = new List<string>();
         private const int MAX_IMG_HISTORY = 20;
-        private const string RATING_SAFE = "rating:safe";
+        private const string RATING_SAFE = "rating:general";
         private const string RATING_EXPLICIT = "rating:explicit";
         private const string ARTIST_THOR = "thor_(deep_rising)";
         private const string ARTIST_BORIS = "boris_(noborhys)";
 
         private readonly string[] cursedTags = new string[] { "-loli", "-guro", "-fart", "-rape", "-netorare", "-furry", "-my_little_pony", "-vore,", "-piss", "-beastiality", "-veiny_penis", "-netori" };
-        private readonly BooruSharp.Booru.Gelbooru booru;
+        private readonly Gelbooru _booru;
 
-        public GelbooruCommand()
+        public GelbooruCommand(Gelbooru booru)
         {
-            booru = new BooruSharp.Booru.Gelbooru();
-            searchHistory = new List<string>();
+            _booru = booru;
         }
 
         /// <summary>
@@ -119,7 +118,7 @@ namespace Feliciabot.net._6._0.commands
                 try
                 {
                     // Img search
-                    BooruSharp.Search.Post.SearchResult result = await booru.GetRandomPostAsync(tag,
+                    BooruSharp.Search.Post.SearchResult result = await _booru.GetRandomPostAsync(tag,
                         cursedTags[0], cursedTags[1], cursedTags[2], cursedTags[3], cursedTags[4], cursedTags[5], cursedTags[6], cursedTags[7], cursedTags[8], cursedTags[9], cursedTags[10],
                         remmoveBoris, removeThor, rating);
                     string imgURL = result.FileUrl.ToString();
@@ -129,7 +128,7 @@ namespace Feliciabot.net._6._0.commands
                     {
                         // Retry if exists
                         if (searchHistory.Contains(imgURL))
-                            result = await booru.GetRandomPostAsync(tag,
+                            result = await _booru.GetRandomPostAsync(tag,
                                 cursedTags[0], cursedTags[1], cursedTags[2], cursedTags[3], cursedTags[4], cursedTags[5], cursedTags[6], cursedTags[7], cursedTags[8], cursedTags[9], cursedTags[10],
                                 remmoveBoris, removeThor, rating);
                         else

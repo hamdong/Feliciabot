@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using BooruSharp.Booru;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.services;
@@ -26,7 +27,7 @@ namespace Feliciabot.net._6._0
             {
                 _client = new DiscordSocketClient(new DiscordSocketConfig { 
                     LogLevel = LogSeverity.Info,
-                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers
+                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent
                 });
                 _commands = new CommandService();
 
@@ -75,6 +76,7 @@ namespace Feliciabot.net._6._0
             .AddSingleton<WaifuClient>()
             .AddSingleton<HttpClient>()
             .AddSingleton<InteractiveService>()
+            .AddSingleton<Gelbooru>()
             .AddLavaNode(x =>
             {
                 x.SelfDeaf = true;

@@ -264,7 +264,7 @@ namespace Feliciabot.net._6._0.commands
         {
 
             // Check if user is allowed to play music
-            string playMusicResponse = CanPlayMusic(Context.Guild, Context.User);
+            string playMusicResponse = CanPlayMusic(Context.Guild, Context.User, true);
             if (!string.IsNullOrEmpty(playMusicResponse))
             {
                 await ReplyAsync(playMusicResponse);
@@ -754,8 +754,9 @@ namespace Feliciabot.net._6._0.commands
         /// </summary>
         /// <param name="guild">Guild context for the music player</param>
         /// <param name="user">User making the request</param>
+        /// <param name="checkingQueue">Ignore DJ role if checking the queue</param>
         /// <returns>Text response containing details on why the user cannot perform an action</returns>
-        private string CanPlayMusic(IGuild guild, IUser user)
+        private string CanPlayMusic(IGuild guild, IUser user, bool checkingQueue = false)
         {
             var voiceState = user as IVoiceState;
 
@@ -781,7 +782,7 @@ namespace Feliciabot.net._6._0.commands
 
             // User doesn't have the correct persmissions
             SocketGuildUser socketUser = (SocketGuildUser)user;
-            if (!socketUser.GuildPermissions.Has(GuildPermission.ManageChannels) && !socketUser.Roles.Any(x => x.Name == "DJ"))
+            if (!socketUser.GuildPermissions.Has(GuildPermission.ManageChannels) && !socketUser.Roles.Any(x => x.Name == "DJ") && !checkingQueue)
             {
                 return "You need either manage permissions access or the DJ role to use this command.";
             }

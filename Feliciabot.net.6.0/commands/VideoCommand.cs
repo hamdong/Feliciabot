@@ -65,5 +65,17 @@ namespace Feliciabot.net._6._0.commands
         {
             await Context.Channel.SendMessageAsync(BOCCHI_VIDEOS[CommandsHelper.GetRandomNumber(BOCCHI_VIDEOS.Count)]);
         }
+
+        /// <summary>
+        /// Post Sena Yippee
+        /// </summary>
+        /// <returns></returns>
+        [Alias("sena")]
+        [Command("yippee", RunMode = RunMode.Async)]
+        [Summary("Posts 'Yippee!' video. [Usage]: !yippee")]
+        public async Task Yippee()
+        {
+            await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\yippee.mov");
+        }
     }
 }
