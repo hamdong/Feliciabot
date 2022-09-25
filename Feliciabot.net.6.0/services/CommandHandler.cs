@@ -393,11 +393,17 @@ namespace Feliciabot.net._6._0.services
         /// </summary>
         /// <param name="arg">exception argument containing information</param>
         /// <returns>Task containing the message to send back to the caller</returns>
-        private Task OnWebSocketClosed(WebSocketClosedEventArgs arg)
+        private async Task OnWebSocketClosed(WebSocketClosedEventArgs arg)
         {
-            LogMessage msg = new LogMessage(LogSeverity.Error, arg.GetType().ToString(), $"Discord WebSocket connection closed with following reason: {arg.Reason}");
-            Main.LogHandler(msg);
-            return Task.CompletedTask;
+            LogMessage msg = new(LogSeverity.Error, arg.GetType().ToString(), $"Discord WebSocket connection closed with the following reason: {arg.Reason}");
+            _ = Main.LogHandler(msg);
+
+            IGuild currentGuild = _client.GetGuild(arg.GuildId);
+            var player = _lavaNode.GetPlayer(currentGuild);
+            var textChannel = player.TextChannel;
+
+            await textChannel.SendMessageAsync($"Discord WebSocket connection closed with the following reason: {arg.Reason}");
+            await _lavaNode.LeaveAsync(player.VoiceChannel);
         }
     }
 }

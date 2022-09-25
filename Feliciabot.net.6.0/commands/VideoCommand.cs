@@ -10,12 +10,18 @@ namespace Feliciabot.net._6._0.commands
     {
         private readonly string INDEED_VIDEO_LINK = "https://www.youtube.com/watch?v=T5S4r2p9x34";
         private readonly string INDEED_VIDEO_LINK_ALT = "https://www.youtube.com/watch?v=3fVo_Zy42FU";
-        private readonly List<string> BOCCHI_VIDEOS = new List<string>() {
+        private readonly List<string> BOCCHI_VIDEOS = new() {
             "https://www.youtube.com/watch?v=Q04Va_1JI04",
             "https://www.youtube.com/shorts/hbFJSrx3sg0",
             "https://www.youtube.com/watch?v=tjAsZ6bHCZE"
         };
+        private readonly List<string> YIPPEE_VIDEOS = new()
+        {
+            Environment.CurrentDirectory + @"\videos\yippee.mov",
+            Environment.CurrentDirectory + @"\videos\brigus.mp4"
+        };
         private readonly string GG_VIDEO_LINK = "https://www.youtube.com/watch?v=9nXYsmTv3Gg";
+        private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
 
         /// <summary>
         /// Post GG
@@ -26,6 +32,17 @@ namespace Feliciabot.net._6._0.commands
         public async Task GG()
         {
             await Context.Channel.SendMessageAsync(GG_VIDEO_LINK);
+        }
+
+        /// <summary>
+        /// Post Ganbare
+        /// </summary>
+        /// <returns></returns>
+        [Command("ganbare", RunMode = RunMode.Async)]
+        [Summary("Posts 'Ganbare' video. [Usage]: !gg")]
+        public async Task Ganbare()
+        {
+            await Context.Channel.SendMessageAsync(GANBARE_VIDEO_LINK);
         }
 
         /// <summary>
@@ -70,12 +87,12 @@ namespace Feliciabot.net._6._0.commands
         /// Post Sena Yippee
         /// </summary>
         /// <returns></returns>
-        [Alias("sena")]
+        [Alias("sena", "yipee")]
         [Command("yippee", RunMode = RunMode.Async)]
         [Summary("Posts 'Yippee!' video. [Usage]: !yippee")]
         public async Task Yippee()
         {
-            await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\yippee.mov");
+            await Context.Channel.SendFileAsync(YIPPEE_VIDEOS[CommandsHelper.GetRandomNumber(YIPPEE_VIDEOS.Count)]);
         }
     }
 }

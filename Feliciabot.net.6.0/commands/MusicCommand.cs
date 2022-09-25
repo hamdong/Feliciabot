@@ -662,7 +662,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task NowPlaying()
         {
             // Check if the user is allowed to perform this action
-            string playMusicResponse = CanPlayMusic(Context.Guild, Context.User);
+            string playMusicResponse = CanPlayMusic(Context.Guild, Context.User, true);
             if (!string.IsNullOrEmpty(playMusicResponse))
             {
                 await ReplyAsync(playMusicResponse);
@@ -775,9 +775,9 @@ namespace Feliciabot.net._6._0.commands
             var player = _lavaNode.GetPlayer(guild);
 
             // Bot is in different voice channel from user
-            if (voiceState.VoiceChannel != player.VoiceChannel)
+            if (voiceState.VoiceChannel.Name != player.VoiceChannel.Name)
             {
-                return "You need to be in the same voice channel as me!";
+                return $"You need to be in the same voice channel as me! Currently, I am in {player.VoiceChannel.Name}";
             }
 
             // User doesn't have the correct persmissions
