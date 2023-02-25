@@ -151,15 +151,5 @@ namespace Feliciabot.net._6._0.commands
                 }
             }
         }
-
-        //[Command("test", RunMode = RunMode.Async), Summary("Shows a random sfw image. Use tags for refined searches, otherwise it defaults to Felicia. (multiple tags are appended with +) [Usage]: !safe fire emblem+sword")]
-        //public async Task TestSearch([Summary("Image tag."), Remainder] string tag = "")
-        //{
-        //    BooruSharp.Search.Post.SearchResult result = await booru.GetRandomImageAsync("hibiki_(kantai_collection)");
-        //    await Context.Channel.SendMessageAsync("Image preview URL: " + result.previewUrl + Environment.NewLine +
-        //          "Image URL: " + result.fileUrl + Environment.NewLine +
-        //          "Image is safe: " + (result.rating == BooruSharp.Search.Post.Rating.Safe) + Environment.NewLine +
-        //          "Tags on the image: " + String.Join(", ", result.tags));
-        //}
     }
 }

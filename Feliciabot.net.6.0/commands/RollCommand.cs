@@ -15,6 +15,7 @@ namespace Feliciabot.net._6._0.commands
         private const string OUTOFCONTEXT_CHANNEL_NAME = "out_of_context";
         private readonly string waifuListPath = Environment.CurrentDirectory + @"\data\waifus.xml";
         private readonly string husbandosListPath = Environment.CurrentDirectory + @"\data\husbandos.xml";
+        private readonly int MAX_MESSAGE_SEARCH = 500;
 
         private readonly Waifu[] waifuList;
         private readonly Waifu[] husbandoList;
@@ -73,6 +74,7 @@ namespace Feliciabot.net._6._0.commands
             {
                 // Find a random channel if none exists
                 IReadOnlyCollection<SocketTextChannel> channels = ((SocketGuild)Context.Guild).TextChannels;
+                channels = channels.Where(x => !x.IsNsfw).ToList();
 
                 if (channels.Count == 0)
                 {
@@ -90,7 +92,7 @@ namespace Feliciabot.net._6._0.commands
 
             try
             {
-                IEnumerable<IMessage> oocMessages = await outOfContextChannel.GetMessagesAsync(200).FlattenAsync();
+                IEnumerable<IMessage> oocMessages = await outOfContextChannel.GetMessagesAsync(MAX_MESSAGE_SEARCH).FlattenAsync();
                 // Determine if there are messages in the channel
                 int maxMsg = oocMessages.Count();
                 if (maxMsg == 0)
@@ -195,12 +197,20 @@ namespace Feliciabot.net._6._0.commands
             {
                 var doc = XElement.Load(file);
                 var waifus = doc.Descendants("waifu")
-                    .Select(s => new Waifu
+                    .Select(s =>
                     {
-                        Name = s.Element("name").Value,
-                        Series = s.Element("series").Value,
-                        Pic = s.Element("pic").Value,
-                        Link = s.Element("link").Value
+                        var name = s.Element("name");
+                        var series = s.Element("series");
+                        var pic = s.Element("pic");
+                        var link = s.Element("link");
+
+                        return new Waifu
+                        {
+                            Name = name != null ? name.Value : "",
+                            Series = series != null ? series.Value : "",
+                            Pic = pic != null ? pic.Value : "",
+                            Link = link != null ? link.Value : "",
+                        };
                     }).ToArray();
                 return waifus;
             }

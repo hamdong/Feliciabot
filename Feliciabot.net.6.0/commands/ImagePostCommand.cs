@@ -16,6 +16,7 @@ namespace Feliciabot.net._6._0.commands
         private readonly string HOME_IMAGE_PATH = Environment.CurrentDirectory + @"\img\home.jpg";
         private readonly string PATHETIC_IMAGE_PATH = Environment.CurrentDirectory + @"\img\pathetic.png";
         private readonly string POG_IMAGE_PATH = Environment.CurrentDirectory + @"\img\pog.jpg";
+        private readonly string REGRESSING_IMAGE_PATH = Environment.CurrentDirectory + @"\img\regressing.jpg";
         private readonly string SHOCK_IMAGE_PATH = Environment.CurrentDirectory + @"\img\shock.jpg";
         private readonly string STARE_IMAGE_PATH = Environment.CurrentDirectory + @"\img\stare.gif";
         private readonly string STUPID_IMAGE_PATH = Environment.CurrentDirectory + @"\img\stupid.png";
@@ -118,6 +119,17 @@ namespace Feliciabot.net._6._0.commands
         public async Task Pog()
         {
             await PostToChannel(POG_IMAGE_PATH);
+        }
+
+        /// <summary>
+        /// Post regressing
+        /// </summary>
+        /// <returns></returns>
+        [Command("regressing", RunMode = RunMode.Async)]
+        [Summary("Posts 'regressing' meme. [Usage]: !regressing")]
+        public async Task Regressing()
+        {
+            await PostToChannel(REGRESSING_IMAGE_PATH);
         }
 
         /// <summary>

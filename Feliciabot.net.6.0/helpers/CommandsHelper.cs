@@ -1,11 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Feliciabot.net._6._0.helpers
 {
@@ -170,14 +165,14 @@ namespace Feliciabot.net._6._0.helpers
         public static string GetMessagesToQuote(List<IMessage> messagesList, IUser? mentionedUser = null)
         {
             const int MAX_QUOTES = 3;
-            Random randomSeed = new Random();
+            Random randomSeed = new();
             string quotedMessage = "";
 
             try
             {
                 for (int i = 0; i < MAX_QUOTES; i++)
                 {
-                    int randIndex = randomSeed.Next(messagesList.Count());
+                    int randIndex = randomSeed.Next(messagesList.Count);
                     quotedMessage += messagesList.ElementAt(randIndex) + "\n";
                     messagesList.RemoveAt(randIndex);
                     if (messagesList.Count == 0)
@@ -203,17 +198,17 @@ namespace Feliciabot.net._6._0.helpers
         /// <returns>Message content as string with url to a random attachment</returns>
         public static string GetMessageWithRandomAttachment(IMessage message)
         {
-            if (message.Content != string.Empty && message.Attachments.Count() > 0)
+            if (message.Content != string.Empty && message.Attachments.Any())
             {
-                int randomAttachment = GetRandomNumber(message.Attachments.Count());
+                int randomAttachment = GetRandomNumber(message.Attachments.Count);
                 return message.Content + " " + message.Attachments.ElementAt(randomAttachment).Url;
             }
-            else if (message.Content == string.Empty && message.Attachments.Count() > 0)
+            else if (message.Content == string.Empty && message.Attachments.Any())
             {
-                int randomAttachment = GetRandomNumber(message.Attachments.Count());
+                int randomAttachment = GetRandomNumber(message.Attachments.Count);
                 return message.Attachments.ElementAt(randomAttachment).Url;
             }
-            else if (message.Content != string.Empty && message.Attachments.Count() == 0)
+            else if (message.Content != string.Empty && !message.Attachments.Any())
             {
                 return message.Content;
             }

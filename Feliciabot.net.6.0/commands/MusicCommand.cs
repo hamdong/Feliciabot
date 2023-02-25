@@ -14,7 +14,6 @@ namespace Feliciabot.net._6._0.commands
     {
         private readonly LavaNode _lavaNode;
         private const int NUM_TRACKS_PER_PAGE = 10;
-        private const string MARIANNE_DANCE_EMOTE = "<a:MarianneDance:899319530269061161>";
         private readonly InteractiveService _interactiveService;
 
         /// <summary>

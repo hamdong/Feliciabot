@@ -20,7 +20,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Displays random quotes from users in channel or quotes that contain a specified keyword. [Usage]: !quote @user/keyword")]
         public async Task Quote(string searchQuery = "")
         {
-            const int MAX_MESSAGES_DOWNLOAD = 100;
+            const int MAX_MESSAGES_DOWNLOAD = 500;
             IUser? mentionedUser = null;
 
             // Get first mentioned user if applicable

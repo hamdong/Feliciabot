@@ -5,7 +5,7 @@ namespace Feliciabot.net._6._0.commands
 {
     public class EightBallCommand : ModuleBase
     {
-        private readonly string[] answers_positive = {
+        private readonly string[] proResponses = {
             "As I see it, yes",
             "It is certain!",
             "It is decidedly so!",
@@ -18,7 +18,7 @@ namespace Feliciabot.net._6._0.commands
             "You may rely on it"
         };
 
-        private readonly string[] answers_maybe = {
+        private readonly string[] midResponses = {
             "Reply hazy, try again",
             "Ask again later",
             "Better not tell you now",
@@ -26,13 +26,20 @@ namespace Feliciabot.net._6._0.commands
             "Concentrate and ask again"
         };
 
-        private readonly string[] answers_negative = {
+        private readonly string[] negResponses = {
             "Don't count on it",
             "My reply is no",
             "My sources say no",
             "Outlook not so good",
             "Very doubtful"
         };
+
+        private readonly string[][] allReponses;
+
+        public EightBallCommand()
+        {
+            allReponses = new string[][] { proResponses, midResponses, negResponses };
+        }
 
         /// <summary>
         /// Responds to a question with 8ball answers
@@ -42,34 +49,16 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Felicia will answer a question. [Usage]: !8ball")]
         public async Task EightBall([Remainder] string question = "")
         {
-            string answer;
-            if (question.Trim() == "")
+            if (string.IsNullOrEmpty(question))
             {
-                answer = "Ask a question!";
-            }
-            else
-            {
-                int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(2);
-
-                int randLineIndex;
-                switch (positiveOrNegativeResponse)
-                {
-                    case 0:
-                        randLineIndex = CommandsHelper.GetRandomNumber(answers_positive.Length - 1);
-                        answer = answers_positive[randLineIndex];
-                        break;
-                    case 1:
-                        randLineIndex = CommandsHelper.GetRandomNumber(answers_maybe.Length - 1);
-                        answer = answers_maybe[randLineIndex];
-                        break;
-                    default:
-                        randLineIndex = CommandsHelper.GetRandomNumber(answers_negative.Length - 1);
-                        answer = answers_negative[randLineIndex];
-                        break;
-                }
+                await Context.Channel.SendMessageAsync("Ask a question!");
+                return;
             }
 
-            await Context.Channel.SendMessageAsync(answer);
+            int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
+            string[] chosenResponse = allReponses[positiveOrNegativeResponse];
+            int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
+            await Context.Channel.SendMessageAsync(chosenResponse[randLineIndex]);
         }
     }
 }

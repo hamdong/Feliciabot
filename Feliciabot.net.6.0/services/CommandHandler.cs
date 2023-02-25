@@ -2,14 +2,9 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Victoria;
 using Victoria.Enums;
 using Victoria.EventArgs;
@@ -69,10 +64,10 @@ namespace Feliciabot.net._6._0.services
             _lavaNode.OnTrackStuck += OnTrackStuck;
             _lavaNode.OnWebSocketClosed += OnWebSocketClosed;
 
-            // Here we discover all of the command modules in the entry 
+            // Here we discover all of the command modules in the entry
             // assembly and load them. Starting from Discord.NET 2.0, a
             // service provider is required to be passed into the
-            // module registration method to inject the 
+            // module registration method to inject the
             // required dependencies.
             //
             // If you do not use Dependency Injection, pass null.
@@ -181,7 +176,7 @@ namespace Feliciabot.net._6._0.services
                 // Find the System (Greetings) channel
                 var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
 
-                if(channel is null) return;
+                if (channel is null) return;
 
                 // Get a random welcome message
                 int randIndex = randomSeedForDialogues.Next(greetingList.Length);

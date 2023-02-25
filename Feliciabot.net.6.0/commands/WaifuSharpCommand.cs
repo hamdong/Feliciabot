@@ -196,13 +196,13 @@ namespace Feliciabot.net._6._0.commands
         }
 
         /// <summary>
-        /// Remind user to mention a user to use these commands.
+        /// Remind user to mention a user to use these commands
         /// </summary>
-        /// <returns>Task for kiss a user</returns>
+        /// <returns>Task for reminding user to mention a user</returns>
         [Command("slap", RunMode = RunMode.Async)]
         [Summary("Remind user to mention a user to use these commands.")]
         [Alias("bite", "bully", "highfive", "hug", "nom", "lick", "pat", "poke", "kiss")]
-        public async Task Kiss()
+        public async Task ActionWithNoMention()
         {
             await Context.Channel.SendMessageAsync("You need to mention a user to use this command! :open_mouth:");
         }
@@ -239,7 +239,7 @@ namespace Feliciabot.net._6._0.commands
         private async Task PostAction(IUser user, Endpoints.Sfw action, string actionPastTense)
         {
             string text = Context.User.Username + " " + actionPastTense + " " + user.Username;
-            await PostTextWithAction(text, action, actionPastTense);
+            await PostTextWithAction(text, action);
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Feliciabot.net._6._0.commands
         private async Task PostAction(Endpoints.Sfw action, string actionPastTense)
         {
             string text = Context.User.Username + " " + actionPastTense;
-            await PostTextWithAction(text, action, actionPastTense);
+            await PostTextWithAction(text, action);
         }
 
         /// <summary>
@@ -259,9 +259,8 @@ namespace Feliciabot.net._6._0.commands
         /// </summary>
         /// <param name="text">Text to go with post</param>
         /// <param name="action">Waifusharp Endpoint Enum action</param>
-        /// <param name="actionPastTense">Action in past tense, for the message title</param>
         /// <returns></returns>
-        private async Task PostTextWithAction(string text, Endpoints.Sfw action, string actionPastTense)
+        private async Task PostTextWithAction(string text, Endpoints.Sfw action)
         {
             string imgURL = _waifuClient.GetSfwImage(action);
 

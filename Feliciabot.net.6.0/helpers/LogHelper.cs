@@ -11,11 +11,12 @@
             {
                 if (f.Contains("Feliciabot_") && f.Contains(".txt"))
                 {
-                    if (!f.Contains("_" + DateTime.Now.Month.ToString() + "_") || !f.Contains((DateTime.Now.Day - 1).ToString() + ".")
-                         && !f.Contains((DateTime.Now.Day - 2).ToString() + ".") && !f.Contains((DateTime.Now.Day).ToString() + "."))
+                    if (f.Contains("_" + DateTime.Now.Month.ToString() + "_") && (f.Contains((DateTime.Now.Day - 1).ToString() + ".")
+                         || f.Contains((DateTime.Now.Day - 2).ToString() + ".") || f.Contains((DateTime.Now.Day).ToString() + ".")))
                     {
-                        File.Delete(f);
+                        continue;
                     }
+                    File.Delete(f);
 
                 }
             }

@@ -51,7 +51,7 @@ namespace Feliciabot.net._6._0.commands
             IMessage[] culledMessagesArray = CommandsHelper.CullEmptyContentFromMessageList(pinnedMessagesArray);
 
             // Check if any text messages exist
-            if (culledMessagesArray.Count() > 0)
+            if (culledMessagesArray.Any())
             {
                 // Pick a random index from the array
                 int randIndex = CommandsHelper.GetRandomNumber(culledMessagesArray.Count());
