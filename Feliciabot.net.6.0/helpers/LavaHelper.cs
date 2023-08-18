@@ -1,6 +1,5 @@
 ﻿using Discord;
-using Victoria;
-using Victoria.Enums;
+using Victoria.Player;
 using Victoria.Responses.Search;
 
 namespace Feliciabot.net._6._0.helpers
@@ -18,7 +17,7 @@ namespace Feliciabot.net._6._0.helpers
             return (!string.IsNullOrEmpty(searchResponse.Playlist.Name));
         }
 
-        public static bool IsPlayerInUse(LavaPlayer player)
+        public static bool IsPlayerInUse(LavaPlayer<LavaTrack> player)
         {
             return (player.PlayerState == PlayerState.Playing || player.PlayerState == PlayerState.Paused);
         }
