@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
-using Victoria;
 using Victoria.Node;
 using Victoria.Node.EventArgs;
 using Victoria.Player;
@@ -38,7 +37,6 @@ namespace Feliciabot.net._6._0.services
         /// <summary>
         /// Task to run upon initialization for the connection call
         /// </summary>
-        /// <returns>Task representing the connected status</returns>
         private async Task OnReadyAsync()
         {
             if (!_lavaNode.IsConnected)
@@ -51,7 +49,6 @@ namespace Feliciabot.net._6._0.services
         /// Event triggers whenever a track ends, used for checking if the bot should initiate an auto disconnect
         /// </summary>
         /// <param name="args">Arguments containing info on the status of what caused the track end event</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task OnTrackEndAsync(TrackEndEventArg<LavaPlayer<LavaTrack>, LavaTrack> args)
         {
             var player = args.Player;
@@ -64,7 +61,7 @@ namespace Feliciabot.net._6._0.services
             // If the track was stopped, commence auto-disconnect if the queue is empty
             if (args.Reason == TrackEndReason.Stopped)
             {
-                if (player.Vueue == null || player.Vueue.Count == 0)
+                if (player.Vueue == null || !player.Vueue.Any())
                 {
                     await player.TextChannel.SendMessageAsync("Queue completed! Please add more tracks for more music!");
                     _ = InitiateDisconnectAsync(player, TimeSpan.FromMinutes(5));
@@ -73,45 +70,35 @@ namespace Feliciabot.net._6._0.services
             }
 
             // Clear the track from the queue upon it ending
-            if (!player.Vueue.TryDequeue(out var queueable))
+            if (!player.Vueue.TryDequeue(out var currentTrack))
             {
                 await player.TextChannel.SendMessageAsync("Queue completed! Please add more tracks for more music!");
-                _ = InitiateDisconnectAsync(args.Player, TimeSpan.FromMinutes(5));
+                _ = InitiateDisconnectAsync(player, TimeSpan.FromMinutes(5));
                 return;
             }
 
-            if (!(queueable is LavaTrack track))
+            if (currentTrack is null)
             {
                 await player.TextChannel.SendMessageAsync("Next item in queue is not a track.");
                 return;
             }
 
-            await args.Player.PlayAsync(track);
-
-            var builder = new EmbedBuilder();
-            string art = await track.FetchArtworkAsync();
-            builder.WithTitle(track.Title);
-            builder.AddField("Source", $"[{track.Url}]({track.Url})");
-            builder.AddField("Duration", track.Duration.ToString("hh\\:mm\\:ss"), true);
-            builder.AddField("Remaining", (track.Duration - track.Position).ToString("hh\\:mm\\:ss"), true);
-            builder.WithThumbnailUrl(art);
-            builder.WithFooter("\u200B", CommandsHelper.MARIANNE_DANCE_LINK); // unicode string added because empty string won't let footer render
-
-            await args.Player.TextChannel.SendMessageAsync($"{args.Reason}: {args.Track.Title}\nNow playing:", false, builder.Build());
+            await player.PlayAsync(currentTrack);
+            await player.TextChannel.SendMessageAsync($"{args.Reason}: {args.Track.Title}\nNow playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(player.Track));
         }
 
         /// <summary>
         /// Event triggers whenever a track starts
         /// </summary>
         /// <param name="arg">Arguments containing info on the status of what caused the track start event</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task OnTrackStartAsync(TrackStartEventArg<LavaPlayer<LavaTrack>, LavaTrack> arg)
         {
-            if (!_disconnectTokens.TryGetValue(arg.Player.VoiceChannel.Id, out var value)) return;
+            var player = arg.Player;
+            if (!_disconnectTokens.TryGetValue(player.VoiceChannel.Id, out var value)) return;
             if (value.IsCancellationRequested) return;
 
             value.Cancel(true);
-            await arg.Player.TextChannel.SendMessageAsync("Auto disconnect has been cancelled!");
+            await player.TextChannel.SendMessageAsync("Auto disconnect has been cancelled!");
         }
 
         /// <summary>
@@ -119,7 +106,6 @@ namespace Feliciabot.net._6._0.services
         /// </summary>
         /// <param name="player">Music player object to disconnect</param>
         /// <param name="timeSpan">Timespan to specify delay before disconnect</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task InitiateDisconnectAsync(LavaPlayer<LavaTrack> player, TimeSpan timeSpan)
         {
             // client was forcibly disconnected
@@ -158,33 +144,32 @@ namespace Feliciabot.net._6._0.services
         /// Call to log exception if track throws an exception
         /// </summary>
         /// <param name="arg">exception argument containing information</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task OnTrackExceptionAsync(TrackExceptionEventArg<LavaPlayer<LavaTrack>, LavaTrack> arg)
         {
-            await arg.Player.TextChannel.SendMessageAsync($"Track {arg.Track.Title} threw an exception. Exception has been logged to console.");
+            var player = arg.Player;
+            await player.TextChannel.SendMessageAsync($"Track {arg.Track.Title} threw an exception. Exception has been logged to console.");
             LogMessage msg = new LogMessage(LogSeverity.Error, arg.GetType().ToString(), arg.Exception.Message);
             await Main.LogHandler(msg);
-            arg.Player.Vueue.Enqueue(arg.Track);
-            await arg.Player.TextChannel.SendMessageAsync($"{arg.Track.Title} has been re-added to queue after throwing an exception.");
+            player.Vueue.Enqueue(arg.Track);
+            await player.TextChannel.SendMessageAsync($"{arg.Track.Title} has been re-added to queue after throwing an exception.");
         }
 
         /// <summary>
         /// Call to log exception if track is stuck
         /// </summary>
         /// <param name="arg">exception argument containing information</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task OnTrackStuckAsync(TrackStuckEventArg<LavaPlayer<LavaTrack>, LavaTrack> arg)
         {
-            await arg.Player.TextChannel.SendMessageAsync($"Track {arg.Track.Title} got stuck for {arg.Threshold}ms.");
-            arg.Player.Vueue.Enqueue(arg.Track);
-            await arg.Player.TextChannel.SendMessageAsync($"{arg.Track.Title} has been re-added to queue after getting stuck.");
+            var player = arg.Player;
+            await player.TextChannel.SendMessageAsync($"Track {arg.Track.Title} got stuck for {arg.Threshold}ms.");
+            player.Vueue.Enqueue(arg.Track);
+            await player.TextChannel.SendMessageAsync($"{arg.Track.Title} has been re-added to queue after getting stuck.");
         }
 
         /// <summary>
         /// Call to log exception if web socket connection is lost
         /// </summary>
         /// <param name="arg">exception argument containing information</param>
-        /// <returns>Task containing the message to send back to the caller</returns>
         private async Task OnWebSocketClosedAsync(WebSocketClosedEventArg arg)
         {
             LogMessage msg = new(LogSeverity.Error, arg.GetType().ToString(), $"Discord WebSocket connection closed with the following reason: {arg.Reason}");

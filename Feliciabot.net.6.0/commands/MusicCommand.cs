@@ -115,7 +115,7 @@ namespace Feliciabot.net._6._0.commands
             if (player.PlayerState == PlayerState.Playing)
             {
                 await ReplyAsync("A song is already playing!");
-                await GetTrackInfoAsEmbed("Now playing:", player.Track);
+                await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(player.Track));
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace Feliciabot.net._6._0.commands
             }
 
             var nextTrack = await player.SkipAsync();
-            await GetTrackInfoAsEmbed("Now playing:", nextTrack.Current);
+            await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(nextTrack.Current));
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Feliciabot.net._6._0.commands
 
             player.Vueue.TryDequeue(out var lavaTrack);
             await player.PlayAsync(lavaTrack);
-            await GetTrackInfoAsEmbed("Now playing:", lavaTrack);
+            await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(lavaTrack));
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace Feliciabot.net._6._0.commands
             try
             {
                 var (skipped, current) = await player.SkipAsync();
-                await GetTrackInfoAsEmbed($"Skipped: {skipped.Title}\nNow playing: {current.Title}", current);
+                await ReplyAsync($"Skipped: {skipped.Title}\nNow playing: {current.Title}", false, await LavaHelper.GetTrackInfoAsEmbedAsync(current));
             }
             catch (Exception ex)
             {
@@ -493,7 +493,7 @@ namespace Feliciabot.net._6._0.commands
             {
                 await newPlayer.PlayAsync(currentTrack);
                 await newPlayer.SeekAsync(currentTrack.Position);
-                await GetTrackInfoAsEmbed("Now playing:", currentTrack);
+                await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(currentTrack));
             }
             else
             {
@@ -510,7 +510,7 @@ namespace Feliciabot.net._6._0.commands
                 {
                     newPlayer.Vueue.TryDequeue(out var lavaTrack);
                     await newPlayer.PlayAsync(lavaTrack);
-                    await GetTrackInfoAsEmbed("Skipped to next song. Now playing:", newPlayer.Track);
+                    await ReplyAsync("Skipped to next song. Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(newPlayer.Track));
                 }
             }
         }
@@ -532,7 +532,7 @@ namespace Feliciabot.net._6._0.commands
                 return;
             }
 
-            await GetTrackInfoAsEmbed("Now playing:", player.Track);
+            await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(player.Track));
         }
 
         /// <summary>
@@ -609,27 +609,6 @@ namespace Feliciabot.net._6._0.commands
         private bool UserHasPermission(SocketGuildUser user)
         {
             return user.GuildPermissions.Has(GuildPermission.ManageChannels) || user.Roles.Any(x => x.Name == "DJ");
-        }
-
-        /// <summary>
-        /// Responds with an embeded message containing the specified track's information
-        /// </summary>
-        /// <param name="message">Message to go with the embed</param>
-        /// <param name="track">Track to display information on</param>
-        /// <returns>Embedded message containing track information</returns>
-        private async Task GetTrackInfoAsEmbed(string message, LavaTrack track)
-        {
-            var builder = new EmbedBuilder();
-            string art = await track.FetchArtworkAsync();
-
-
-            builder.WithAuthor(track.Author, CommandsHelper.MARIANNE_DANCE_LINK, track.Url);
-            builder.WithTitle(track.Title);
-            builder.WithUrl($"{track.Url}");
-            builder.AddField("Duration", track.Duration.ToString("hh\\:mm\\:ss"), true);
-            builder.AddField("Remaining", (track.Duration - track.Position).ToString("hh\\:mm\\:ss"), true);
-            builder.WithThumbnailUrl(art);
-            await ReplyAsync(message, false, builder.Build());
         }
     }
 }
