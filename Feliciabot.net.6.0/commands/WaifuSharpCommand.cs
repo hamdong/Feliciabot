@@ -24,7 +24,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a biting gif with the mentioned user
         /// </summary>
         /// <param name="user">User to bite</param>
-        /// <returns>Task for bite a user</returns>
         [Command("bite", RunMode = RunMode.Async)]
         [Summary("Bite a user. [Usage]: !bite [mentioned user]")]
         public async Task Bite(IUser user)
@@ -35,7 +34,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a blushing gif
         /// </summary>
-        /// <returns>Task for wink</returns>
         [Command("blush", RunMode = RunMode.Async)]
         [Summary("Blush. [Usage]: !blush")]
         public async Task Blush()
@@ -47,7 +45,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a bullying gif with the mentioned user
         /// </summary>
         /// <param name="user">User to bully</param>
-        /// <returns>Task for bully a user</returns>
         [Command("bully", RunMode = RunMode.Async)]
         [Summary("Bully a user. [Usage]: !bully [mentioned user]")]
         public async Task Bully(IUser user)
@@ -58,7 +55,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a cringing gif
         /// </summary>
-        /// <returns>Task for wink</returns>
         [Command("cringe", RunMode = RunMode.Async)]
         [Summary("Cringe. [Usage]: !cringe")]
         public async Task Cringe()
@@ -69,7 +65,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a crying gif
         /// </summary>
-        /// <returns>Task for cry</returns>
         [Command("cry", RunMode = RunMode.Async)]
         [Summary("Cry. [Usage]: !cry")]
         public async Task Cry()
@@ -80,7 +75,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a dancing gif
         /// </summary>
-        /// <returns>Task for dance</returns>
         [Command("dance", RunMode = RunMode.Async)]
         [Summary("Dance. [Usage]: !dance")]
         public async Task Dance()
@@ -91,7 +85,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a happy gif
         /// </summary>
-        /// <returns>Task for happy</returns>
         [Command("happy", RunMode = RunMode.Async)]
         [Summary("Happy. [Usage]: !happy")]
         public async Task Happy()
@@ -103,7 +96,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a highfiving gif with the mentioned user
         /// </summary>
         /// <param name="user">User to highfive</param>
-        /// <returns>Task for highfive a user</returns>
         [Command("highfive", RunMode = RunMode.Async)]
         [Summary("Highfive a user. [Usage]: !highfive [mentioned user]")]
         public async Task Highfive(IUser user)
@@ -115,7 +107,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a hugging gif with the mentioned user
         /// </summary>
         /// <param name="user">User to hug</param>
-        /// <returns>Task for hug a user</returns>
         [Command("hug", RunMode = RunMode.Async)]
         [Summary("Hug a user. [Usage]: !hug [mentioned user]")]
         public async Task Hug(IUser user)
@@ -127,7 +118,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a kissing gif with the mentioned user
         /// </summary>
         /// <param name="user">User to kiss</param>
-        /// <returns>Task for kiss a user</returns>
         [Command("kiss", RunMode = RunMode.Async)]
         [Summary("Kiss a user. [Usage]: !kiss [mentioned user]")]
         public async Task Kiss(IUser user)
@@ -139,7 +129,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a nomming gif with the mentioned user
         /// </summary>
         /// <param name="user">User to nom</param>
-        /// <returns>Task for nom a user</returns>
         [Command("nom", RunMode = RunMode.Async)]
         [Summary("Nom a user. [Usage]: !nom [mentioned user]")]
         public async Task Nom(IUser user)
@@ -151,7 +140,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a licking gif with the mentioned user
         /// </summary>
         /// <param name="user">User to lick</param>
-        /// <returns>Task for lick a user</returns>
         [Command("lick", RunMode = RunMode.Async)]
         [Summary("Lick a user. [Usage]: !lick [mentioned user]")]
         public async Task Lick(IUser user)
@@ -163,7 +151,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a patting gif with the mentioned user
         /// </summary>
         /// <param name="user">User to pat</param>
-        /// <returns>Task for pat a user</returns>
         [Command("pat", RunMode = RunMode.Async)]
         [Summary("Pat a user. [Usage]: !pat [mentioned user]")]
         public async Task Pat(IUser user)
@@ -175,7 +162,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a poking gif with the mentioned user
         /// </summary>
         /// <param name="user">User to poke</param>
-        /// <returns>Task for poke a user</returns>
         [Command("poke", RunMode = RunMode.Async)]
         [Summary("Poke a user. [Usage]: !poke [mentioned user]")]
         public async Task Poke(IUser user)
@@ -187,7 +173,6 @@ namespace Feliciabot.net._6._0.commands
         /// Post a slapping gif with the mentioned user
         /// </summary>
         /// <param name="user">User to slap</param>
-        /// <returns>Task for slap a user</returns>
         [Command("slap", RunMode = RunMode.Async)]
         [Summary("Slap a user. [Usage]: !slap [mentioned user]")]
         public async Task Slap(IUser user)
@@ -198,7 +183,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Remind user to mention a user to use these commands
         /// </summary>
-        /// <returns>Task for reminding user to mention a user</returns>
         [Command("slap", RunMode = RunMode.Async)]
         [Summary("Remind user to mention a user to use these commands.")]
         [Alias("bite", "bully", "highfive", "hug", "nom", "lick", "pat", "poke", "kiss")]
@@ -210,7 +194,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a smugging gif
         /// </summary>
-        /// <returns>Task for smug</returns>
         [Command("smug", RunMode = RunMode.Async)]
         [Summary("Smug. [Usage]: !smug")]
         public async Task Smug()
@@ -221,7 +204,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Post a winking gif
         /// </summary>
-        /// <returns>Task for wink</returns>
         [Command("wink", RunMode = RunMode.Async)]
         [Summary("Wink. [Usage]: !wink")]
         public async Task Wink()
@@ -235,7 +217,6 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to post action for</param>
         /// <param name="action">Waifusharp Endpoint Enum action</param>
         /// <param name="actionPastTense">Action in past tense, for the message title</param>
-        /// <returns>Task for post the action</returns>
         private async Task PostAction(IUser user, Endpoints.Sfw action, string actionPastTense)
         {
             string text = Context.User.Username + " " + actionPastTense + " " + user.Username;
@@ -247,7 +228,6 @@ namespace Feliciabot.net._6._0.commands
         /// </summary>
         /// <param name="action">Waifusharp Endpoint Enum action</param>
         /// <param name="actionPastTense">Action in past tense, for the message title</param>
-        /// <returns>Task for post the action</returns>
         private async Task PostAction(Endpoints.Sfw action, string actionPastTense)
         {
             string text = Context.User.Username + " " + actionPastTense;
@@ -259,7 +239,6 @@ namespace Feliciabot.net._6._0.commands
         /// </summary>
         /// <param name="text">Text to go with post</param>
         /// <param name="action">Waifusharp Endpoint Enum action</param>
-        /// <returns></returns>
         private async Task PostTextWithAction(string text, Endpoints.Sfw action)
         {
             string imgURL = _waifuClient.GetSfwImage(action);
