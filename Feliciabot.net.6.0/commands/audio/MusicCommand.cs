@@ -532,7 +532,8 @@ namespace Feliciabot.net._6._0.commands
                 return;
             }
 
-            await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(player.Track));
+            var track = player.Track;
+            await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(track));
         }
 
         /// <summary>

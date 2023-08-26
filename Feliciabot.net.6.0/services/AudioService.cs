@@ -11,38 +11,21 @@ namespace Feliciabot.net._6._0.services
 {
     public sealed class AudioService
     {
-        private readonly DiscordSocketClient _client;
         private readonly LavaNode _lavaNode;
         private readonly ILogger _logger;
         private readonly ConcurrentDictionary<ulong, CancellationTokenSource> _disconnectTokens;
 
-        public AudioService(DiscordSocketClient client, LavaNode lavaNode, ILoggerFactory loggerFactory)
+        public AudioService(LavaNode lavaNode, ILoggerFactory loggerFactory)
         {
-            _client = client;
             _lavaNode = lavaNode;
             _logger = loggerFactory.CreateLogger<LavaNode>();
             _disconnectTokens = new ConcurrentDictionary<ulong, CancellationTokenSource>();
-        }
 
-        public void Initialize()
-        {
-            _client.Ready += OnReadyAsync;
             _lavaNode.OnTrackEnd += OnTrackEndAsync;
             _lavaNode.OnTrackStart += OnTrackStartAsync;
             _lavaNode.OnWebSocketClosed += OnWebSocketClosedAsync;
             _lavaNode.OnTrackStuck += OnTrackStuckAsync;
             _lavaNode.OnTrackException += OnTrackExceptionAsync;
-        }
-
-        /// <summary>
-        /// Task to run upon initialization for the connection call
-        /// </summary>
-        private async Task OnReadyAsync()
-        {
-            if (!_lavaNode.IsConnected)
-            {
-                await _lavaNode.ConnectAsync();
-            }
         }
 
         /// <summary>

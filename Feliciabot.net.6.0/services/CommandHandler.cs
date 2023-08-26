@@ -2,8 +2,10 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Victoria.Node;
 
 namespace Feliciabot.net._6._0.services
 {
@@ -44,9 +46,11 @@ namespace Feliciabot.net._6._0.services
         public async Task InitializeAsync()
         {
             // client event subscriptions
+            _client.Ready += OnReadyAsync;
             _client.MessageReceived += HandleCommandAsync;
             _client.UserJoined += AnnounceJoinedUser;
             _client.UserLeft += AnnounceLeftUser;
+            _services.GetRequiredService<AudioService>();
 
             // Here we discover all of the command modules in the entry
             // assembly and load them. Starting from Discord.NET 2.0, a
@@ -65,6 +69,18 @@ namespace Feliciabot.net._6._0.services
                 commandList.Add(c.Name + "| " + c.Summary);
             }
             //HelpCommand.commands = commandList;
+        }
+
+        /// <summary>
+        /// Task to run upon initialization for the connection call
+        /// </summary>
+        private async Task OnReadyAsync()
+        {
+            LavaNode node = _services.GetRequiredService<LavaNode>();
+            if (!node.IsConnected)
+            {
+                await node.ConnectAsync();
+            }
         }
 
         private async Task HandleCommandAsync(SocketMessage messageParam)

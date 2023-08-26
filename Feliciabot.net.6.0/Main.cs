@@ -16,7 +16,6 @@ namespace Feliciabot.net._6._0
     {
         private DiscordSocketClient _client = new();
         private CommandService _commands = new();
-        private LavaNode _avaNode = new(new DiscordSocketClient(), new NodeConfiguration(), null);
         private readonly string clientTokenPath = Environment.CurrentDirectory + @"\ignore\token.txt";
 
         /// <summary>
@@ -34,8 +33,6 @@ namespace Feliciabot.net._6._0
                     GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent
                 });
                 _commands = new CommandService();
-                var loggerFactory = (ILoggerFactory)new LoggerFactory();
-                _avaNode = new LavaNode(_client, new NodeConfiguration(), loggerFactory.CreateLogger<LavaNode>());
 
                 // Subscribe the logging handler to both the client and the CommandService.
                 _client.Log += LogHandler;
@@ -71,7 +68,6 @@ namespace Feliciabot.net._6._0
 
             // Initialize commands
             await BuildServiceProvider().GetRequiredService<CommandHandler>().InitializeAsync();
-            BuildServiceProvider().GetRequiredService<AudioService>().Initialize();
 
             // Block this task until the program is closed
             await Task.Delay(-1);
@@ -85,8 +81,8 @@ namespace Feliciabot.net._6._0
             .AddSingleton<InteractiveService>()
             .AddSingleton<Gelbooru>()
             .AddLogging()
-            .AddLavaNode(x => x.SelfDeaf = true)
-            .AddSingleton(_avaNode)
+            .AddSingleton<NodeConfiguration>()
+            .AddSingleton<LavaNode>()
             .AddSingleton<AudioService>()
             .AddSingleton<CommandHandler>()
             .BuildServiceProvider();
