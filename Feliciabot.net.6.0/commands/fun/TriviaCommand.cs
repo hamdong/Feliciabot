@@ -10,7 +10,6 @@ namespace Feliciabot.net._6._0.commands
     public class TriviaCommand : ModuleBase
     {
         private readonly string[] triviasList;
-
         private readonly string triviasPath = Environment.CurrentDirectory + @"\data\trivias.txt";
 
         /// <summary>
@@ -24,7 +23,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Displays random trivia
         /// </summary>
-        /// <returns>Post trivia to message channel</returns>
         [Command("trivia", RunMode = RunMode.Async)]
         [Alias("triv")]
         [Summary("Displays random trivia. [Usage]: !trivia, !triv")]
@@ -38,31 +36,22 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Gets a random pinned message from the list of pins in the current channel
         /// </summary>
-        /// <returns>Posts random pinned test message in the channel</returns>
         [Command("pin", RunMode = RunMode.Async)]
         [Summary("Displays random pinned channel text message. [Usage]: !pin")]
         public async Task Pin()
         {
-            // Get all pinned messages
             IEnumerable<IMessage> pinnedMessages = await Context.Channel.GetPinnedMessagesAsync();
-
-            // Convert to array
             IMessage[] pinnedMessagesArray = pinnedMessages.ToArray();
-            IMessage[] culledMessagesArray = CommandsHelper.CullEmptyContentFromMessageList(pinnedMessagesArray);
+            IMessage[] culledMessagesArray = CommandsHelper.CullEmptyContentFromMessageList(pinnedMessagesArray.ToArray());
 
-            // Check if any text messages exist
-            if (culledMessagesArray.Any())
-            {
-                // Pick a random index from the array
-                int randIndex = CommandsHelper.GetRandomNumber(culledMessagesArray.Count());
-
-                // Display message
-                await Context.Channel.SendMessageAsync(culledMessagesArray[randIndex].Content);
-            }
-            else
+            if (!culledMessagesArray.Any())
             {
                 await Context.Channel.SendMessageAsync("Couldn't find a pinned text message. :confused:");
+                return;
             }
+
+            int randIndex = CommandsHelper.GetRandomNumber(culledMessagesArray.Length);
+            await Context.Channel.SendMessageAsync(culledMessagesArray[randIndex].Content);
         }
     }
 }
