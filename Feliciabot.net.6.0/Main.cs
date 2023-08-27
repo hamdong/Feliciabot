@@ -5,8 +5,6 @@ using Discord.WebSocket;
 using Feliciabot.net._6._0.services;
 using Fergun.Interactive;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Victoria;
 using Victoria.Node;
 using WaifuSharp;
 
@@ -21,49 +19,36 @@ namespace Feliciabot.net._6._0
         /// <summary>
         /// Asynchronous call to log in and setup command services
         /// </summary>
-        /// <returns>Nothing, run until manually closed</returns>
         public async Task MainAsync()
         {
-            //Server login
             try
             {
-                _client = new DiscordSocketClient(new DiscordSocketConfig
-                {
-                    LogLevel = LogSeverity.Info,
-                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent
-                });
+                _client = new DiscordSocketClient(GenerateNewConfig());
                 _commands = new CommandService();
 
                 // Subscribe the logging handler to both the client and the CommandService.
                 _client.Log += LogHandler;
                 _commands.Log += LogHandler;
-
-                //Clear previous logs
                 LogHelper.ClearPreviousLogs();
 
-                if (File.Exists(clientTokenPath))
-                {
-                    string token = File.ReadAllText(clientTokenPath);
-
-                    // Login and connect.
-                    await _client.LoginAsync(TokenType.Bot, token);
-                    await _client.StartAsync();
-                    await _client.SetGameAsync("!icanhelp");
-                }
-                else
+                if (!File.Exists(clientTokenPath))
                 {
                     Console.WriteLine("Can't find token. Aborting.");
                     Console.ReadLine();
+                    return;
                 }
+
+                // Login and connect
+                string token = File.ReadAllText(clientTokenPath);
+                await _client.LoginAsync(TokenType.Bot, token);
+                await _client.StartAsync();
+                await _client.SetGameAsync("!icanhelp");
             }
             catch (OperationCanceledException ex)
             {
                 // Check ex.CancellationToken.IsCancellationRequested here.
                 // If false, it's pretty safe to assume it was a timeout.
-                if (!ex.CancellationToken.IsCancellationRequested)
-                {
-                    LogHelper.Log(ex.Message);
-                }
+                if (!ex.CancellationToken.IsCancellationRequested) LogHelper.Log(ex.Message);
             }
 
             // Initialize commands
@@ -73,6 +58,9 @@ namespace Feliciabot.net._6._0
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// Service Registration
+        /// </summary>
         public IServiceProvider BuildServiceProvider() => new ServiceCollection()
             .AddSingleton(_client)
             .AddSingleton(_commands)
@@ -87,6 +75,10 @@ namespace Feliciabot.net._6._0
             .AddSingleton<CommandHandler>()
             .BuildServiceProvider();
 
+        /// <summary>
+        /// Log Handler
+        /// </summary>
+        /// <param name="message">Message received to log</param>
         public static Task LogHandler(LogMessage message)
         {
             switch (message.Severity)
@@ -110,8 +102,22 @@ namespace Feliciabot.net._6._0
             LogHelper.Log(msg);
             Console.WriteLine(msg);
             Console.ResetColor();
-
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Creates a new config file to be used with the client
+        /// </summary>
+        private static DiscordSocketConfig GenerateNewConfig()
+        {
+            var config = new DiscordSocketConfig()
+            {
+                LogLevel = LogSeverity.Info,
+                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent
+            };
+            config.GatewayIntents &= ~GatewayIntents.GuildScheduledEvents;
+            config.GatewayIntents &= ~GatewayIntents.GuildInvites;
+            return config;
         }
     }
 }
