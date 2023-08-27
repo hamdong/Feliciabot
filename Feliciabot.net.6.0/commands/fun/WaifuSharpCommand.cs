@@ -26,20 +26,14 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to bite</param>
         [Command("bite", RunMode = RunMode.Async)]
         [Summary("Bite a user. [Usage]: !bite [mentioned user]")]
-        public async Task Bite(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Bite, "bit");
-        }
+        public async Task Bite(IUser user) => await PostAction(user, Endpoints.Sfw.Bite, "bit");
 
         /// <summary>
         /// Post a blushing gif
         /// </summary>
         [Command("blush", RunMode = RunMode.Async)]
         [Summary("Blush. [Usage]: !blush")]
-        public async Task Blush()
-        {
-            await PostAction(Endpoints.Sfw.Blush, "is blushing");
-        }
+        public async Task Blush() => await PostAction(Endpoints.Sfw.Blush, "is blushing");
 
         /// <summary>
         /// Post a bullying gif with the mentioned user
@@ -47,50 +41,35 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to bully</param>
         [Command("bully", RunMode = RunMode.Async)]
         [Summary("Bully a user. [Usage]: !bully [mentioned user]")]
-        public async Task Bully(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Bully, "bullied");
-        }
+        public async Task Bully(IUser user) => await PostAction(user, Endpoints.Sfw.Bully, "bullied");
 
         /// <summary>
         /// Post a cringing gif
         /// </summary>
         [Command("cringe", RunMode = RunMode.Async)]
         [Summary("Cringe. [Usage]: !cringe")]
-        public async Task Cringe()
-        {
-            await PostAction(Endpoints.Sfw.Cringe, "is cringing");
-        }
+        public async Task Cringe() => await PostAction(Endpoints.Sfw.Cringe, "is cringing");
 
         /// <summary>
         /// Post a crying gif
         /// </summary>
         [Command("cry", RunMode = RunMode.Async)]
         [Summary("Cry. [Usage]: !cry")]
-        public async Task Cry()
-        {
-            await PostAction(Endpoints.Sfw.Cry, "is crying");
-        }
+        public async Task Cry() => await PostAction(Endpoints.Sfw.Cry, "is crying");
 
         /// <summary>
         /// Post a dancing gif
         /// </summary>
         [Command("dance", RunMode = RunMode.Async)]
         [Summary("Dance. [Usage]: !dance")]
-        public async Task Dance()
-        {
-            await PostAction(Endpoints.Sfw.Dance, "is dancing");
-        }
+        public async Task Dance() => await PostAction(Endpoints.Sfw.Dance, "is dancing");
 
         /// <summary>
         /// Post a happy gif
         /// </summary>
         [Command("happy", RunMode = RunMode.Async)]
         [Summary("Happy. [Usage]: !happy")]
-        public async Task Happy()
-        {
-            await PostAction(Endpoints.Sfw.Happy, "is happy");
-        }
+        public async Task Happy() => await PostAction(Endpoints.Sfw.Happy, "is happy");
 
         /// <summary>
         /// Post a highfiving gif with the mentioned user
@@ -98,10 +77,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to highfive</param>
         [Command("highfive", RunMode = RunMode.Async)]
         [Summary("Highfive a user. [Usage]: !highfive [mentioned user]")]
-        public async Task Highfive(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Highfive, "highfived");
-        }
+        public async Task Highfive(IUser user) => await PostAction(user, Endpoints.Sfw.Highfive, "highfived");
 
         /// <summary>
         /// Post a hugging gif with the mentioned user
@@ -109,10 +85,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to hug</param>
         [Command("hug", RunMode = RunMode.Async)]
         [Summary("Hug a user. [Usage]: !hug [mentioned user]")]
-        public async Task Hug(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Hug, "hugged");
-        }
+        public async Task Hug(IUser user) => await PostAction(user, Endpoints.Sfw.Hug, "hugged");
 
         /// <summary>
         /// Post a kissing gif with the mentioned user
@@ -120,10 +93,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to kiss</param>
         [Command("kiss", RunMode = RunMode.Async)]
         [Summary("Kiss a user. [Usage]: !kiss [mentioned user]")]
-        public async Task Kiss(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Kiss, "kissed");
-        }
+        public async Task Kiss(IUser user) => await PostAction(user, Endpoints.Sfw.Kiss, "kissed");
 
         /// <summary>
         /// Post a nomming gif with the mentioned user
@@ -131,10 +101,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to nom</param>
         [Command("nom", RunMode = RunMode.Async)]
         [Summary("Nom a user. [Usage]: !nom [mentioned user]")]
-        public async Task Nom(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Nom, "nommed");
-        }
+        public async Task Nom(IUser user) => await PostAction(user, Endpoints.Sfw.Nom, "nommed");
 
         /// <summary>
         /// Post a licking gif with the mentioned user
@@ -142,10 +109,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to lick</param>
         [Command("lick", RunMode = RunMode.Async)]
         [Summary("Lick a user. [Usage]: !lick [mentioned user]")]
-        public async Task Lick(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Lick, "licked");
-        }
+        public async Task Lick(IUser user) => await PostAction(user, Endpoints.Sfw.Lick, "licked");
 
         /// <summary>
         /// Post a patting gif with the mentioned user
@@ -153,10 +117,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to pat</param>
         [Command("pat", RunMode = RunMode.Async)]
         [Summary("Pat a user. [Usage]: !pat [mentioned user]")]
-        public async Task Pat(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Pat, "patted");
-        }
+        public async Task Pat(IUser user) => await PostAction(user, Endpoints.Sfw.Pat, "patted");
 
         /// <summary>
         /// Post a poking gif with the mentioned user
@@ -164,10 +125,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to poke</param>
         [Command("poke", RunMode = RunMode.Async)]
         [Summary("Poke a user. [Usage]: !poke [mentioned user]")]
-        public async Task Poke(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Poke, "poked");
-        }
+        public async Task Poke(IUser user) => await PostAction(user, Endpoints.Sfw.Poke, "poked");
 
         /// <summary>
         /// Post a slapping gif with the mentioned user
@@ -175,10 +133,7 @@ namespace Feliciabot.net._6._0.commands
         /// <param name="user">User to slap</param>
         [Command("slap", RunMode = RunMode.Async)]
         [Summary("Slap a user. [Usage]: !slap [mentioned user]")]
-        public async Task Slap(IUser user)
-        {
-            await PostAction(user, Endpoints.Sfw.Slap, "slapped");
-        }
+        public async Task Slap(IUser user) => await PostAction(user, Endpoints.Sfw.Slap, "slapped");
 
         /// <summary>
         /// Remind user to mention a user to use these commands
