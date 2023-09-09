@@ -7,6 +7,7 @@ using Fergun.Interactive;
 using Microsoft.Extensions.DependencyInjection;
 using Victoria.Node;
 using WaifuSharp;
+using YoutubeSearchApi.Net.Services;
 
 namespace Feliciabot.net._6._0
 {
@@ -68,6 +69,7 @@ namespace Feliciabot.net._6._0
             .AddSingleton<HttpClient>()
             .AddSingleton<InteractiveService>()
             .AddSingleton<Gelbooru>()
+            .AddSingleton<YoutubeSearchClient>()
             .AddLogging()
             .AddSingleton<NodeConfiguration>()
             .AddSingleton<LavaNode>()
