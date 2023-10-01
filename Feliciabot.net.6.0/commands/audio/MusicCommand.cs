@@ -1,13 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Victoria.Responses.Search;
 using Feliciabot.net._6._0.helpers;
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
 using Victoria.Node;
 using Victoria.Player;
-using Victoria;
+using Victoria.Responses.Search;
 
 namespace Feliciabot.net._6._0.commands
 {
@@ -35,10 +34,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Checks the status of the music player connection. [Usage] !musicplayerstatus")]
         public async Task MusicPlayerStatus()
         {
-            if (_lavaNode.IsConnected)
-                await ReplyAsync("Music player is connected! :smiley:");
-            else
-                await ReplyAsync("Music player is not connected! :scream:");
+            await ReplyAsync(_lavaNode.IsConnected ? "Player is connected! :smiley:" : "Player is not connected! :scream:");
         }
 
         /// <summary>
@@ -57,20 +53,12 @@ namespace Feliciabot.net._6._0.commands
             if (_lavaNode.HasPlayer(Context.Guild))
             {
                 var getPlayerSuccess = _lavaNode.TryGetPlayer(Context.Guild, out LavaPlayer<LavaTrack> player);
-                if (getPlayerSuccess)
-                {
-                    await ReplyAsync($"I've already joined in voice channel {player.VoiceChannel}.");
-                }
-                else
-                {
-                    await ReplyAsync($"Unable to get player :(!");
-                }
+                await ReplyAsync(getPlayerSuccess ? $"I've already joined in voice channel {player.VoiceChannel}." : $"Unable to get player :(!");
                 return;
             }
 
-            var voiceState = Context.User as IVoiceState;
 
-            if (voiceState is null)
+            if (Context.User is not IVoiceState voiceState)
             {
                 await ReplyAsync($"Unable to determine voice state (null). Cannot join channel.");
                 return;
@@ -345,13 +333,6 @@ namespace Feliciabot.net._6._0.commands
                 return;
             }
 
-            /*TODO: Might not need this?
-            if (player.PlayerState == PlayerState.Stopped)
-            {
-                await ReplyAsync("Cannot pause stopped music. :confused:");
-                return;
-            }*/
-
             await player.PauseAsync();
             await ReplyAsync("Paused music.");
         }
@@ -435,83 +416,6 @@ namespace Feliciabot.net._6._0.commands
             catch (Exception exception)
             {
                 await ReplyAsync(exception.Message);
-            }
-        }
-
-        /// <summary>
-        /// Reconnect to the bot to vc, retaining the current playlist if there is one
-        /// </summary>
-        [Alias("rc")]
-        [Command("reconnect", RunMode = RunMode.Async)]
-        [Summary("Reconnects bot to voice channel and retains the current queue. [Usage] !reconnect, rc")]
-        public async Task Reconnect()
-        {
-            LavaPlayer<LavaTrack>? player = await GetPlayer();
-            if (player == null) return;
-
-            List<LavaTrack> currentQueue = new();
-            LavaTrack? currentTrack = null;
-            var channel = player.VoiceChannel;
-
-            // Get the current track if there is one
-            if (player.Track != null)
-            {
-                currentTrack = player.Track;
-                await ReplyAsync($"Current track has been stored!");
-            }
-
-            // Get all tracks in the queue
-            if (player.Vueue.Any())
-            {
-                currentQueue = player.Vueue.ToList();
-                await ReplyAsync($"Current queue has been stored!");
-            }
-
-            // Disconnect from voice channel
-            try
-            {
-                await player.StopAsync();
-                await _lavaNode.LeaveAsync(channel);
-                await ReplyAsync($"Leaving voice channel {channel.Name}.");
-            }
-            catch (InvalidOperationException e)
-            {
-                await ReplyAsync($"Command failed with the following error message: {e.Message}. Try running again.");
-                return;
-            }
-
-            // Rejoin voice channel
-            await _lavaNode.JoinAsync(channel, Context.Channel as ITextChannel);
-            await ReplyAsync($"Reconnected to {channel.Name}!");
-
-            // Get the new player
-            LavaPlayer<LavaTrack>? newPlayer = await GetPlayer();
-            if (newPlayer == null) return;
-
-            // Play the current track upon reconnect and seek to previous position
-            if (currentTrack != null)
-            {
-                await newPlayer.PlayAsync(currentTrack);
-                await newPlayer.SeekAsync(currentTrack.Position);
-                await ReplyAsync("Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(currentTrack));
-            }
-            else
-            {
-                await ReplyAsync($"Current track was lost. :sob:");
-            }
-
-            // Queue up the remaining songs in the current queue
-            if (currentQueue.Any())
-            {
-                newPlayer.Vueue.Enqueue(currentQueue);
-                await ReplyAsync($"Enqueued {currentQueue.Count} tracks.");
-
-                if (player.PlayerState != PlayerState.Playing)
-                {
-                    newPlayer.Vueue.TryDequeue(out var lavaTrack);
-                    await newPlayer.PlayAsync(lavaTrack);
-                    await ReplyAsync("Skipped to next song. Now playing:", false, await LavaHelper.GetTrackInfoAsEmbedAsync(newPlayer.Track));
-                }
             }
         }
 
