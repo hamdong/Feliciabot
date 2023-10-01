@@ -1,5 +1,4 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Microsoft.Extensions.DependencyInjection;
@@ -157,41 +156,17 @@ namespace Feliciabot.net._6._0.services
         public async Task AnnounceJoinedUser(SocketGuildUser user)
         {
             var guild = user.Guild;
+            if (guild == null) return;
 
-            if (guild != null)
-            {
-                // Find the System (Greetings) channel
-                var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+            var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+            if (channel is null) return;
 
-                if (channel is null) return;
+            // Get a random welcome message
+            int randIndex = randomSeedForDialogues.Next(greetingList.Length);
+            string quoteToPost = greetingList[randIndex];
 
-                // Get a random welcome message
-                int randIndex = randomSeedForDialogues.Next(greetingList.Length);
-                string quoteToPost = greetingList[randIndex];
-
-                // Welcome the user
-                await channel.SendMessageAsync("Welcome to " + channel.Guild.Name + ", " + user.Mention + "! " + quoteToPost);
-
-                // Assign trouble role if such a role exists
-                await AssignRoleToUser(ROLE_TROUBLE, user);
-            }
-        }
-
-        /// <summary>
-        /// Assigns an existing role to a specified user, NOTE: Requires manage roles permission
-        /// </summary>
-        /// <param name="roleName">Name of existing role to assign to user</param>
-        /// <param name="user">User to assign role to</param>
-        private async Task AssignRoleToUser(string roleName, SocketGuildUser user)
-        {
-            foreach (IRole r in user.Guild.Roles)
-            {
-                if (r.Name == roleName)
-                {
-                    await user.AddRoleAsync(r);
-                    break;
-                }
-            }
+            await channel.SendMessageAsync("Welcome to " + channel.Guild.Name + ", " + user.Mention + "! " + quoteToPost);
+            await AssignRoleToUser(ROLE_TROUBLE, user);
         }
 
         /// <summary>
@@ -201,30 +176,25 @@ namespace Feliciabot.net._6._0.services
         /// <param name="user">User who left the server</param>
         public async Task AnnounceLeftUser(SocketGuild guild, SocketUser user)
         {
-            if (guild != null)
-            {
-                var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
-                if (channel is null) return;
-                await channel.SendMessageAsync("ok " + user.Username + ".");
-            }
+            if (guild == null) return;
+
+            var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+            if (channel is null) return;
+            await channel.SendMessageAsync("ok " + user.Username + ".");
         }
 
-        /// <summary>
-        /// Checks if a message contains a word in a given list
-        /// </summary>
-        /// <param name="list">list of words to check for</param>
-        /// <param name="message">message to parse through</param>
-        private static bool IsWordOccurenceInMsg(string[] list, string message)
+        private static async Task AssignRoleToUser(string roleName, SocketGuildUser user)
         {
-            foreach (string s in list)
-            {
-                if (Regex.IsMatch(message, @"\b" + s + @"\b"))
-                {
-                    return true;
-                }
-            }
+            var serverRole = user.Guild.Roles.FirstOrDefault(role => role.Name == roleName);
+            if (serverRole == null) return;
+            await user.AddRoleAsync(serverRole);
+        }
 
-            return false;
+        private static bool IsWordOccurenceInMsg(string[] checkWordList, string message)
+        {
+            var escapedWords = checkWordList.Select(w => @"\b" + Regex.Escape(w) + @"\b");
+            bool containsWord = escapedWords.Any(pattern => Regex.IsMatch(message, pattern));
+            return containsWord;
         }
     }
 }
