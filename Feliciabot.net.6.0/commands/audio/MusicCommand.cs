@@ -502,7 +502,7 @@ namespace Feliciabot.net._6._0.commands
                 }
             }
 
-            if (voiceState?.VoiceChannel.Name != player?.VoiceChannel.Name)
+            if ((voiceState?.VoiceChannel is null || player?.VoiceChannel is null) || voiceState.VoiceChannel.Name != player.VoiceChannel.Name)
             {
                 await ReplyAsync($"You must in the same voice channel as me! Currently, I am in {player?.VoiceChannel.Name}");
                 return null;
