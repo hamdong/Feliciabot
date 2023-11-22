@@ -18,17 +18,9 @@ namespace Feliciabot.net._6._0.commands
             "https://www.youtube.com/watch?v=tjAsZ6bHCZE"
         };
 
-        private readonly List<string> YIPPEE_VIDEOS = new()
-        {
-            Environment.CurrentDirectory + @"\videos\yippee.mov",
-            Environment.CurrentDirectory + @"\videos\brigus.mp4",
-            Environment.CurrentDirectory + @"\videos\yieaaa.mov",
-            Environment.CurrentDirectory + @"\videos\yippbo.mp4",
-            Environment.CurrentDirectory + @"\videos\yippee-magic.mp4"
-        };
-
         private readonly string GG_VIDEO_LINK = "https://www.youtube.com/watch?v=9nXYsmTv3Gg";
         private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
+        private readonly string YIPPEE_FOLDER_PATH = Path.Combine(Environment.CurrentDirectory, "videos", "yippee");
 
         /// <summary>
         /// Post GG
@@ -125,7 +117,7 @@ namespace Feliciabot.net._6._0.commands
         }
 
         /// <summary>
-        /// Post Sena Yippee
+        /// Post Yippee
         /// </summary>
         /// <returns></returns>
         [Alias("sena", "yipee")]
@@ -133,7 +125,17 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Posts 'Yippee!' video. [Usage]: !yippee")]
         public async Task Yippee()
         {
-            await Context.Channel.SendFileAsync(YIPPEE_VIDEOS[CommandsHelper.GetRandomNumber(YIPPEE_VIDEOS.Count)]);
+            var videoFiles = Directory.GetFiles(YIPPEE_FOLDER_PATH, "*.*")
+                .Where(s => Path.GetExtension(s).Equals(".mov", StringComparison.OrdinalIgnoreCase) ||
+                Path.GetExtension(s).Equals(".mp4", StringComparison.OrdinalIgnoreCase));
+
+            if (!videoFiles.Any())
+            {
+                await Context.Channel.SendMessageAsync("No yippee videos found...");
+            }
+
+            var yippeeVideo = videoFiles.ElementAt(CommandsHelper.GetRandomNumber(videoFiles.Count()));
+            await Context.Channel.SendFileAsync(yippeeVideo);
         }
     }
 }
