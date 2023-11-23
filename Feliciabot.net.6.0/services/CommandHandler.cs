@@ -44,8 +44,8 @@ namespace Feliciabot.net._6._0.services
 
         public async Task InitializeAsync()
         {
-            // client event subscriptions
-            _client.Ready += OnReadyAsync;
+            _client.Connected += OnConnectedAsync;
+            _client.Disconnected += OnDisconnectedAsync;
             _client.MessageReceived += HandleCommandAsync;
             _client.UserJoined += AnnounceJoinedUser;
             _client.UserLeft += AnnounceLeftUser;
@@ -70,16 +70,14 @@ namespace Feliciabot.net._6._0.services
             //HelpCommand.commands = commandList;
         }
 
-        /// <summary>
-        /// Task to run upon initialization for the connection call
-        /// </summary>
-        private async Task OnReadyAsync()
+        private async Task OnConnectedAsync()
         {
-            LavaNode node = _services.GetRequiredService<LavaNode>();
-            if (!node.IsConnected)
-            {
-                await node.ConnectAsync();
-            }
+            await _services.GetRequiredService<LavaNode>().ConnectAsync();
+        }
+
+        private async Task OnDisconnectedAsync(Exception arg)
+        {
+            await _services.GetRequiredService<LavaNode>().DisconnectAsync();
         }
 
         private async Task HandleCommandAsync(SocketMessage messageParam)
