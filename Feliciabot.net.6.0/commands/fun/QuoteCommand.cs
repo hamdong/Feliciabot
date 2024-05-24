@@ -4,9 +4,6 @@ using Feliciabot.net._6._0.helpers;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to quoting
-    /// </summary>
     public class QuoteCommand : ModuleBase
     {
         private const int DELAY_BEFORE_DELETE_BOT_MSG = 3000;
@@ -15,7 +12,6 @@ namespace Feliciabot.net._6._0.commands
         /// Displays random quotes from users in channel or quotes that contain a specified keyword
         /// </summary>
         /// <param name="searchQuery">User to quote if specified</param>
-        /// <returns>Post quotes to message channel</returns>
         [Command("quote", RunMode = RunMode.Async)]
         [Summary("Displays random quotes from users in channel or quotes that contain a specified keyword. [Usage]: !quote @user/keyword")]
         public async Task Quote(string searchQuery = "")

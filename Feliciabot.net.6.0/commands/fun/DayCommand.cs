@@ -2,12 +2,9 @@
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to posting Day memes
-    /// </summary>
     public class DayCommand : ModuleBase
     {
-        readonly (string videoLink, string title)[] dayEvent = new[] {
+        readonly (string videoLink, string title)[] dayEvent = [
             (Environment.CurrentDirectory + @"\videos\sunday.mov", "It's Energy Sword Sunday!"),
             (Environment.CurrentDirectory + @"\videos\monado.mp4", "It is currently Monado Monday my dude!"),
             (Environment.CurrentDirectory + @"\img\towa.png", "It's Towa Tuesday!"),
@@ -16,7 +13,7 @@ namespace Feliciabot.net._6._0.commands
             (Environment.CurrentDirectory + @"\img\felicia_img\felicia_stare.gif", "It's Felicia Friday!"),
             (Environment.CurrentDirectory + @"\img\radical.png", "You have entered Radical Saturday"),
             ("","If you're seeing this message that means we've fallen out of the timeline")
-        };
+        ];
 
         /// <summary>
         /// Posts a meme relative to the current day or time

@@ -4,9 +4,6 @@ using Discord.Commands;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Command for searching via Gelbooru API
-    /// </summary>
     public class GelbooruCommand : ModuleBase
     {
         private const int MAX_IMG_HISTORY = 20;
@@ -15,8 +12,8 @@ namespace Feliciabot.net._6._0.commands
         private const string ARTIST_THOR = "thor_(deep_rising)";
         private const string ARTIST_BORIS = "boris_(noborhys)";
 
-        private readonly static List<string> searchHistory = new();
-        private readonly string[] cursedTags = new string[] { "-loli", "-guro", "-fart", "-rape", "-netorare", "-furry", "-my_little_pony", "-vore,", "-piss", "-beastiality", "-veiny_penis", "-netori" };
+        private readonly static List<string> searchHistory = [];
+        private readonly string[] cursedTags = ["-loli", "-guro", "-fart", "-rape", "-netorare", "-furry", "-my_little_pony", "-vore,", "-piss", "-beastiality", "-veiny_penis", "-netori"];
         private readonly Gelbooru _booru;
 
         public GelbooruCommand(Gelbooru booru)

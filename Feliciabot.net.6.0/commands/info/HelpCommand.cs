@@ -4,9 +4,6 @@ using Fergun.Interactive.Pagination;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to help and bot information
-    /// </summary>
     public class HelpCommand : ModuleBase
     {
         private const int NUM_ITEMS_PER_PAGE = 10;
@@ -27,7 +24,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Posts the list of commands and their functions
         /// </summary>
-        /// <returns></returns>
         [Command("icanhelp", RunMode = RunMode.Async)]
         [Summary("Lists all commands in an embedded paginator. [Usage]: !icanhelp")]
         public async Task ICanHelp()
@@ -64,7 +60,7 @@ namespace Feliciabot.net._6._0.commands
             var pages = trackList.ToArray();
             List<PageBuilder> pagebuilder = new List<PageBuilder>();
 
-            foreach(string page in pages)
+            foreach (string page in pages)
             {
                 pagebuilder.Add(new PageBuilder().WithDescription(page));
             }

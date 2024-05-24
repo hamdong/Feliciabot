@@ -7,9 +7,6 @@ using System.Text.RegularExpressions;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to posting emotes
-    /// </summary>
     public class EmoteCommand : ModuleBase
     {
         private const int MAX_CLAPS = 12;

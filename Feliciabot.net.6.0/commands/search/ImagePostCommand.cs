@@ -2,9 +2,6 @@
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to posting random images
-    /// </summary>
     public class ImagePostCommand : ModuleBase
     {
         private readonly string AWESOME_IMAGE_PATH = Environment.CurrentDirectory + @"\img\awesome.jpg";

@@ -35,14 +35,14 @@ namespace Feliciabot.net._6._0.commands.search
         {
             var response = await _ytClient.SearchAsync(query);
 
-            if (!response.Results.Any())
+            if (response.Results.Count == 0)
             {
                 await ReplyAsync($"I wasn't able to find any results for `{query}`. :confused:");
                 return;
             }
 
             var pages = response.Results.ToArray();
-            List<PageBuilder> pagebuilder = new();
+            List<PageBuilder> pagebuilder = [];
 
             foreach (YoutubeVideo page in pages)
             {

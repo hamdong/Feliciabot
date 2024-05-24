@@ -3,9 +3,6 @@ using Discord.Commands;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to ok
-    /// </summary>
     public class OkayCommand : ModuleBase
     {
         /// <summary>

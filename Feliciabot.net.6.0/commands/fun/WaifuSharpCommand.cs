@@ -4,9 +4,6 @@ using WaifuSharp;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to WaifuSharp memes
-    /// </summary>
     public class WaifuSharpCommand : ModuleBase
     {
         private readonly WaifuClient _waifuClient;

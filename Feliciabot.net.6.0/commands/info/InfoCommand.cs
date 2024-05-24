@@ -3,15 +3,11 @@ using Discord.Commands;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to bot information
-    /// </summary>
     public class InfoCommand : ModuleBase
     {
         /// <summary>
         /// Shows legacy information on the bot
         /// </summary>
-        /// <returns></returns>
         [Command("info", RunMode = RunMode.Async)]
         [Summary("Displays legacy information on Feliciabot. [Usage]: !info")]
         public async Task Info()

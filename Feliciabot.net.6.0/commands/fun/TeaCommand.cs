@@ -4,9 +4,6 @@ using Feliciabot.net._6._0.helpers;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands for serving tea
-    /// </summary>
     public class TeaCommand : ModuleBase
     {
         private readonly string[] teaList;

@@ -4,9 +4,6 @@ using Feliciabot.net._6._0.helpers;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to getting trivia
-    /// </summary>
     public class TriviaCommand : ModuleBase
     {
         private readonly string[] triviasList;

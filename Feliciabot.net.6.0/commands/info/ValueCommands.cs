@@ -5,9 +5,6 @@ using System.Text;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to Fire Emblem class assignment
-    /// </summary>
     public class ValueCommands : ModuleBase
     {
         private readonly MD5 md5Hasher;
@@ -26,7 +23,7 @@ namespace Feliciabot.net._6._0.commands
         {
             IGuildUser userContext = (IGuildUser)Context.User;
 
-            if(userContext == null)
+            if (userContext == null)
             {
                 await Context.Channel.SendMessageAsync("Unable to find user context in the server");
                 return;

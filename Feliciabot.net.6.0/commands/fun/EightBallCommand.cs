@@ -38,13 +38,12 @@ namespace Feliciabot.net._6._0.commands
 
         public EightBallCommand()
         {
-            allReponses = new string[][] { proResponses, midResponses, negResponses };
+            allReponses = [proResponses, midResponses, negResponses];
         }
 
         /// <summary>
         /// Responds to a question with 8ball answers
         /// </summary>
-        /// <returns>Nothing, posts the answer in the channel</returns>
         [Command("8ball", RunMode = RunMode.Async)]
         [Summary("Felicia will answer a question. [Usage]: !8ball")]
         public async Task EightBall([Remainder] string question = "")

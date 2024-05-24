@@ -5,9 +5,6 @@ using Ratquaza.Pokedex2;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to pokemon pokedex
-    /// </summary>
     public class PokemonCommand : ModuleBase
     {
         private const int MAX_POKEMON_NUM = 898;
@@ -16,7 +13,6 @@ namespace Feliciabot.net._6._0.commands
         /// Gets specified pokemon pokedex entry and posts to channel
         /// </summary>
         /// <param name="pokeQuery">query to pass into pokedex search</param>
-        /// <returns>Nothing, posts pokemon pokedex entry</returns>
         [Alias("dex")]
         [Command("pokedex", RunMode = RunMode.Async)]
         [Summary("Gets specified pokemon pokedex entry and posts to channel. [Usage]: !pokedex [pikachu]")]
@@ -35,7 +31,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Gets specified pokemon pokedex entry and posts to channel
         /// </summary>
-        /// <returns>Nothing, posts pokemon pokedex entry</returns>
         [Alias("dex")]
         [Command("pokedex", RunMode = RunMode.Async)]
         [Summary("Gets specified pokemon pokedex entry and posts to channel. [Usage]: !pokedex [pikachu]")]
@@ -57,7 +52,6 @@ namespace Feliciabot.net._6._0.commands
         /// Does not actually build the embed
         /// </summary>
         /// <param name="pokeNameOrNum">pokemon name or number to query</param>
-        /// <returns>Embed containing pokemon information</returns>
         private EmbedBuilder GetPokeEmbedBuilder(string pokeNameOrNum)
         {
             Pokemon mon;

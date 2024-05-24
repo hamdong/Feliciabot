@@ -2,13 +2,10 @@
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to posting trouble
-    /// </summary>
     public class TroubleCommand : ModuleBase
     {
         private const int DELAY_BETWEEN_TROUBLE_MESSAGES = 1000;
-        private readonly string[] weveGotTroubleQuotes = { "WE'VE", "GOT", "TROUBLE!" };
+        private readonly string[] weveGotTroubleQuotes = ["WE'VE", "GOT", "TROUBLE!"];
 
         /// <summary>
         /// Posts Felicia's iconic line to the text channel dramatically

@@ -7,9 +7,6 @@ using System.Xml.Linq;
 
 namespace Feliciabot.net._6._0.commands
 {
-    /// <summary>
-    /// Commands pertaining to rolling
-    /// </summary>
     public class RollCommand : ModuleBase
     {
         private const string OUTOFCONTEXT_CHANNEL_NAME = "out_of_context";
@@ -30,7 +27,6 @@ namespace Feliciabot.net._6._0.commands
         /// Rolls the dice based on a specified max value
         /// </summary>
         /// <param name="max">max number that can be rolled on the dice</param>
-        /// <returns>Nothing, post the dice roll result in the channel</returns>
         [Command("roll", RunMode = RunMode.Async)]
         [Summary("Felicia will roll the dice for you. If no dice type specified then defaults to 6. [Usage]: !roll 6, !dice")]
         [Alias("dice")]
@@ -48,7 +44,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Flips a coin and posts the result
         /// </summary>
-        /// <returns>Nothing, posts the coin flip result in the channel</returns>
         [Command("flip", RunMode = RunMode.Async)]
         [Summary("Felicia will flip a coin for you. [Usage]: !flip")]
         public async Task CoinFlip()
@@ -62,7 +57,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Posts a random message from the #out_of_context channel
         /// </summary>
-        /// <returns>Nothing, posts a random message from the #out_of_context channel</returns>
         [Command("ooc", RunMode = RunMode.Async)]
         [Summary("Felicia will post a random image/post from out_of_context. Requires channel named out_of_context. [Usage]: !ooc")]
         public async Task CheckRandomOutOfContext()
@@ -118,7 +112,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Roll husbando command
         /// </summary>
-        /// <returns></returns>
         [Command("rollhusbando", RunMode = RunMode.Async)]
         [Summary("Felicia will roll you a husbando. [Usage]: !rollhusbando")]
         public async Task RollHusbando()
@@ -129,7 +122,6 @@ namespace Feliciabot.net._6._0.commands
         /// <summary>
         /// Roll waifu command
         /// </summary>
-        /// <returns></returns>
         [Command("rollwaifu", RunMode = RunMode.Async)]
         [Summary("Felicia will roll you a waifu. [Usage]: !rollwaifu")]
         public async Task RollWaifu()
@@ -141,7 +133,6 @@ namespace Feliciabot.net._6._0.commands
         /// Gets a random waifu from the array
         /// </summary>
         /// <param name="waifuOrHusbandoList">List of husbandos or waifus</param>
-        /// <returns>Waifu to post</returns>
         private async Task RollFromList(Waifu[] waifuOrHusbandoList)
         {
             int randIndex = CommandsHelper.GetRandomNumber(waifuOrHusbandoList.Length);
