@@ -6,41 +6,18 @@ namespace Feliciabot.net._6._0.helpers
 {
     public static class CommandsHelper
     {
-        private const string GREETINGS_CHANNEL_NAME = "greetings";
-        private const string GENERAL_CHANNEL_NAME = "general";
         private static readonly Regex emoteRegex = new Regex("^a*:[a-zA-Z0-9_.-]*:[a-zA-Z0-9_.-]*>$");
-        public static readonly string MARIANNE_DANCE_LINK = "https://cdn.discordapp.com/emojis/899319530269061161.gif";
-
         private static Random rand = new();
 
-        /// <summary>
-        /// Determines the system channel from a specified guild
-        /// </summary>
-        /// <param name="guild">Guild to retrieve system channel from</param>
-        /// <returns>Channel object representing the system channel</returns>
         public static SocketTextChannel? GetSystemChannelFromGuild(SocketGuild guild)
         {
             var channel = GetSystemChannel(guild);
-
-            //If no system channel exists just try looking for #greetings or #general
-            if (channel == null)
-            {
-                channel = GetChannelByName(guild, GREETINGS_CHANNEL_NAME);
-            }
-
-            if (channel == null)
-            {
-                channel = GetChannelByName(guild, GENERAL_CHANNEL_NAME);
-            }
+            channel ??= GetChannelByName(guild, "greetings");
+            channel ??= GetChannelByName(guild, "general");
 
             return channel;
         }
 
-        /// <summary>
-        /// Gets the current designated system channel
-        /// </summary>
-        /// <param name="guild">Guild to check for system channel</param>
-        /// <returns>The system channel, or null if it does not exist</returns>
         public static SocketTextChannel GetSystemChannel(SocketGuild guild)
         {
             return guild.SystemChannel;
@@ -173,7 +150,7 @@ namespace Feliciabot.net._6._0.helpers
                 for (int i = 0; i < MAX_QUOTES; i++)
                 {
                     int randIndex = randomSeed.Next(messagesList.Count);
-                    quotedMessage += messagesList.ElementAt(randIndex) + "\n";
+                    quotedMessage += messagesList[randIndex] + "\n";
                     messagesList.RemoveAt(randIndex);
                     if (messagesList.Count == 0)
                         break;

@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using Feliciabot.net._6._0.helpers;
+﻿using Feliciabot.net._6._0.helpers;
+using NUnit.Framework;
 
 namespace FeliciabotTests.tests
 {
@@ -9,7 +9,7 @@ namespace FeliciabotTests.tests
         [Test]
         public void Does_Testing_Work()
         {
-            Assert.IsTrue(true);
+            Assert.That(true);
         }
 
         [Test]
@@ -17,30 +17,30 @@ namespace FeliciabotTests.tests
         {
             string path = Environment.CurrentDirectory + @"\data\greetings.txt";
             var stringArray = CommandsHelper.GetStringArrayFromFile(path);
-            Assert.IsTrue(stringArray.GetType().Name == "String[]");
+            Assert.That(stringArray.GetType().Name == "String[]");
         }
 
         [Test]
         public void IsNonCommandQuery_Returns_True_For_Normal_String()
         {
-            Assert.IsTrue(CommandsHelper.IsNonCommandQuery("Hello world"));
+            Assert.That(CommandsHelper.IsNonCommandQuery("Hello world"));
         }
 
         [Test]
         public void IsNonCommandQuery_Returns_False_For_Command_Query_String()
         {
-            Assert.IsFalse(CommandsHelper.IsNonCommandQuery(""));
-            Assert.IsFalse(CommandsHelper.IsNonCommandQuery("!Hello world"));
-            Assert.IsFalse(CommandsHelper.IsNonCommandQuery("feh!Hello world"));
-            Assert.IsFalse(CommandsHelper.IsNonCommandQuery("@Hello world"));
-            Assert.IsFalse(CommandsHelper.IsNonCommandQuery(".Hello world"));
+            Assert.That(CommandsHelper.IsNonCommandQuery(""), Is.False);
+            Assert.That(CommandsHelper.IsNonCommandQuery("!Hello world"), Is.False);
+            Assert.That(CommandsHelper.IsNonCommandQuery("feh!Hello world"), Is.False);
+            Assert.That(CommandsHelper.IsNonCommandQuery("@Hello world"), Is.False);
+            Assert.That(CommandsHelper.IsNonCommandQuery(".Hello world"), Is.False);
         }
 
         [Test]
         public void RandomNumber_Returns_Number_In_Range()
         {
             int num = CommandsHelper.GetRandomNumber(5, 1);
-            Assert.IsTrue(num >= 1 && num <= 5);
+            Assert.That(num >= 1 && num <= 5);
         }
     }
 }
