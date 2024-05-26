@@ -7,9 +7,49 @@ namespace Feliciabot.net._6._0.modules
     public sealed class RollModule : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly WaifuClient _waifuClient;
+
+        private readonly string[][] allReponses = [
+            [ "As I see it, yes",
+            "It is certain!",
+            "It is decidedly so!",
+            "Most likely!",
+            "Outlook good!",
+            "Signs point to yes",
+            "Without a doubt",
+            "Yes",
+            "Yes - definitely",
+            "You may rely on it"],[
+                "Don't count on it",
+            "My reply is no",
+            "My sources say no",
+            "Outlook not so good",
+            "Very doubtful"
+                ],
+                [ "Reply hazy, try again",
+            "Ask again later",
+            "Better not tell you now",
+            "Cannot predict now",
+            "Concentrate and ask again" ]
+    ];
+
         public RollModule(WaifuClient waifuClient)
         {
             _waifuClient = waifuClient;
+        }
+
+        [SlashCommand("8ball", "Answers a question with yes/no/maybe responses", runMode: RunMode.Async)]
+        public async Task EightBall(string question)
+        {
+            if (string.IsNullOrEmpty(question))
+            {
+                await Context.Channel.SendMessageAsync("Ask a question!");
+                return;
+            }
+
+            int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
+            string[] chosenResponse = allReponses[positiveOrNegativeResponse];
+            int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
+            await Context.Channel.SendMessageAsync(chosenResponse[randLineIndex]);
         }
 
         [SlashCommand("roll", "Rolls a 🎲 (default: 6 sided)", runMode: RunMode.Async)]
