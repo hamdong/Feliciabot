@@ -5,11 +5,8 @@ namespace Feliciabot.net._6._0.commands
 {
     public class ChairmanBanaCommand : ModuleBase
     {
-        /// <summary>
-        /// Posts bana after some delay as a response to chairman
-        /// </summary>
         [Command("chairman", RunMode = RunMode.Async)]
-        [Summary("Waits some random interval of time before replying bana. [Usage]: !chairman")]
+        [Summary("Waits some random interval of time before replying 'bana'")]
         public async Task Chairman()
         {
             int waitInterval = CommandsHelper.GetRandomNumber(60000);
