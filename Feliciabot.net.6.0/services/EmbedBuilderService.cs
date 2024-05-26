@@ -24,6 +24,16 @@ namespace Feliciabot.net._6._0.services
             return builder.Build();
         }
 
+        internal Embed GetBotInfoAsEmbed(string botInfo, string serverInfo)
+        {
+            builder.WithTitle("You want to know more about me?");
+            builder.AddField("Bot Info", botInfo);
+            builder.AddField("Server Info", serverInfo);
+            builder.WithThumbnailUrl("https://raw.githubusercontent.com/Andu2/FEH-Mass-Simulator/master/heroes/Felicia.png");
+            builder.WithColor(Color.LightGrey);
+            return builder.Build();
+        }
+
         internal Embed GetTrackInfoAsEmbed(LavalinkTrack track)
         {
             string trackUri = track.Uri is null ? "" : track.Uri.AbsoluteUri;

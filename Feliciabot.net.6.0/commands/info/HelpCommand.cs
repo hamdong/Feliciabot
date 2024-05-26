@@ -7,11 +7,8 @@ namespace Feliciabot.net._6._0.commands
     public class HelpCommand : ModuleBase
     {
         private const int NUM_ITEMS_PER_PAGE = 10;
-
-        private readonly string[] omittedCommands = {
-            "feliciabotdelete", "feliciabotclean", "feliciabotleave", "thor", "boris"
-        };
-        public static List<string> commands = new List<string>();
+        private readonly string[] omittedCommands = { "thor", "boris" };
+        public static List<string> commands = new();
         private readonly CommandService _service;
         private readonly InteractiveService _interactiveService;
 
