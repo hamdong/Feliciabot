@@ -26,11 +26,16 @@ namespace Feliciabot.net._6._0.services
 
         internal Embed GetTrackInfoAsEmbed(LavalinkTrack track)
         {
-            builder.WithAuthor(track.Author, MARIANNE_DANCE_LINK, track.Uri.AbsoluteUri);
+            string trackUri = track.Uri is null ? "" : track.Uri.AbsoluteUri;
+            string artworkUri = track.ArtworkUri is null ? "" : track.ArtworkUri.AbsoluteUri;
+            TimeSpan position = (TimeSpan)(track.StartPosition is null ? new TimeSpan() : track.StartPosition);
+
+            builder.WithAuthor(track.Author, MARIANNE_DANCE_LINK, trackUri);
             builder.WithTitle(track.Title);
             builder.WithUrl($"{track.Uri}");
             builder.AddField("Duration", track.Duration.ToString("hh\\:mm\\:ss"), true);
-            builder.WithThumbnailUrl(track.ArtworkUri.AbsoluteUri);
+            builder.AddField("Remaining", (track.Duration - position).ToString("hh\\:mm\\:ss"), true);
+            builder.WithThumbnailUrl(artworkUri);
             return builder.Build();
         }
     }
