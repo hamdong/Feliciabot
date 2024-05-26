@@ -2,57 +2,13 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
-using Feliciabot.net._6._0.models;
-using System.Xml.Linq;
 
 namespace Feliciabot.net._6._0.commands
 {
     public class RollCommand : ModuleBase
     {
         private const string OUTOFCONTEXT_CHANNEL_NAME = "out_of_context";
-        private readonly string waifuListPath = Environment.CurrentDirectory + @"\data\waifus.xml";
-        private readonly string husbandosListPath = Environment.CurrentDirectory + @"\data\husbandos.xml";
         private readonly int MAX_MESSAGE_SEARCH = 500;
-
-        private readonly Waifu[] waifuList;
-        private readonly Waifu[] husbandoList;
-
-        public RollCommand()
-        {
-            waifuList = GetListToWaifuArray(waifuListPath);
-            husbandoList = GetListToWaifuArray(husbandosListPath);
-        }
-
-        /// <summary>
-        /// Rolls the dice based on a specified max value
-        /// </summary>
-        /// <param name="max">max number that can be rolled on the dice</param>
-        [Command("roll", RunMode = RunMode.Async)]
-        [Summary("Felicia will roll the dice for you. If no dice type specified then defaults to 6. [Usage]: !roll 6, !dice")]
-        [Alias("dice")]
-        public async Task DiceRoll([Summary("Max number.")] int max = 0)
-        {
-            int randomRoll;
-
-            // If not max specified then just default to 6-sided die
-            if (max != 0) randomRoll = CommandsHelper.GetRandomNumber(max + 1, 1);
-            else randomRoll = CommandsHelper.GetRandomNumber(7, 1);
-
-            await Context.Channel.SendMessageAsync(Context.Message.Author.Username + " rolled *" + randomRoll + "*");
-        }
-
-        /// <summary>
-        /// Flips a coin and posts the result
-        /// </summary>
-        [Command("flip", RunMode = RunMode.Async)]
-        [Summary("Felicia will flip a coin for you. [Usage]: !flip")]
-        public async Task CoinFlip()
-        {
-            int headsOrTails = CommandsHelper.GetRandomNumber(2);
-            string coinFlipResult = (headsOrTails == 0) ? "Heads" : "Tails";
-
-            await Context.Channel.SendMessageAsync(Context.Message.Author.Username + " got *" + coinFlipResult + "*");
-        }
 
         /// <summary>
         /// Posts a random message from the #out_of_context channel
@@ -106,109 +62,6 @@ namespace Feliciabot.net._6._0.commands
             catch (Exception)
             {
                 await Context.Channel.SendMessageAsync("Unable to get messages from found channel: " + outOfContextChannel.Name);
-            }
-        }
-
-        /// <summary>
-        /// Roll husbando command
-        /// </summary>
-        [Command("rollhusbando", RunMode = RunMode.Async)]
-        [Summary("Felicia will roll you a husbando. [Usage]: !rollhusbando")]
-        public async Task RollHusbando()
-        {
-            await RollFromList(husbandoList);
-        }
-
-        /// <summary>
-        /// Roll waifu command
-        /// </summary>
-        [Command("rollwaifu", RunMode = RunMode.Async)]
-        [Summary("Felicia will roll you a waifu. [Usage]: !rollwaifu")]
-        public async Task RollWaifu()
-        {
-            await RollFromList(waifuList);
-        }
-
-        /// <summary>
-        /// Gets a random waifu from the array
-        /// </summary>
-        /// <param name="waifuOrHusbandoList">List of husbandos or waifus</param>
-        private async Task RollFromList(Waifu[] waifuOrHusbandoList)
-        {
-            int randIndex = CommandsHelper.GetRandomNumber(waifuOrHusbandoList.Length);
-            string name = waifuOrHusbandoList[randIndex].Name;
-            string series = waifuOrHusbandoList[randIndex].Series ?? "N/A";
-            string pic = waifuOrHusbandoList[randIndex].Pic ?? "";
-            string link = waifuOrHusbandoList[randIndex].Link ?? "N/A";
-
-            await PostWaifu(name, series, pic, link);
-        }
-
-        /// <summary>
-        /// Posts the specified waifu in the channel
-        /// </summary>
-        /// <param name="name">name of the waifu</param>
-        /// <param name="series">series the waifu is from</param>
-        /// <param name="pic">image link to the waifu</param>
-        /// <param name="link">link to source of waifu</param>
-        /// <returns>Nothing, posts the waifu in the channel</returns>
-        private async Task PostWaifu(string name, string series, string pic, string link)
-        {
-            string response;
-            if (name == "Felicia")
-            {
-                response = ":tada: " + Context.Message.Author.Username + " rolled *" + name + "* :tada:" + "*\nSeries: *" + series + "*";
-                await Context.Channel.SendMessageAsync(response);
-            }
-            else if (name == "Wrys")
-            {
-                response = Context.Message.Author.Username + " rolled *" + name + "* :sunglasses:" + "*\nSeries: *" + series + "*";
-                await Context.Channel.SendMessageAsync(response);
-            }
-            else
-            {
-                response = Context.Message.Author.Username + " rolled *" + name + "*\nSeries: *" + series + "*";
-                await Context.Channel.SendMessageAsync(response);
-            }
-
-            var builder = new EmbedBuilder();
-            builder.WithImageUrl(pic);
-            builder.WithDescription("[" + name + "](" + link + ")");
-            await Context.Channel.SendMessageAsync("", false, builder.Build());
-        }
-
-        /// <summary>
-        /// Converts a waifu block from the xml file into an array
-        /// </summary>
-        /// <param name="file">path to the xml file</param>
-        /// <returns>Array of waifus</returns>
-        private static Waifu[] GetListToWaifuArray(string file)
-        {
-            try
-            {
-                var doc = XElement.Load(file);
-                var waifus = doc.Descendants("waifu")
-                    .Select(s =>
-                    {
-                        var name = s.Element("name");
-                        var series = s.Element("series");
-                        var pic = s.Element("pic");
-                        var link = s.Element("link");
-
-                        return new Waifu
-                        {
-                            Name = name != null ? name.Value : "",
-                            Series = series != null ? series.Value : "",
-                            Pic = pic != null ? pic.Value : "",
-                            Link = link != null ? link.Value : "",
-                        };
-                    }).ToArray();
-                return waifus;
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("Waifu file not found");
-                return Array.Empty<Waifu>();
             }
         }
     }
