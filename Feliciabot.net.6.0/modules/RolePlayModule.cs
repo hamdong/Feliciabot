@@ -6,7 +6,6 @@ namespace Feliciabot.net._6._0.modules
 {
     public sealed class RolePlayModule(WaifuClient waifuClient) : InteractionModuleBase<SocketInteractionContext>
     {
-        private readonly WaifuClient _waifuClient = waifuClient;
         private readonly EmbedBuilder builder = new();
 
         [SlashCommand("bite", "Bite a user", runMode: RunMode.Async)]
@@ -74,11 +73,11 @@ namespace Feliciabot.net._6._0.modules
 
         private async Task PostTextWithAction(string text, Endpoints.Sfw action)
         {
-            string imgURL = _waifuClient.GetSfwImage(action);
+            string imgURL = waifuClient.GetSfwImage(action);
             builder.Title = text;
             builder.WithImageUrl(imgURL);
 
-            await ReplyAsync(embed: builder.Build()).ConfigureAwait(false);
+            await RespondAsync(embed: builder.Build()).ConfigureAwait(false);
         }
     }
 }

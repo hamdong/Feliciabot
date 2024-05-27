@@ -3,7 +3,7 @@ using Feliciabot.net._6._0.services;
 
 namespace Feliciabot.net._6._0.modules
 {
-    public sealed class TestModule(EmbedBuilderService embedBuilderService) : InteractionModuleBase<SocketInteractionContext>
+    public sealed class TestModule() : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("test", description: "Testing slash command.", runMode: RunMode.Async)]
         public async Task TestAsync()
@@ -14,7 +14,7 @@ namespace Feliciabot.net._6._0.modules
         [SlashCommand("embed", description: "Testing embeds.", runMode: RunMode.Async)]
         public async Task EmbedAsync()
         {
-            await RespondAsync(embed: embedBuilderService.GetTestEmbed()).ConfigureAwait(false);
+            await RespondAsync(embed: EmbedBuilderService.GetTestEmbed()).ConfigureAwait(false);
         }
     }
 }
