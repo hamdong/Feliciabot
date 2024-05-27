@@ -1,41 +1,33 @@
 ﻿using Discord;
 using Discord.Commands;
+using Feliciabot.net._6._0.services;
 
 namespace Feliciabot.net._6._0.commands
 {
-    public class InfoCommand : ModuleBase
+    public sealed class InfoCommand() : ModuleBase
     {
-        /// <summary>
-        /// Shows legacy information on the bot
-        /// </summary>
         [Command("info", RunMode = RunMode.Async)]
-        [Summary("Displays legacy information on Feliciabot. [Usage]: !info")]
+        [Summary("Displays legacy information")]
         public async Task Info()
         {
             IGuildUser owner = await Context.Guild.GetOwnerAsync();
             var users = await Context.Guild.GetUsersAsync();
 
-            string infoText = "Name: " + Context.Client.CurrentUser.Username + "\n" +
-              "Created by: Ham#1185" + "\n" +
-              "Framework: Discord.NET C#\n" +
-              "Status: " + Context.Client.CurrentUser.Status + "\n" +
-              "Currently playing: " + Context.Client.CurrentUser.Activities.FirstOrDefault(name => name.ToString() != "");
+            string botInfo =
+                $"Name: {Context.Client.CurrentUser.Username}\n" +
+                $"Created by: Ham#1185\n" +
+                $"Framework: Discord.NET C#\n" +
+                $"Status: {Context.Client.CurrentUser.Status}\n" +
+                $"Currently playing: {Context.Client.CurrentUser.Activities.FirstOrDefault(name => name.ToString() != "")}";
 
-            string serverText = "Name: " + Context.Guild.Name + "\n" +
-                "Server ID: " + Context.Guild.Id.ToString() + "\n" +
-                "Owner: " + owner.Username + "\n" +
-                "Members: " + users.Count.ToString();
+            string serverInfo =
+                $"Name: {Context.Guild.Name}\n" +
+                $"Server ID: {Context.Guild.Id}\n" +
+                $"Owner: {owner.Username}\n" +
+                $"Members: {users.Count}";
 
-            var builder = new EmbedBuilder();
-
-            builder.WithTitle("You want to know more about me?");
-            builder.AddField("Bot Info", infoText);
-            builder.AddField("Server Info", serverText);
-
-            builder.WithThumbnailUrl("https://raw.githubusercontent.com/Andu2/FEH-Mass-Simulator/master/heroes/Felicia.png");
-            builder.WithColor(Color.LightGrey);
-            await Context.User.SendMessageAsync("", false, builder.Build());
-
+            var builder = EmbedBuilderService.GetBotInfoAsEmbed(botInfo, serverInfo);
+            await Context.User.SendMessageAsync("", false, builder);
         }
     }
 }

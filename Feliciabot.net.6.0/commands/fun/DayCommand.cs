@@ -15,12 +15,9 @@ namespace Feliciabot.net._6._0.commands
             ("","If you're seeing this message that means we've fallen out of the timeline")
         ];
 
-        /// <summary>
-        /// Posts a meme relative to the current day or time
-        /// </summary>
         [Command("day", RunMode = RunMode.Async)]
         [Alias("today")]
-        [Summary("Posts a meme related to the current day or time. [Usage] !day, !today")]
+        [Summary("Posts a meme related to the current day or time")]
         public async Task Day()
         {
             var timeUtc = DateTime.UtcNow;

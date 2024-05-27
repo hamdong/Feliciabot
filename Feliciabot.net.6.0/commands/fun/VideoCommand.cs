@@ -19,52 +19,37 @@ namespace Feliciabot.net._6._0.commands
         private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
         private readonly string YIPPEE_FOLDER_PATH = Path.Combine(Environment.CurrentDirectory, "videos", "yippee");
 
-        /// <summary>
-        /// Post GG
-        /// </summary>
         [Command("gg", RunMode = RunMode.Async)]
-        [Summary("Posts 'GG' video. [Usage]: !gg")]
+        [Summary("Posts 'GG' video")]
         public async Task GG()
         {
             await Context.Channel.SendMessageAsync(GG_VIDEO_LINK);
         }
 
-        /// <summary>
-        /// Post Ganbare
-        /// </summary>
         [Command("ganbare", RunMode = RunMode.Async)]
-        [Summary("Posts 'Ganbare' video. [Usage]: !gg")]
+        [Summary("Posts 'Ganbare' video")]
         public async Task Ganbare()
         {
             await Context.Channel.SendMessageAsync(GANBARE_VIDEO_LINK);
         }
 
-        /// <summary>
-        /// Post huh video
-        /// </summary>
         [Command("huh", RunMode = RunMode.Async)]
-        [Summary("Posts huh video. [Usage]: !huh")]
+        [Summary("Posts huh video")]
         public async Task Huh()
         {
             await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\huh.mp4");
         }
 
-        /// <summary>
-        /// Post Malos hi
-        /// </summary>
         [Alias("hello", "owain")]
         [Command("hi", RunMode = RunMode.Async)]
-        [Summary("Posts 'Hi' video. [Usage]: !hi, !hello, !owain")]
+        [Summary("Posts 'Hi' video")]
         public async Task Hi()
         {
             await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\video0.mov");
         }
 
-        /// <summary>
-        /// Post indeed
-        /// </summary>
         [Command("indeed", RunMode = RunMode.Async)]
-        [Summary("Posts 'Indeed' video. [Usage]: !indeed")]
+        [Summary("Posts 'Indeed' video")]
         public async Task Indeed()
         {
             // 1 in 6 odds of posting the alternative video
@@ -74,43 +59,31 @@ namespace Feliciabot.net._6._0.commands
             await Context.Channel.SendMessageAsync(videoToPost);
         }
 
-        /// <summary>
-        /// Post shutup video
-        /// </summary>
         [Command("shutup", RunMode = RunMode.Async)]
-        [Summary("Posts shutup video. [Usage]: !shutup")]
+        [Summary("Posts shutup video")]
         public async Task Shutup()
         {
             await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\shutup.mp4");
         }
 
-        /// <summary>
-        /// Post random wahaha
-        /// </summary>
         [Command("wahaha", RunMode = RunMode.Async)]
-        [Summary("Posts random wahaha video. [Usage]: !wahaha")]
+        [Summary("Posts random wahaha video")]
         public async Task Wahaha()
         {
             await Context.Channel.SendMessageAsync(BOCCHI_VIDEOS[CommandsHelper.GetRandomNumber(BOCCHI_VIDEOS.Count)]);
         }
 
-        /// <summary>
-        /// Post what video
-        /// </summary>
         [Alias("whatareyoutalkingabout", "whatsgoinonhere")]
         [Command("what", RunMode = RunMode.Async)]
-        [Summary("Posts what are you talking about video. [Usage]: !what")]
+        [Summary("Posts what are you talking about video")]
         public async Task What()
         {
             await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\what.mov");
         }
 
-        /// <summary>
-        /// Post Yippee
-        /// </summary>
         [Alias("sena", "yipee")]
         [Command("yippee", RunMode = RunMode.Async)]
-        [Summary("Posts 'Yippee!' video. [Usage]: !yippee")]
+        [Summary("Posts 'Yippee!' video")]
         public async Task Yippee()
         {
             var videoFiles = Directory.GetFiles(YIPPEE_FOLDER_PATH, "*.*")

@@ -7,7 +7,7 @@ using Feliciabot.net._6._0;
 using Feliciabot.net._6._0.services;
 using Fergun.Interactive;
 using Lavalink4NET.Extensions;
-using Lavalink4NET.InactivityTracking.Trackers.Idle;
+using Lavalink4NET.InactivityTracking.Extensions;
 using Lavalink4NET.InactivityTracking.Trackers.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,9 +31,15 @@ try
 
     // Lavalink
     builder.Services.AddLavalink();
+    builder.Services.AddInactivityTracking();
     builder.Services.AddLogging(x => x.AddConsole().SetMinimumLevel(LogLevel.Trace));
-    builder.Services.Configure<IdleInactivityTrackerOptions>(config => { config.Timeout = TimeSpan.FromSeconds(10); })
-        .Configure<UsersInactivityTrackerOptions>(config => { config.Timeout = TimeSpan.FromSeconds(10); });
+    builder.Services.ConfigureInactivityTracking(x => { })
+        .Configure<UsersInactivityTrackerOptions>(options =>
+        {
+            options.Threshold = 1;
+            options.Timeout = TimeSpan.FromSeconds(30);
+            options.ExcludeBots = true;
+        });
 
     // Services
     builder.Services.AddSingleton<GreetingService>()

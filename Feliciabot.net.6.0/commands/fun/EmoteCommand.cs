@@ -14,40 +14,22 @@ namespace Feliciabot.net._6._0.commands
             EmoteCustom.Pyradog1, EmoteCustom.Pyradog2, EmoteCustom.Pyradog3, EmoteCustom.Pyradog4, EmoteCustom.Pyradog5,
             EmoteCustom.Pyradog6, EmoteCustom.Pyradog7, EmoteCustom.Pyradog8, EmoteCustom.Pyradog9};
 
-        /// <summary>
-        /// Posts Feliciaciv emote
-        /// </summary>
-        [Command("civ", RunMode = RunMode.Async), Summary("Posts Feliciaciv emote. [Usage] !civ")]
+        [Command("civ", RunMode = RunMode.Async), Summary("Posts Feliciaciv emote")]
         public async Task Civ() => await Context.Channel.SendMessageAsync(EmoteCustom.FeliciaCiv);
 
-        /// <summary>
-        /// Posts Feliciadoru emote
-        /// </summary>
-        [Command("pad", RunMode = RunMode.Async), Summary("Posts Feliciadoru emote. [Usage] !pad")]
+        [Command("pad", RunMode = RunMode.Async), Summary("Posts Feliciadoru emote")]
         public async Task Padoru() => await Context.Channel.SendMessageAsync(EmoteCustom.Padoru);
 
-        /// <summary>
-        /// Posts Pyrasip emote
-        /// </summary>
-        [Command("sip", RunMode = RunMode.Async), Summary("Posts Pyrasip emote. [Usage] !sip")]
+        [Command("sip", RunMode = RunMode.Async), Summary("Posts Pyrasip emote")]
         public async Task Sip() => await Context.Channel.SendMessageAsync(EmoteCustom.PyraSip);
 
-        /// <summary>
-        /// Posts Feliciaspin emote
-        /// </summary>
-        [Command("spin", RunMode = RunMode.Async), Summary("Posts Feliciaspin emote. [Usage] !spin")]
+        [Command("spin", RunMode = RunMode.Async), Summary("Posts Feliciaspin emote")]
         public async Task Spin() => await Context.Channel.SendMessageAsync(EmoteCustom.FeliciaSpin);
 
-        /// <summary>
-        /// Posts Wiiclap emote
-        /// </summary>
-        [Command("clap", RunMode = RunMode.Async), Summary("Posts Wiiclap emote. [Usage] !clap")]
+        [Command("clap", RunMode = RunMode.Async), Summary("Posts Wiiclap emote")]
         public async Task Clap() => await Clap(1);
 
-        /// <summary>
-        /// Posts Wiiclap emote
-        /// </summary>
-        [Command("clap", RunMode = RunMode.Async), Summary("Posts Wiiclap emote. Max claps 12. [Usage] !clap [number of claps]")]
+        [Command("clap", RunMode = RunMode.Async), Summary("Posts Wiiclap emote (max 12)")]
         public async Task Clap(int copies)
         {
             copies = copies > MAX_CLAPS ? MAX_CLAPS : copies;
@@ -60,29 +42,29 @@ namespace Feliciabot.net._6._0.commands
             await Context.Channel.SendMessageAsync(sb.ToString());
         }
 
-        [Command("pyradog", RunMode = RunMode.Async), Summary("Posts Pyradog emote. [Usage] !pyradog")]
+        [Command("pyradog", RunMode = RunMode.Async), Summary("Posts Pyradog emote")]
         public async Task Pyradog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(pyraDogArray[1]));
 
         [Alias("tatdog", "tatianadog")]
-        [Command("tatidog", RunMode = RunMode.Async), Summary("Posts Tatianadog emote. [Usage] !tatidog, !tatianadog")]
+        [Command("tatidog", RunMode = RunMode.Async), Summary("Posts Tatianadog emote")]
         public async Task Tatianadog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.Tatiana));
 
-        [Command("aibadog", RunMode = RunMode.Async), Summary("Posts Aibadog emote. [Usage] !aibadog")]
+        [Command("aibadog", RunMode = RunMode.Async), Summary("Posts Aibadog emote")]
         public async Task Aibadog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.Aiba));
 
-        [Command("ninodog", RunMode = RunMode.Async), Summary("Posts Ninodog emote. [Usage] !ninodog")]
+        [Command("ninodog", RunMode = RunMode.Async), Summary("Posts Ninodog emote")]
         public async Task Ninodog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.Nino));
 
-        [Command("pogdog", RunMode = RunMode.Async), Summary("Posts pogdog emote. [Usage] !pogdog")]
+        [Command("pogdog", RunMode = RunMode.Async), Summary("Posts pogdog emote")]
         public async Task Pogdog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.PyraPoggers));
 
-        [Command("okudog", RunMode = RunMode.Async), Summary("Posts okudog emote. [Usage] !okudog")]
+        [Command("okudog", RunMode = RunMode.Async), Summary("Posts okudog emote")]
         public async Task Okudog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.Oku));
 
-        [Command("cowboyninodog", RunMode = RunMode.Async), Summary("Posts cowboyninodog emote. [Usage] !cowboyninodog")]
+        [Command("cowboyninodog", RunMode = RunMode.Async), Summary("Posts cowboyninodog emote")]
         public async Task Cowboyninodog() => await Context.Channel.SendMessageAsync(ConstructPyraDog(EmoteCustom.CowboyNino));
 
-        [Command("shuffledog", RunMode = RunMode.Async), Summary("Posts Pyradog emote in random assortment. [Usage] !shuffledog")]
+        [Command("shuffledog", RunMode = RunMode.Async), Summary("Posts Pyradog emote in random assortment")]
         public async Task Shuffledog()
         {
             Random rnd = new();
@@ -90,10 +72,7 @@ namespace Feliciabot.net._6._0.commands
             await Context.Channel.SendMessageAsync(ConstructPyraDog(pyraDogRandom));
         }
 
-        /// <summary>
-        /// Posts Pyradog emote with a randomized head
-        /// </summary>
-        [Command("randog", RunMode = RunMode.Async), Summary("Posts Pyradog emote with a random emote from the server as the head. [Usage] !randog")]
+        [Command("randog", RunMode = RunMode.Async), Summary("Posts Pyradog emote with a random emote from the server as the head")]
         public async Task Randog()
         {
             IReadOnlyCollection<GuildEmote> emotes = Context.Guild.Emotes;
@@ -107,11 +86,6 @@ namespace Feliciabot.net._6._0.commands
             await Context.Channel.SendMessageAsync(ConstructPyraDog(emoteRef));
         }
 
-        /// <summary>
-        /// Gets the PyraDog body emote and appends a head, required to be in an emote reference format
-        /// </summary>
-        /// <param name="pyradogHead">Reference to the id of the emote to make the head</param>
-        /// <returns>Returns the entire Pyradog emote with a custom head</returns>
         private static string ConstructPyraDog(string pyradogHead)
         {
             return $"{pyraDogArray[0]}{pyradogHead}{pyraDogArray[2]}\n" +
@@ -119,11 +93,6 @@ namespace Feliciabot.net._6._0.commands
                 $"{pyraDogArray[6]}{pyraDogArray[7]}{pyraDogArray[8]}";
         }
 
-        /// <summary>
-        /// Gets the PyraDog body emote based on the passed array of pieces
-        /// </summary>
-        /// <param name="pyradogPieces">Reference to the pieces of the emote as an array</param>
-        /// <returns>Returns the entire Pyradog emote</returns>
         private static string ConstructPyraDog(string[] pyradogPieces)
         {
             return $"{pyradogPieces[0]}{pyradogPieces[1]}{pyradogPieces[2]}\n" +
