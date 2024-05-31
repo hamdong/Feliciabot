@@ -8,6 +8,7 @@ using Lavalink4NET.DiscordNet;
 using Lavalink4NET.Players;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
+using Lavalink4NET.Tracks;
 using Microsoft.Extensions.Options;
 
 namespace Feliciabot.net._6._0.modules
@@ -70,9 +71,8 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            var track = await _audioService.Tracks
-                .LoadTrackAsync(query, TrackSearchMode.YouTube)
-                .ConfigureAwait(false);
+            var loadedTracks = await _audioService.Tracks.LoadTracksAsync(query, TrackSearchMode.YouTube).ConfigureAwait(false);
+            var track = loadedTracks.Track;
 
             if (track is null)
             {
@@ -84,11 +84,20 @@ namespace Feliciabot.net._6._0.modules
 
             if (position is 0)
             {
-                await FollowupAsync($"🔈 Playing:", embed: _embedBuilderService.GetTrackInfoAsEmbed(track)).ConfigureAwait(false);
+                await FollowupAsync($"🔈 Playing:", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
             }
             else
             {
-                await FollowupAsync($"🔈 Added to queue: {track.Title}").ConfigureAwait(false);
+                if (!loadedTracks.IsPlaylist) await FollowupAsync($"🔈 Added to queue: {track.Title} [{track.Duration}]").ConfigureAwait(false);
+            }
+
+            if (loadedTracks.IsPlaylist)
+            {
+                await FollowupAsync($"📃 Playlist found").ConfigureAwait(false);
+                List<LavalinkTrack> remainingTracks = loadedTracks.Tracks.Skip(1).ToList();
+                var queueableTracks = remainingTracks.Select(t => new TrackQueueItem(t)).ToList().AsReadOnly();
+                await player.Queue.AddRangeAsync(queueableTracks);
+                await FollowupAsync($"🔈 Added {loadedTracks.Count} track(s) to queue").ConfigureAwait(false);
             }
         }
 
@@ -113,7 +122,7 @@ namespace Feliciabot.net._6._0.modules
             }
 
             var track = player.CurrentTrack;
-            await RespondAsync("Now playing:", embed: _embedBuilderService.GetTrackInfoAsEmbed(track)).ConfigureAwait(false);
+            await RespondAsync("Now playing:", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -220,13 +229,20 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            if (player.CurrentItem is null)
+            if (player.CurrentItem is null || player.CurrentTrack is null)
             {
                 await RespondAsync("Nothing playing!").ConfigureAwait(false);
                 return;
             }
 
-            await RespondAsync($"Position: {player.Position?.Position} / {player.CurrentTrack.Duration}.").ConfigureAwait(false);
+            if (player.Position is null || player.Position?.Position is null)
+            {
+                await RespondAsync("No position found for this track").ConfigureAwait(false);
+                return;
+            }
+
+            var timespan = player.Position?.Position.ToString(@"hh\:mm\:ss");
+            await RespondAsync($"Position: {timespan} / {player.CurrentTrack.Duration}.").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -275,7 +291,7 @@ namespace Feliciabot.net._6._0.modules
 
             if (track is not null)
             {
-                await RespondAsync($"Skipped. Now playing: {track.Track!.Uri}", embed: _embedBuilderService.GetTrackInfoAsEmbed(track.Track)).ConfigureAwait(false);
+                await RespondAsync($"Skipped. Now playing: {track.Track!.Uri}", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
             }
             else
             {

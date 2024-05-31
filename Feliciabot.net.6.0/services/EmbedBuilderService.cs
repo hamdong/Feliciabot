@@ -1,5 +1,5 @@
 ﻿using Discord;
-using Lavalink4NET.Tracks;
+using Lavalink4NET.Players;
 
 namespace Feliciabot.net._6._0.services
 {
@@ -30,20 +30,36 @@ namespace Feliciabot.net._6._0.services
             return builder.Build();
         }
 
-        internal Embed GetTrackInfoAsEmbed(LavalinkTrack track)
+        internal Embed GetPlayingTrackInfoAsEmbed(LavalinkPlayer player)
         {
             var builder = new EmbedBuilder();
+            var track = player.CurrentTrack;
+
+            if (track is null) return builder.Build();
+
             string trackUri = track.Uri is null ? "" : track.Uri.AbsoluteUri;
             string artworkUri = track.ArtworkUri is null ? "" : track.ArtworkUri.AbsoluteUri;
-            TimeSpan position = (TimeSpan)(track.StartPosition is null ? new TimeSpan() : track.StartPosition);
+            var position = player.Position?.Position ?? new TimeSpan();
+            var visual = GetPositionVisual(position, track.Duration);
+            var displayPosition = position.ToString("hh\\:mm\\:ss");
+            var displayDuration = track.Duration.ToString("hh\\:mm\\:ss");
 
             builder.WithAuthor(track.Author, MARIANNE_DANCE_LINK, trackUri);
             builder.WithTitle(track.Title);
             builder.WithUrl($"{track.Uri}");
-            builder.AddField("Duration", track.Duration.ToString("hh\\:mm\\:ss"), true);
-            builder.AddField("Remaining", (track.Duration - position).ToString("hh\\:mm\\:ss"), true);
+            builder.AddField("Track Position", $"{displayPosition} {visual} {displayDuration}", true);
             builder.WithThumbnailUrl(artworkUri);
             return builder.Build();
+        }
+
+        private static string GetPositionVisual(TimeSpan position, TimeSpan duration)
+        {
+            double progressPercentage = (position.TotalSeconds / duration.TotalSeconds) * 100;
+            int filledCharacters = (int)(progressPercentage / 5);
+
+            string progressBar = new('#', filledCharacters);
+            string emptyBar = new('-', 20 - filledCharacters); // Assuming a maximum of 20
+            return $"[{progressBar}{emptyBar}]";
         }
     }
 }
