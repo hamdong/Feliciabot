@@ -61,23 +61,22 @@ namespace Feliciabot.net._6._0.modules
 
         private async Task PostAction(IUser user, Endpoints.Sfw action, string actionPastTense)
         {
-            string text = $"{Context.User.Username} {actionPastTense} {user.Username}";
+            string text = $"{Context.User.GlobalName} {actionPastTense} {user.Mention}";
             await PostTextWithAction(text, action);
         }
 
         private async Task PostAction(Endpoints.Sfw action, string actionPastTense)
         {
-            string text = $"{Context.User.Username} {actionPastTense}";
+            string text = $"{Context.User.GlobalName} {actionPastTense}";
             await PostTextWithAction(text, action);
         }
 
         private async Task PostTextWithAction(string text, Endpoints.Sfw action)
         {
             string imgURL = waifuClient.GetSfwImage(action);
-            builder.Title = text;
             builder.WithImageUrl(imgURL);
 
-            await RespondAsync(embed: builder.Build()).ConfigureAwait(false);
+            await RespondAsync(text, embed: builder.Build()).ConfigureAwait(false);
         }
     }
 }
