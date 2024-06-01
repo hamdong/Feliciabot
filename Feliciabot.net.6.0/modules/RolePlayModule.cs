@@ -6,8 +6,6 @@ namespace Feliciabot.net._6._0.modules
 {
     public sealed class RolePlayModule(WaifuClient waifuClient) : InteractionModuleBase<SocketInteractionContext>
     {
-        private readonly EmbedBuilder builder = new();
-
         [SlashCommand("bite", "Bite a user", runMode: RunMode.Async)]
         public async Task Bite(IUser user) => await PostAction(user, Endpoints.Sfw.Bite, "bit");
 
@@ -73,6 +71,7 @@ namespace Feliciabot.net._6._0.modules
 
         private async Task PostTextWithAction(string text, Endpoints.Sfw action)
         {
+            var builder = new EmbedBuilder();
             string imgURL = waifuClient.GetSfwImage(action);
             builder.WithImageUrl(imgURL);
 

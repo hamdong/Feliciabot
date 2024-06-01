@@ -121,7 +121,6 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            var track = player.CurrentTrack;
             await RespondAsync("Now playing:", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
         }
 
