@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Feliciabot.net._6._0.helpers;
 
 namespace Feliciabot.net._6._0.commands
 {
@@ -48,7 +49,7 @@ namespace Feliciabot.net._6._0.commands
 
         [Command("shez", RunMode = RunMode.Async)]
         [Summary("Posts 'shez!' meme")]
-        public async Task Shez() => await PostToChannel($@"{env}shez.jpg");
+        public async Task Shez() => await PostToChannel(CommandsHelper.GetRandomNumber(2) == 0 ? $@"{env}shez1.jpg" : $@"{env}shez2.jpg");
 
         [Command("shock", RunMode = RunMode.Async)]
         [Summary("Posts 'shock' meme")]
