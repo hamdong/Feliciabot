@@ -52,7 +52,7 @@ namespace Feliciabot.net._6._0.commands
         /// Does not actually build the embed
         /// </summary>
         /// <param name="pokeNameOrNum">pokemon name or number to query</param>
-        private EmbedBuilder GetPokeEmbedBuilder(string pokeNameOrNum)
+        private static EmbedBuilder GetPokeEmbedBuilder(string pokeNameOrNum)
         {
             Pokemon mon;
             var builder = new EmbedBuilder();

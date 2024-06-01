@@ -4,17 +4,16 @@ namespace Feliciabot.net._6._0.commands
 {
     public class TroubleCommand : ModuleBase
     {
-        private const int DELAY_BETWEEN_TROUBLE_MESSAGES = 1000;
-        private readonly string[] weveGotTroubleQuotes = ["WE'VE", "GOT", "TROUBLE!"];
+        private readonly string[] troubleQuotes = ["WE'VE", "GOT", "TROUBLE!"];
 
         [Command("trouble", RunMode = RunMode.Async)]
         [Summary("You have all the information you need")]
         public async Task Trouble()
         {
-            foreach (string quote in weveGotTroubleQuotes)
+            foreach (string quote in troubleQuotes)
             {
                 await Context.Channel.SendMessageAsync(quote);
-                await Task.Delay(DELAY_BETWEEN_TROUBLE_MESSAGES);
+                await Task.Delay(1000);
             }
         }
     }

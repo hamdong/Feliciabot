@@ -7,7 +7,7 @@ namespace Feliciabot.net._6._0.commands
     public class HelpCommand : ModuleBase
     {
         private const int NUM_ITEMS_PER_PAGE = 10;
-        private readonly string[] omittedCommands = { "thor", "boris" };
+        private readonly string[] omittedCommands = ["thor", "boris"];
         private readonly CommandService _service;
         private readonly InteractiveService _interactiveService;
 
@@ -24,7 +24,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Lists all commands in an embedded paginator. [Usage]: !icanhelp")]
         public async Task ICanHelp()
         {
-            List<string> trackList = new();
+            List<string> trackList = [];
             string lastCommandAdded = string.Empty;
             string pageContent = string.Empty;
             int itemOnPageCount = 1;
@@ -54,7 +54,7 @@ namespace Feliciabot.net._6._0.commands
 
             // Create paginated message
             var pages = trackList.ToArray();
-            List<PageBuilder> pagebuilder = new List<PageBuilder>();
+            List<PageBuilder> pagebuilder = [];
 
             foreach (string page in pages)
             {

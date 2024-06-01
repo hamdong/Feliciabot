@@ -10,9 +10,9 @@ namespace Feliciabot.net._6._0.commands
     public class EmoteCommand : ModuleBase
     {
         private const int MAX_CLAPS = 12;
-        private static readonly string[] pyraDogArray = {
+        private static readonly string[] pyraDogArray = [
             EmoteCustom.Pyradog1, EmoteCustom.Pyradog2, EmoteCustom.Pyradog3, EmoteCustom.Pyradog4, EmoteCustom.Pyradog5,
-            EmoteCustom.Pyradog6, EmoteCustom.Pyradog7, EmoteCustom.Pyradog8, EmoteCustom.Pyradog9};
+            EmoteCustom.Pyradog6, EmoteCustom.Pyradog7, EmoteCustom.Pyradog8, EmoteCustom.Pyradog9];
 
         [Command("civ", RunMode = RunMode.Async), Summary("Posts Feliciaciv emote")]
         public async Task Civ() => await Context.Channel.SendMessageAsync(EmoteCustom.FeliciaCiv);
@@ -68,7 +68,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task Shuffledog()
         {
             Random rnd = new();
-            string[] pyraDogRandom = pyraDogArray.OrderBy(x => rnd.Next()).ToArray();
+            string[] pyraDogRandom = [.. pyraDogArray.OrderBy(x => rnd.Next())];
             await Context.Channel.SendMessageAsync(ConstructPyraDog(pyraDogRandom));
         }
 

@@ -69,7 +69,7 @@ namespace Feliciabot.net._6._0.services
             await UserManagementService.AssignTroubleRoleToUser(user);
         }
 
-        public async Task AnnounceLeftUser(SocketGuild guild, SocketUser user)
+        public static async Task AnnounceLeftUser(SocketGuild guild, SocketUser user)
         {
             if (guild == null) return;
 

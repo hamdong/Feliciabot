@@ -52,7 +52,7 @@ namespace Feliciabot.net._6._0.commands
             {
                 if (userToServe == Context.Client.CurrentUser.Username)
                 {
-                    comment = (teaToPost.ToLower().Contains(ALLERGY)) ? $"Oh no! I'm allergic to ${ALLERGY}! :scream:" : "Thanks! :smile:";
+                    comment = (teaToPost.Contains(ALLERGY, StringComparison.CurrentCultureIgnoreCase)) ? $"Oh no! I'm allergic to ${ALLERGY}! :scream:" : "Thanks! :smile:";
                 }
             }
 

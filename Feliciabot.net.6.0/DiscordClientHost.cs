@@ -141,7 +141,7 @@ namespace Feliciabot.net._6._0
 
         public async Task OnUserLeft(SocketGuild guild, SocketUser user)
         {
-            await _greetingService.AnnounceLeftUser(guild, user);
+            await GreetingService.AnnounceLeftUser(guild, user);
         }
 
         public static Task LogHandler(LogMessage message)

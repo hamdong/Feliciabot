@@ -76,26 +76,6 @@ namespace Feliciabot.net._6._0.helpers
         }
 
         /// <summary>
-        /// Removes all empty messages from a message list
-        /// </summary>
-        /// <param name="messageList">List of messages to parse through</param>
-        /// <returns>Redefined list without any empty messages</returns>
-        public static IMessage[] CullEmptyContentFromMessageList(IMessage[] messageList)
-        {
-            return Array.FindAll(messageList, HasContent).ToArray();
-        }
-
-        /// <summary>
-        /// Determines if a message has text content
-        /// </summary>
-        /// <param name="msg">Message to check</param>
-        /// <returns>True, if the message has text content</returns>
-        private static bool HasContent(IMessage msg)
-        {
-            return msg.Content != "";
-        }
-
-        /// <summary>
         /// Determines if the passed query won't execute common bot commands for other bot users
         /// </summary>
         /// <param name="query">Query to check for command syntax</param>
