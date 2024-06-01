@@ -13,7 +13,7 @@ namespace Feliciabot.net._6._0.modules
         {
             if (!DateTime.TryParseExact(birthday, "M/d", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
             {
-                await RespondAsync("Invalid birthday format. Please enter your birthday in the format 'M/d', e.g., '4/20'.");
+                await RespondAsync("Invalid birthday format. Please enter your birthday in the format 'M/d', e.g., '4/20'.").ConfigureAwait(false);
                 return;
             }
 
@@ -22,11 +22,11 @@ namespace Feliciabot.net._6._0.modules
 
             if (await SaveBirthdayAsync(Context.User.Id, guildId, formattedBirthday))
             {
-                await RespondAsync("Your birthday has been saved!");
+                await RespondAsync("Your birthday has been saved!").ConfigureAwait(false);
             }
             else
             {
-                await RespondAsync("Unable to save birthday. Try again?");
+                await RespondAsync("Unable to save birthday. Try again?").ConfigureAwait(false);
             }
         }
 

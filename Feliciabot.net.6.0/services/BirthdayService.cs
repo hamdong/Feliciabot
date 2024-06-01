@@ -29,7 +29,7 @@ namespace Feliciabot.net._6._0.services
 
                     if (guild == null) continue;
 
-                    var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+                    var channel = CommandsHelper.GetGeneralChannelFromGuild(guild);
                     var user = guild.Users.FirstOrDefault(x => x.Id.ToString() == userId);
 
                     if (user != null && channel != null)
