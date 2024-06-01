@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Feliciabot.net._6._0.helpers;
 
 namespace Feliciabot.net._6._0.commands
 {
@@ -20,9 +21,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Posts a meme related to the current day or time")]
         public async Task Day()
         {
-            var timeUtc = DateTime.UtcNow;
-            TimeZoneInfo estZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            DayOfWeek currentDay = TimeZoneInfo.ConvertTimeFromUtc(timeUtc, estZone).DayOfWeek;
+            DayOfWeek currentDay = CommandsHelper.GetCurrentTimeEastern().DayOfWeek;
 
             if (dayEvent[(int)currentDay].videoLink == string.Empty)
             {

@@ -4,123 +4,68 @@ namespace Feliciabot.net._6._0.commands
 {
     public class ImagePostCommand : ModuleBase
     {
-        private readonly string AWESOME_IMAGE_PATH = Environment.CurrentDirectory + @"\img\awesome.jpg";
-        private readonly string BANJO_IMAGE_PATH = Environment.CurrentDirectory + @"\img\banjo.jpg";
-        private readonly string BONK_IMAGE_PATH = Environment.CurrentDirectory + @"\img\bonk.jpg";
-        private readonly string BUGGIN_IMAGE_PATH = Environment.CurrentDirectory + @"\img\buggin.png";
-        private readonly string CRUEL_IMAGE_PATH = Environment.CurrentDirectory + @"\img\cruel.png";
-        private readonly string FIREEMBLEM_IMAGE_PATH = Environment.CurrentDirectory + @"\img\fireemblem.png";
-        private readonly string HOME_IMAGE_PATH = Environment.CurrentDirectory + @"\img\home.jpg";
-        private readonly string PATHETIC_IMAGE_PATH = Environment.CurrentDirectory + @"\img\pathetic.png";
-        private readonly string POG_IMAGE_PATH = Environment.CurrentDirectory + @"\img\pog.jpg";
-        private readonly string REGRESSING_IMAGE_PATH = Environment.CurrentDirectory + @"\img\regressing.jpg";
-        private readonly string SHOCK_IMAGE_PATH = Environment.CurrentDirectory + @"\img\shock.jpg";
-        private readonly string STARE_IMAGE_PATH = Environment.CurrentDirectory + @"\img\stare.gif";
-        private readonly string STUPID_IMAGE_PATH = Environment.CurrentDirectory + @"\img\stupid.png";
-        private readonly string XENOBLADE_IMAGE_PATH = Environment.CurrentDirectory + @"\img\xenoblade.png";
+        private readonly string env = $@"{Environment.CurrentDirectory}\img\";
 
-        /// <summary>
-        /// Post awesome
-        /// </summary>
         [Command("awesome", RunMode = RunMode.Async)]
-        [Summary("Posts 'AWESOME' meme. [Usage]: !awesome")]
-        public async Task Awesome() => await PostToChannel(AWESOME_IMAGE_PATH);
+        [Summary("Posts 'AWESOME' meme")]
+        public async Task Awesome() => await PostToChannel($@"{env}awesome.jpg");
 
-        /// <summary>
-        /// Post banjo
-        /// </summary>
         [Command("banjo", RunMode = RunMode.Async)]
-        [Summary("Posts 'Banjo' meme. [Usage]: !banjo")]
-        public async Task Banjo() => await PostToChannel(BANJO_IMAGE_PATH);
+        [Summary("Posts 'Banjo' meme")]
+        public async Task Banjo() => await PostToChannel($@"{env}banjo.jpg");
 
-        /// <summary>
-        /// Post bonk
-        /// </summary>
         [Command("bonk", RunMode = RunMode.Async)]
-        [Summary("Posts 'Bonk' meme. [Usage]: !bonk")]
-        public async Task Bonk() => await PostToChannel(BONK_IMAGE_PATH);
+        [Summary("Posts 'Bonk' meme")]
+        public async Task Bonk() => await PostToChannel($@"{env}bonk.jpg");
 
-        /// <summary>
-        /// Post buggin
-        /// </summary>
         [Command("buggin", RunMode = RunMode.Async)]
-        [Summary("Posts 'Something bugging you?' meme. [Usage]: !buggin")]
-        public async Task Buggin() => await PostToChannel(BUGGIN_IMAGE_PATH);
+        [Summary("Posts 'Something bugging you?' meme")]
+        public async Task Buggin() => await PostToChannel($@"{env}buggin.png");
 
-        /// <summary>
-        /// Post cruel
-        /// </summary>
         [Command("cruel", RunMode = RunMode.Async)]
-        [Summary("Posts 'It's a tentacruel world' meme. [Usage]: !cruel")]
-        public async Task Cruel() => await PostToChannel(CRUEL_IMAGE_PATH);
+        [Summary("Posts 'It's a tentacruel world' meme")]
+        public async Task Cruel() => await PostToChannel($@"{env}cruel.png");
 
-        /// <summary>
-        /// Post fire emblem
-        /// </summary>
         [Command("fireemblem", RunMode = RunMode.Async)]
-        [Summary("Posts 'war crimes' meme. [Usage]: !fireemblem")]
-        public async Task FireEmblem() => await PostToChannel(FIREEMBLEM_IMAGE_PATH);
+        [Summary("Posts 'war crimes' meme")]
+        public async Task FireEmblem() => await PostToChannel($@"{env}fireemblem.png");
 
-        /// <summary>
-        /// Post I wanna go home
-        /// </summary>
         [Command("home", RunMode = RunMode.Async)]
-        [Summary("Posts 'I wanna go home' meme. [Usage]: !home")]
-        public async Task Home() => await PostToChannel(HOME_IMAGE_PATH);
+        [Summary("Posts 'I wanna go home' meme")]
+        public async Task Home() => await PostToChannel($@"{env}home.jpg");
 
-        /// <summary>
-        /// Post pathetic
-        /// </summary>
         [Command("pathetic", RunMode = RunMode.Async)]
-        [Summary("Posts 'pathetic' meme. [Usage]: !pathetic")]
-        public async Task Pathetic() => await PostToChannel(PATHETIC_IMAGE_PATH);
+        [Summary("Posts 'pathetic' meme")]
+        public async Task Pathetic() => await PostToChannel($@"{env}pathetic.png");
 
-        /// <summary>
-        /// Post pog
-        /// </summary>
         [Command("pog", RunMode = RunMode.Async)]
-        [Summary("Posts 'pog' meme. [Usage]: !pog")]
-        public async Task Pog() => await PostToChannel(POG_IMAGE_PATH);
+        [Summary("Posts 'pog' meme")]
+        public async Task Pog() => await PostToChannel($@"{env}pog.jpg");
 
-        /// <summary>
-        /// Post regressing
-        /// </summary>
         [Command("regressing", RunMode = RunMode.Async)]
-        [Summary("Posts 'regressing' meme. [Usage]: !regressing")]
-        public async Task Regressing() => await PostToChannel(REGRESSING_IMAGE_PATH);
+        [Summary("Posts 'regressing' meme")]
+        public async Task Regressing() => await PostToChannel($@"{env}regressing.jpg");
 
-        /// <summary>
-        /// Post shock
-        /// </summary>
+        [Command("shez", RunMode = RunMode.Async)]
+        [Summary("Posts 'shez!' meme")]
+        public async Task Shez() => await PostToChannel($@"{env}shez.jpg");
+
         [Command("shock", RunMode = RunMode.Async)]
-        [Summary("Posts 'shock' meme. [Usage]: !shock")]
-        public async Task Shock() => await PostToChannel(SHOCK_IMAGE_PATH);
+        [Summary("Posts 'shock' meme")]
+        public async Task Shock() => await PostToChannel($@"{env}shock.jpg");
 
-        /// <summary>
-        /// Post stare
-        /// </summary>
         [Command("stare", RunMode = RunMode.Async)]
-        [Summary("Posts 'stare' meme. [Usage]: !stare")]
-        public async Task Stare() => await PostToChannel(STARE_IMAGE_PATH);
+        [Summary("Posts 'stare' meme")]
+        public async Task Stare() => await PostToChannel($@"{env}stare.gif");
 
-        /// <summary>
-        /// Post stupid
-        /// </summary>
         [Command("stupid", RunMode = RunMode.Async)]
-        [Summary("Posts 'I may be stupid' meme. [Usage]: !stupid")]
-        public async Task Stupid() => await PostToChannel(STUPID_IMAGE_PATH);
+        [Summary("Posts 'I may be stupid' meme")]
+        public async Task Stupid() => await PostToChannel($@"{env}stupid.png");
 
-        /// <summary>
-        /// Post Xenoblade
-        /// </summary>
         [Command("xenoblade", RunMode = RunMode.Async)]
-        [Summary("Posts 'Holy s* it's the xenoblade' meme. [Usage]: !xenoblade")]
-        public async Task Xenoblade() => await PostToChannel(XENOBLADE_IMAGE_PATH);
+        [Summary("Posts 'Holy s* it's the xenoblade' meme")]
+        public async Task Xenoblade() => await PostToChannel($@"{env}xenoblade.png");
 
-        /// <summary>
-        /// Post specified image path
-        /// </summary>
-        /// <param name="filePathToPost">Path to file to post</param>
         private async Task PostToChannel(string filePathToPost) => await Context.Channel.SendFileAsync(filePathToPost, "");
     }
 }

@@ -23,6 +23,18 @@ namespace Feliciabot.net._6._0.helpers
             return guild.SystemChannel;
         }
 
+        public static SocketTextChannel? GetTestingChannel(SocketGuild guild)
+        {
+            return GetChannelByName(guild, "betafelicia-testing");
+        }
+
+        public static DateTime GetCurrentTimeEastern()
+        {
+            var timeUtc = DateTime.UtcNow;
+            TimeZoneInfo easternZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(timeUtc, easternZone);
+        }
+
         /// <summary>
         /// Gets the channel object from the name in the channel list
         /// If more than one channel with the same name exists, return the first occurence in the list
@@ -81,11 +93,7 @@ namespace Feliciabot.net._6._0.helpers
         /// <returns>True, if the specified query doesn't contain common bot commands</returns>
         public static bool IsNonCommandQuery(string query)
         {
-            return (query != "" &&
-                query.IndexOf('!') != 0 &&
-                query.IndexOf('.') != 0 &&
-                !query.StartsWith("feh") &&
-                !query.Contains('@'));
+            return query != "" && !query.StartsWith('!') && !query.StartsWith('.') && !query.StartsWith("feh") && !query.Contains('@');
         }
 
         /// <summary>
