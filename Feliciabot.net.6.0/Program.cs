@@ -43,6 +43,7 @@ try
 
     // Services
     builder.Services.AddSingleton<GreetingService>()
+        .AddSingleton<BirthdayService>()
         .AddSingleton<UserManagementService>()
         .AddSingleton<EmbedBuilderService>();
 

@@ -58,7 +58,7 @@ namespace Feliciabot.net._6._0.services
             int filledCharacters = (int)(progressPercentage / 5);
 
             string progressBar = new('#', filledCharacters);
-            string emptyBar = new('-', 20 - filledCharacters); // Assuming a maximum of 20
+            string emptyBar = new('-', 20 - filledCharacters); // max 20 char length
             return $"[{progressBar}{emptyBar}]";
         }
     }

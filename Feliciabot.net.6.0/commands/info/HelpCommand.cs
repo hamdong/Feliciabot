@@ -8,7 +8,6 @@ namespace Feliciabot.net._6._0.commands
     {
         private const int NUM_ITEMS_PER_PAGE = 10;
         private readonly string[] omittedCommands = { "thor", "boris" };
-        public static List<string> commands = new();
         private readonly CommandService _service;
         private readonly InteractiveService _interactiveService;
 
@@ -25,7 +24,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Lists all commands in an embedded paginator. [Usage]: !icanhelp")]
         public async Task ICanHelp()
         {
-            List<string> trackList = new List<string>();
+            List<string> trackList = new();
             string lastCommandAdded = string.Empty;
             string pageContent = string.Empty;
             int itemOnPageCount = 1;
@@ -67,7 +66,6 @@ namespace Feliciabot.net._6._0.commands
                 .WithPages(pagebuilder) // Set the pages the paginator will use. This is the only required component.
                 .Build();
 
-            // Send the paginator to the source channel and wait until it times out after 10 minutes.
             await _interactiveService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(10));
         }
     }
