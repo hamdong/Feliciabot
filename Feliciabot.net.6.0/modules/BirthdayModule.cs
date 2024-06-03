@@ -17,7 +17,7 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            string formattedBirthday = parsedDate.ToString("M/d");
+            string formattedBirthday = parsedDate.ToString("M-d");
             ulong guildId = Context.Guild?.Id ?? 0;
 
             if (await SaveBirthdayAsync(Context.User.Id, guildId, formattedBirthday))
@@ -35,7 +35,7 @@ namespace Feliciabot.net._6._0.modules
             try
             {
                 var birthdays = LoadBirthdays(birthdayPath);
-                birthdays[$"{userId}-{guildId}1"] = formattedBirthday;
+                birthdays[$"{userId}-{guildId}"] = formattedBirthday;
                 await File.WriteAllTextAsync(birthdayPath, JsonSerializer.Serialize(birthdays));
             }
             catch (Exception ex)
