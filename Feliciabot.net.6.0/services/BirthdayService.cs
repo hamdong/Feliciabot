@@ -10,7 +10,9 @@ namespace Feliciabot.net._6._0.services
 
         public void ResetTimer()
         {
-            timer = new Timer(CheckBirthdays, null, TimeSpan.Zero, TimeSpan.FromDays(1));
+            DateTime now = DateTime.Now;
+            TimeSpan delayUntilMidnight = MidnightDelay(now);
+            timer = new Timer(CheckBirthdays, null, delayUntilMidnight, TimeSpan.FromDays(1));
         }
 
         private async void CheckBirthdays(object? state)
@@ -71,6 +73,11 @@ namespace Feliciabot.net._6._0.services
         private static async Task SendBirthdayMessageToChannel(SocketTextChannel channel, SocketGuildUser user)
         {
             await channel.SendMessageAsync($"Happy birthday, {user.Mention}");
+        }
+
+        private static TimeSpan MidnightDelay(DateTime currentTime)
+        {
+            return currentTime.Hour < 12 ? TimeSpan.Zero : new TimeSpan(24 - currentTime.Hour, 0, 0, 0);
         }
 
         public void Dispose()
