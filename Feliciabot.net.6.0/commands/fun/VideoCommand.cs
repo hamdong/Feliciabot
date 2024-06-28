@@ -19,6 +19,14 @@ namespace Feliciabot.net._6._0.commands
         private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
         private readonly string YIPPEE_FOLDER_PATH = Path.Combine(Environment.CurrentDirectory, "videos", "yippee");
 
+        [Alias("alfie")]
+        [Command("alfred", RunMode = RunMode.Async)]
+        [Summary("Posts 'Alfred' video")]
+        public async Task Alfred()
+        {
+            await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\alfred.mov");
+        }
+
         [Command("gg", RunMode = RunMode.Async)]
         [Summary("Posts 'GG' video")]
         public async Task GG()
