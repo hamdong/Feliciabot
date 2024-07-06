@@ -23,8 +23,8 @@ namespace Feliciabot.net._6._0.services
         public GreetingService(DiscordSocketClient client)
         {
             _client = client;
-            quoteList = CommandsHelper.GetStringArrayFromFile(quotesPath);
-            greetingList = CommandsHelper.GetStringArrayFromFile(greetingsPath);
+            quoteList = File.ReadAllLines(quotesPath);
+            greetingList = File.ReadAllLines(greetingsPath);
             randomSeedForDialogues = new Random();
         }
 
