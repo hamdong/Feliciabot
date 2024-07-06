@@ -1,23 +1,32 @@
 ﻿using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 
 namespace Feliciabot.net._6._0.services
 {
-    public sealed class BirthdayService(DiscordSocketClient _client) : IDisposable
+    public sealed class BirthdayService(DiscordSocketClient _client) : BackgroundService
     {
-        private Timer? timer;
-
-        public void ResetTimer()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            DateTime now = DateTime.Now;
-            TimeSpan delayUntilMidnight = MidnightDelay(now);
-            timer = new Timer(CheckBirthdays, null, delayUntilMidnight, TimeSpan.FromDays(1));
+            do
+            {
+                var now = CommandsHelper.GetCurrentTimeEastern();
+                var nextMidnight = CalculateNextMidnight(now);
+
+                if (now >= nextMidnight)
+                {
+                    nextMidnight = nextMidnight.AddDays(1);
+                }
+
+                var delay = nextMidnight - now;
+                await Task.Delay(delay, stoppingToken); // for testing, change delay to TimeSpan.FromSeconds(10)
+                await CheckForBirthdaysAtTime(now);
+            } while (!stoppingToken.IsCancellationRequested);
         }
 
-        private async void CheckBirthdays(object? state)
+        private async Task CheckForBirthdaysAtTime(DateTime now)
         {
-            var now = CommandsHelper.GetCurrentTimeEastern();
             var guildIds = _client.Guilds.Select(g => g.Id).ToList();
             var userGuildToBdays = LoadBirthdays(guildIds).Where(x => IsBirthday(now, x.Value)).ToList();
 
@@ -44,7 +53,6 @@ namespace Feliciabot.net._6._0.services
             {
                 LogHelper.Log($"Error checking birthdays with exception: {e.Message}");
             }
-
         }
 
         private static bool IsBirthday(DateTime date, string formattedBirthday)
@@ -75,14 +83,16 @@ namespace Feliciabot.net._6._0.services
             await channel.SendMessageAsync($"Happy birthday, {user.Mention}");
         }
 
-        private static TimeSpan MidnightDelay(DateTime currentTime)
+        private static DateTime CalculateNextMidnight(DateTime currentTime)
         {
-            return currentTime.Hour < 12 ? TimeSpan.Zero : new TimeSpan(24 - currentTime.Hour, 0, 0, 0);
-        }
+            // Determine if daylight saving time is in effect
+            bool isDst = ((currentTime.Kind == DateTimeKind.Utc && currentTime.TimeOfDay.Hours <= 4) ||
+                         (currentTime.Kind == DateTimeKind.Local && currentTime.TimeOfDay.Hours <= 5));
 
-        public void Dispose()
-        {
-            timer?.Dispose();
+            // Calculate the next midnight, adjusting for daylight saving time
+            DateTime nextMidnight = currentTime.Date.AddHours(isDst ? 24 - currentTime.TimeOfDay.Hours : 24);
+
+            return nextMidnight;
         }
     }
 }

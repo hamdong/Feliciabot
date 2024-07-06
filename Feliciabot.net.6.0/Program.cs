@@ -42,8 +42,8 @@ try
         });
 
     // Services
-    builder.Services.AddSingleton<GreetingService>()
-        .AddSingleton<BirthdayService>()
+    builder.Services.AddHostedService<BirthdayService>()
+        .AddSingleton<GreetingService>()
         .AddSingleton<UserManagementService>()
         .AddSingleton<EmbedBuilderService>();
 

@@ -17,15 +17,13 @@ namespace Feliciabot.net._6._0
         private readonly InteractionService _interactionService;
         private readonly IServiceProvider _serviceProvider;
         private readonly GreetingService _greetingService;
-        private readonly BirthdayService _birthdayService;
 
         public DiscordClientHost(
             DiscordSocketClient discordSocketClient,
             CommandService commandService,
             InteractionService interactionService,
             IServiceProvider serviceProvider,
-            GreetingService greetingService,
-            BirthdayService birthdayService)
+            GreetingService greetingService)
         {
             ArgumentNullException.ThrowIfNull(discordSocketClient);
             ArgumentNullException.ThrowIfNull(interactionService);
@@ -36,7 +34,6 @@ namespace Feliciabot.net._6._0
             _interactionService = interactionService;
             _serviceProvider = serviceProvider;
             _greetingService = greetingService;
-            _birthdayService = birthdayService;
 
             try
             {
@@ -100,8 +97,6 @@ namespace Feliciabot.net._6._0
 
         private async Task ClientReady()
         {
-            _birthdayService.ResetTimer();
-
             await _client.SetGameAsync("!icanhelp");
 
             await _interactionService
