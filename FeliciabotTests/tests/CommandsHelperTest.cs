@@ -13,14 +13,6 @@ namespace FeliciabotTests.tests
         }
 
         [Test]
-        public void GetStringArrayFromFile_Returns_String_Array()
-        {
-            string path = Environment.CurrentDirectory + @"\data\greetings.txt";
-            var stringArray = CommandsHelper.GetStringArrayFromFile(path);
-            Assert.That(stringArray.GetType().Name == "String[]");
-        }
-
-        [Test]
         public void IsNonCommandQuery_Returns_True_For_Normal_String()
         {
             Assert.That(CommandsHelper.IsNonCommandQuery("Hello world"));

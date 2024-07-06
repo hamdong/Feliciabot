@@ -65,17 +65,6 @@ namespace Feliciabot.net._6._0.helpers
         }
 
         /// <summary>
-        /// Retrieves the list of dialogue for Feliciabot to post in commands
-        /// </summary>
-        /// <param name="path">Path to the dialogue list</param>
-        /// <returns>List of dialogues as a string array</returns>
-        public static string[] GetStringArrayFromFile(string path)
-        {
-            string[] dialogueList = System.IO.File.ReadAllLines(path);
-            return dialogueList;
-        }
-
-        /// <summary>
         /// Determines if the passed query won't execute common bot commands for other bot users
         /// </summary>
         /// <param name="query">Query to check for command syntax</param>
