@@ -4,6 +4,7 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Feliciabot.net._6._0
@@ -13,6 +14,7 @@ namespace Feliciabot.net._6._0
         private readonly string clientTokenPath = Environment.CurrentDirectory + @"\ignore\token.txt";
 
         private readonly DiscordSocketClient _client;
+        private readonly ILogger<DiscordClientHost> _logger;
         private readonly CommandService _commands;
         private readonly InteractionService _interactionService;
         private readonly IServiceProvider _serviceProvider;
@@ -20,6 +22,7 @@ namespace Feliciabot.net._6._0
 
         public DiscordClientHost(
             DiscordSocketClient discordSocketClient,
+            ILogger<DiscordClientHost> logger,
             CommandService commandService,
             InteractionService interactionService,
             IServiceProvider serviceProvider,
@@ -30,6 +33,7 @@ namespace Feliciabot.net._6._0
             ArgumentNullException.ThrowIfNull(serviceProvider);
 
             _client = discordSocketClient;
+            _logger = logger;
             _commands = commandService;
             _interactionService = interactionService;
             _serviceProvider = serviceProvider;
@@ -39,7 +43,6 @@ namespace Feliciabot.net._6._0
             {
                 _client.Log += LogHandler;
                 _commands.Log += LogHandler;
-                LogHelper.ClearPreviousLogs();
 
                 if (!File.Exists(clientTokenPath))
                 {
@@ -48,11 +51,11 @@ namespace Feliciabot.net._6._0
                     return;
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException e)
             {
                 // Check ex.CancellationToken.IsCancellationRequested here.
                 // If false, it's pretty safe to assume it was a timeout.
-                if (!ex.CancellationToken.IsCancellationRequested) LogHelper.Log(ex.Message);
+                if (!e.CancellationToken.IsCancellationRequested) _logger.LogError("{Message}", e.Message);
             }
         }
 
@@ -159,7 +162,6 @@ namespace Feliciabot.net._6._0
                     break;
             }
             string msg = $"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}";
-            LogHelper.Log(msg);
             Console.WriteLine(msg);
             Console.ResetColor();
             return Task.CompletedTask;

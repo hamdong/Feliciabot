@@ -1,11 +1,12 @@
 ﻿using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Feliciabot.net._6._0.services
 {
-    public sealed class BirthdayService(DiscordSocketClient _client) : BackgroundService
+    public sealed class BirthdayService(DiscordSocketClient _client, ILogger<BirthdayService> _logger) : BackgroundService
     {
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -51,7 +52,7 @@ namespace Feliciabot.net._6._0.services
             }
             catch (Exception e)
             {
-                LogHelper.Log($"Error checking birthdays with exception: {e.Message}");
+                _logger.LogError("Error checking birthdays with exception: {Message}", e.Message);
             }
         }
 

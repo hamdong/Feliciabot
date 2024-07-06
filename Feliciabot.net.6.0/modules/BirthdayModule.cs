@@ -38,9 +38,8 @@ namespace Feliciabot.net._6._0.modules
                 birthdays[$"{userId}-{guildId}"] = formattedBirthday;
                 await File.WriteAllTextAsync(birthdayPath, JsonSerializer.Serialize(birthdays));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LogHelper.Log($"An error occurred while saving the birthday: {ex.Message}");
                 return false;
             }
 
