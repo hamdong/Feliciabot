@@ -15,14 +15,16 @@ namespace Feliciabot.net._6._0.services
         ];
 
         private readonly DiscordSocketClient _client;
+        private readonly UserManagementService _userManagementService;
 
         private readonly Random randomSeedForDialogues;
         private readonly string[] greetingList;
         private readonly string[] quoteList;
 
-        public GreetingService(DiscordSocketClient client)
+        public GreetingService(DiscordSocketClient client, UserManagementService userManagementService)
         {
             _client = client;
+            _userManagementService = userManagementService;
             quoteList = File.ReadAllLines(quotesPath);
             greetingList = File.ReadAllLines(greetingsPath);
             randomSeedForDialogues = new Random();
@@ -66,7 +68,7 @@ namespace Feliciabot.net._6._0.services
             string quoteToPost = greetingList[randIndex];
 
             await channel.SendMessageAsync($"Welcome to {channel.Guild.Name}, {user.Mention}! {quoteToPost}");
-            await UserManagementService.AssignTroubleRoleToUser(user);
+            await _userManagementService.AssignTroubleRoleToUserById(guild.Id, user.Id);
         }
 
         public static async Task AnnounceLeftUser(SocketGuild guild, SocketUser user)

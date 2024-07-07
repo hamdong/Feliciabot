@@ -1,16 +1,19 @@
-﻿using Discord.WebSocket;
-
-namespace Feliciabot.net._6._0.services
+﻿namespace Feliciabot.net._6._0.services
 {
     public class UserManagementService
     {
-        protected UserManagementService() { }
+        private readonly GuildService _guildService;
 
-        public static async Task AssignTroubleRoleToUser(SocketGuildUser user)
+        public UserManagementService(GuildService guildService)
         {
-            var serverRole = user.Guild.Roles.FirstOrDefault(role => role.Name == "trouble");
-            if (serverRole == null) return;
-            await user.AddRoleAsync(serverRole);
+            _guildService = guildService;
+        }
+
+        public async Task AssignTroubleRoleToUserById(ulong guildId, ulong userId)
+        {
+            var roleId = _guildService.GetRoleIdByName(guildId, "trouble");
+            if (roleId == 0) return;
+            await _guildService.AddRoleToUserByIdAsync(guildId, userId, roleId);
         }
     }
 }
