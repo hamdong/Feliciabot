@@ -1,7 +1,7 @@
 ﻿using Feliciabot.net._6._0.helpers;
 using NUnit.Framework;
 
-namespace FeliciabotTests.tests
+namespace FeliciabotTests.tests.helpers
 {
     [TestFixture]
     public class CommandsHelperTest

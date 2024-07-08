@@ -43,6 +43,7 @@ try
 
     // Services
     builder.Services.AddHostedService<BirthdayService>()
+        .AddSingleton<ClientService>()
         .AddSingleton<GuildService>()
         .AddSingleton<GreetingService>()
         .AddSingleton<UserManagementService>()

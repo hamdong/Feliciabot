@@ -1,6 +1,8 @@
-﻿namespace Feliciabot.net._6._0.services
+﻿using Feliciabot.net._6._0.services.interfaces;
+
+namespace Feliciabot.net._6._0.services
 {
-    public class UserManagementService
+    public class UserManagementService : IUserManagementService
     {
         private readonly GuildService _guildService;
 

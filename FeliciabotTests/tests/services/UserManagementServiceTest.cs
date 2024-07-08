@@ -3,12 +3,13 @@ using Feliciabot.net._6._0.services;
 using Moq;
 using NUnit.Framework;
 
-namespace FeliciabotTests.tests
+namespace FeliciabotTests.tests.services
 {
     [TestFixture]
     public class UserManagementServiceTest
     {
         private readonly UserManagementService _userManagementService;
+        private readonly Mock<ClientService> _mockClientService;
         private readonly Mock<GuildService> _mockGuildService;
 
         private readonly ulong expectedGuildId = GenerateRandomUlong();
@@ -18,7 +19,8 @@ namespace FeliciabotTests.tests
         public UserManagementServiceTest()
         {
             var mockDiscordClient = new Mock<DiscordSocketClient>();
-            _mockGuildService = new Mock<GuildService>(mockDiscordClient.Object);
+            _mockClientService = new Mock<ClientService>(mockDiscordClient.Object);
+            _mockGuildService = new Mock<GuildService>(_mockClientService.Object);
             _userManagementService = new UserManagementService(_mockGuildService.Object);
         }
 
