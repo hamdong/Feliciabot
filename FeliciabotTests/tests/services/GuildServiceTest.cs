@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using Feliciabot.Abstractions.interfaces;
 using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services;
 using Moq;
@@ -9,11 +10,12 @@ namespace FeliciabotTests.tests.services
     [TestFixture]
     public class GuildServiceTest
     {
-        private readonly ulong expectedGuildId = GenerateRandomUlong();
-        private readonly ulong expectedUserId = GenerateRandomUlong();
-        private readonly ulong expectedRoleId = GenerateRandomUlong();
+        private readonly ulong expectedGuildId = 1234567890123456789;
+        private readonly ulong expectedUserId = 9876543210987654321;
+        private readonly ulong expectedRoleId = 1111111111111111111;
 
         private readonly Mock<DiscordSocketClient> _mockDiscordClient;
+        private readonly Mock<IGuildFactory> _mockGuildFactory;
         private readonly Mock<Guild> _mockGuild;
         private readonly Mock<User> _mockUser;
         private readonly Mock<ClientService> _mockClientService;
@@ -22,9 +24,10 @@ namespace FeliciabotTests.tests.services
         public GuildServiceTest()
         {
             _mockDiscordClient = new Mock<DiscordSocketClient>();
+            _mockGuildFactory = new Mock<IGuildFactory>();
             _mockGuild = new Mock<Guild>();
             _mockUser = new Mock<User>();
-            _mockClientService = new Mock<ClientService>(_mockDiscordClient.Object);
+            _mockClientService = new Mock<ClientService>(_mockDiscordClient.Object, _mockGuildFactory.Object);
             _guildService = new GuildService(_mockClientService.Object);
         }
 
@@ -75,14 +78,6 @@ namespace FeliciabotTests.tests.services
             ulong actualRoleId = _guildService.GetRoleIdByName(expectedGuildId, "trouble");
 
             Assert.That(actualRoleId, Is.EqualTo(0));
-        }
-
-        private static ulong GenerateRandomUlong()
-        {
-            var random = new Random();
-            byte[] randomNumberBytes = new byte[8];
-            random.NextBytes(randomNumberBytes);
-            return BitConverter.ToUInt64(randomNumberBytes, 0);
         }
     }
 }

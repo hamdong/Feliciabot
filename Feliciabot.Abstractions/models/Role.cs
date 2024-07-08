@@ -1,9 +1,8 @@
 ﻿using Discord.WebSocket;
-using Feliciabot.Abstractions.interfaces;
 
 namespace Feliciabot.Abstractions.models
 {
-    public class Role : IRole
+    public class Role
     {
         public ulong Id { get; set; }
         public string Name { get; set; }

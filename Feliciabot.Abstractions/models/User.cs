@@ -38,9 +38,14 @@ namespace Feliciabot.Abstractions.models
             if (SocketGuildUser != null) await SocketGuildUser.AddRoleAsync(roleId);
         }
 
-        public static User FromSocketGuildUser(SocketGuildUser socketGuildUser)
+        public static User? FromSocketGuildUser(SocketGuildUser socketGuildUser)
         {
-            return new User(socketGuildUser);
+            return socketGuildUser == null ? null : new User(socketGuildUser);
+        }
+
+        public static User[] FromSocketGuildUsers(IReadOnlyCollection<SocketGuildUser> socketGuildUsers)
+        {
+            return socketGuildUsers.Select(socketGuildUser => new User(socketGuildUser)).ToArray();
         }
     }
 }
