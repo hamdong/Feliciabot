@@ -1,5 +1,5 @@
 ﻿using Discord.WebSocket;
-using Feliciabot.net._6._0.models;
+using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services;
 using Moq;
 using NUnit.Framework;

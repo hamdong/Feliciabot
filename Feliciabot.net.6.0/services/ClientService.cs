@@ -1,5 +1,5 @@
 ﻿using Discord.WebSocket;
-using Feliciabot.net._6._0.models;
+using Feliciabot.Abstractions.models;
 
 namespace Feliciabot.net._6._0.services
 {

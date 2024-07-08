@@ -1,8 +1,9 @@
 ﻿using Discord.WebSocket;
+using Feliciabot.Abstractions.interfaces;
 
-namespace Feliciabot.net._6._0.models
+namespace Feliciabot.Abstractions.models
 {
-    public class User
+    public class User : IUser
     {
         private SocketGuildUser? SocketGuildUser { get; set; }
         public ulong Id { get; set; }
