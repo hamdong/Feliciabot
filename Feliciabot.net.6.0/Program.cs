@@ -50,6 +50,7 @@ try
     builder.Services.AddHostedService<BirthdayService>()
         .AddSingleton<ClientService>()
         .AddSingleton<GuildService>()
+        .AddSingleton<MessagingService>()
         .AddSingleton<GreetingService>()
         .AddSingleton<UserManagementService>()
         .AddSingleton<EmbedBuilderService>();
