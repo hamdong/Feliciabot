@@ -27,15 +27,32 @@ namespace FeliciabotTests.tests.commands.fun
             _troubleCommand = new TroubleCommand(_mockMessagingService.Object);
         }
 
+        [SetUp]
+        public void Setup()
+        {
+            _mockMessagingService.Reset();
+        }
+
         [Test]
         public async Task Trouble_MessagesThreeTimes()
         {
-            _mockMessagingService.Setup(s => s.SendMessageToChannelById(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+            _mockMessagingService.Setup(s => s.SendMessageToContext(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
             TestCommandContext.SetContext(_troubleCommand, _mockContext.Object);
 
             await _troubleCommand.Trouble();
 
-            _mockMessagingService.Verify(s => s.SendMessageToChannelById(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Exactly(3));
+            _mockMessagingService.Verify(s => s.SendMessageToContext(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Exactly(3));
+        }
+
+        [Test]
+        public async Task Chairman_MessagesOnce()
+        {
+            _mockMessagingService.Setup(s => s.SendMessageToContext(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+            TestCommandContext.SetContext(_troubleCommand, _mockContext.Object);
+
+            await _troubleCommand.Chairman();
+
+            _mockMessagingService.Verify(s => s.SendMessageToContext(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Once);
         }
     }
 }
