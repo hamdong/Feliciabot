@@ -7,6 +7,7 @@ namespace Feliciabot.Abstractions.models
         public ulong Id { get; set; }
         public string Name { get; set; }
         public virtual Role[] Roles { get; set; }
+        public virtual Channel[] Channels { get; set; }
         public virtual User[] Users { get; set; }
 
         public Guild()
@@ -14,6 +15,7 @@ namespace Feliciabot.Abstractions.models
             Id = 0;
             Name = "guild";
             Roles = [];
+            Channels = [];
             Users = [];
         }
 
@@ -22,6 +24,7 @@ namespace Feliciabot.Abstractions.models
             Id = id;
             Name = name;
             Roles = [];
+            Channels = [];
             Users = [];
         }
 
@@ -30,6 +33,7 @@ namespace Feliciabot.Abstractions.models
             Id = id;
             Name = name;
             Roles = [];
+            Channels = [];
             Users = [user];
         }
 
@@ -38,6 +42,7 @@ namespace Feliciabot.Abstractions.models
             Id = socketGuild.Id;
             Name = socketGuild.Name;
             Roles = Role.FromSocketRoles(socketGuild.Roles);
+            Channels = Channel.FromSocketGuildChannels(socketGuild.Channels);
             Users = User.FromSocketGuildUsers(socketGuild.Users);
         }
 

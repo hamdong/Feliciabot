@@ -15,5 +15,10 @@ namespace Feliciabot.net._6._0.services
         {
             return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Users.ToList().Find(u => u.Id == userId);
         }
+
+        public virtual Channel? GetChannelByGuildById(ulong guildId, ulong channelId)
+        {
+            return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Channels.ToList().Find(c => c.Id == channelId);
+        }
     }
 }
