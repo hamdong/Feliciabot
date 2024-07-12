@@ -1,4 +1,6 @@
-﻿using Feliciabot.net._6._0.services.interfaces;
+﻿using Discord;
+using Discord.Commands;
+using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
@@ -15,6 +17,11 @@ namespace Feliciabot.net._6._0.services
         {
             var role = clientService.GetGuildById(guildId).Roles.ToList().Find(r => r.Name == name);
             return role?.Id ?? default; // 0 if not found
+        }
+
+        public virtual IReadOnlyCollection<GuildEmote> GetEmotesFromGuild(ICommandContext context)
+        {
+            return context.Guild.Emotes;
         }
     }
 }

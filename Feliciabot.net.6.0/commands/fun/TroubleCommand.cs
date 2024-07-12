@@ -17,7 +17,7 @@ namespace Feliciabot.net._6._0.commands
         {
             foreach (string quote in troubleQuotes)
             {
-                await _msgService.SendMessageToContext(Context, quote);
+                await _msgService.SendMessageToContextAsync(Context, quote);
                 await Task.Delay(1000);
             }
         }
@@ -26,9 +26,9 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Waits some random interval of time before replying 'bana'")]
         public async Task Chairman()
         {
-            int waitInterval = CommandsHelper.GetRandomNumber(60000);
+            int waitInterval = CommandsHelper.GetRandomNumber(30000);
             await Task.Delay(waitInterval);
-            await _msgService.SendMessageToContext(Context, "bana");
+            await _msgService.SendMessageToContextAsync(Context, "bana");
         }
     }
 }
