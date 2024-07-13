@@ -4,7 +4,7 @@ using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class GuildService(ClientService clientService) : IGuildService
+    public class GuildService(IClientService clientService) : IGuildService
     {
         public virtual async Task AddRoleToUserByIdAsync(ulong guildId, ulong userId, ulong roleId)
         {

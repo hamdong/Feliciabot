@@ -2,6 +2,7 @@
 using Feliciabot.Abstractions.interfaces;
 using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -14,20 +15,16 @@ namespace FeliciabotTests.tests.services
         private readonly ulong expectedUserId = 9876543210987654321;
         private readonly ulong expectedRoleId = 1111111111111111111;
 
-        private readonly Mock<DiscordSocketClient> _mockDiscordClient;
-        private readonly Mock<IGuildFactory> _mockGuildFactory;
         private readonly Mock<Guild> _mockGuild;
         private readonly Mock<User> _mockUser;
-        private readonly Mock<ClientService> _mockClientService;
+        private readonly Mock<IClientService> _mockClientService;
         private readonly GuildService _guildService;
 
         public GuildServiceTest()
         {
-            _mockDiscordClient = new Mock<DiscordSocketClient>();
-            _mockGuildFactory = new Mock<IGuildFactory>();
             _mockGuild = new Mock<Guild>();
             _mockUser = new Mock<User>();
-            _mockClientService = new Mock<ClientService>(_mockDiscordClient.Object, _mockGuildFactory.Object);
+            _mockClientService = new Mock<IClientService>();
             _guildService = new GuildService(_mockClientService.Object);
         }
 

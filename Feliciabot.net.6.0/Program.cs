@@ -7,6 +7,7 @@ using Feliciabot.Abstractions.factories;
 using Feliciabot.Abstractions.interfaces;
 using Feliciabot.net._6._0;
 using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Fergun.Interactive;
 using Lavalink4NET.Extensions;
 using Lavalink4NET.InactivityTracking.Extensions;
@@ -47,10 +48,10 @@ try
     builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
     // Services
-    builder.Services.AddHostedService<BirthdayService>()
-        .AddSingleton<ClientService>()
+    builder.Services.AddSingleton<IClientService, ClientService>()
+        .AddSingleton<IMessagingService, MessagingService>()
+        .AddHostedService<BirthdayService>()
         .AddSingleton<GuildService>()
-        .AddSingleton<MessagingService>()
         .AddSingleton<GreetingService>()
         .AddSingleton<UserManagementService>()
         .AddSingleton<EmbedBuilderService>();
