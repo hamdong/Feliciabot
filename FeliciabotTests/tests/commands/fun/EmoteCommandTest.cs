@@ -1,10 +1,7 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using Feliciabot.Abstractions.interfaces;
+﻿using Discord.Commands;
 using Feliciabot.net._6._0.commands;
 using Feliciabot.net._6._0.models;
-using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 using System.Text;
@@ -15,21 +12,13 @@ namespace FeliciabotTests.tests.commands.fun
     public class EmoteCommandTest
     {
         private readonly Mock<ICommandContext> _mockContext;
-        private readonly Mock<DiscordSocketClient> _mockClient;
-        private readonly Mock<IGuildFactory> _mockGuildFactory;
-        private readonly Mock<ClientService> _mockClientService;
-        private readonly Mock<MessagingService> _mockMessagingService;
-        private readonly Mock<GuildService> _mockGuildService;
+        private readonly Mock<IMessagingService> _mockMessagingService;
         private readonly EmoteCommand _emoteCommand;
         public EmoteCommandTest()
         {
             _mockContext = new Mock<ICommandContext>();
-            _mockClient = new Mock<DiscordSocketClient>();
-            _mockGuildFactory = new Mock<IGuildFactory>();
-            _mockClientService = new Mock<ClientService>(_mockClient.Object, _mockGuildFactory.Object);
-            _mockMessagingService = new Mock<MessagingService>(_mockClientService.Object);
-            _mockGuildService = new Mock<GuildService>(_mockClientService.Object);
-            _emoteCommand = new EmoteCommand(_mockMessagingService.Object, _mockGuildService.Object);
+            _mockMessagingService = new Mock<IMessagingService>();
+            _emoteCommand = new EmoteCommand(_mockMessagingService.Object);
         }
 
         [SetUp]
@@ -37,14 +26,12 @@ namespace FeliciabotTests.tests.commands.fun
         {
             TestCommandContext.SetContext(_emoteCommand, _mockContext.Object);
             _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-            _mockGuildService.Setup(s => s.GetEmotesFromGuild(It.IsAny<ICommandContext>())).Returns(It.IsAny<IReadOnlyCollection<GuildEmote>>);
         }
 
         [TearDown]
         public void Teardown()
         {
             _mockMessagingService.Reset();
-            _mockGuildService.Reset();
         }
 
         [Test]

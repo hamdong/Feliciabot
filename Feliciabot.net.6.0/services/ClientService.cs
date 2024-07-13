@@ -7,16 +7,16 @@ namespace Feliciabot.net._6._0.services
 {
     public class ClientService(DiscordSocketClient client, IGuildFactory guildFactory) : IClientService
     {
-        public virtual Guild GetGuildById(ulong id)
+        public Guild GetGuildById(ulong id)
         {
             return guildFactory.FromSocketGuild(client.GetGuild(id));
         }
-        public virtual User? GetUserByGuildById(ulong guildId, ulong userId)
+        public User? GetUserByGuildById(ulong guildId, ulong userId)
         {
             return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Users.ToList().Find(u => u.Id == userId);
         }
 
-        public virtual Channel? GetChannelByGuildById(ulong guildId, ulong channelId)
+        public Channel? GetChannelByGuildById(ulong guildId, ulong channelId)
         {
             return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Channels.ToList().Find(c => c.Id == channelId);
         }

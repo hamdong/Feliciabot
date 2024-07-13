@@ -2,13 +2,13 @@
 using Discord.Commands;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
-using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Feliciabot.net._6._0.commands
 {
-    public class EmoteCommand(MessagingService _msgingService, GuildService _guildService) : ModuleBase<ICommandContext>
+    public class EmoteCommand(IMessagingService _msgingService) : ModuleBase<ICommandContext>
     {
         private const int MAX_CLAPS = 12;
         private static readonly string[] pyraDogArray = [
@@ -77,7 +77,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task Randog()
         {
             var context = Context;
-            IReadOnlyCollection<GuildEmote> emotes = _guildService.GetEmotesFromGuild(Context);
+            IReadOnlyCollection<GuildEmote> emotes = Context.Guild.Emotes;
             int randomIndex = CommandsHelper.GetRandomNumber(emotes.Count);
             GuildEmote emote = emotes.ElementAt(randomIndex);
             string emoteId = Regex.Match(emote.Url, @"\d+").Value;

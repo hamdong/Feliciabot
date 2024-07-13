@@ -1,15 +1,15 @@
 ﻿using Discord.Commands;
 using Feliciabot.net._6._0.helpers;
-using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.commands
 {
     public class TroubleCommand : ModuleBase<ICommandContext>
     {
         private readonly string[] troubleQuotes = ["WE'VE", "GOT", "TROUBLE!"];
-        private readonly MessagingService _msgService;
+        private readonly IMessagingService _msgService;
 
-        public TroubleCommand(MessagingService msgService) => _msgService = msgService;
+        public TroubleCommand(IMessagingService msgService) => _msgService = msgService;
 
         [Command("trouble", RunMode = RunMode.Async)]
         [Summary("You have all the information you need")]
