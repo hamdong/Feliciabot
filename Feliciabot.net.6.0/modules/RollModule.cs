@@ -27,7 +27,7 @@ namespace Feliciabot.net._6._0.modules
             int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
             string[] chosenResponse = Roll.Responses[positiveOrNegativeResponse];
             int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
-            await _interactingService.SendRespondAsync(Context, $"Q: {question}\nA: {chosenResponse[randLineIndex]}").ConfigureAwait(false);
+            await _interactingService.SendResponseAsync(Context, $"Q: {question}\nA: {chosenResponse[randLineIndex]}").ConfigureAwait(false);
         }
 
         [SlashCommand("roll", "Rolls a 🎲 (default: 6 sided)", runMode: RunMode.Async)]
@@ -35,12 +35,12 @@ namespace Feliciabot.net._6._0.modules
         {
             if (sides <= 0)
             {
-                await RespondAsync("Please enter a positive number for the number of sides").ConfigureAwait(false);
+                await _interactingService.SendResponseAsync(Context, "Please enter a positive number for the number of sides").ConfigureAwait(false);
                 return;
             }
 
             int randomRoll = CommandsHelper.GetRandomNumber(sides + 1, 1);
-            await RespondAsync($"{Context.User.Username} rolled *{randomRoll}*").ConfigureAwait(false);
+            await _interactingService.SendRollResponseAsync(Context, randomRoll).ConfigureAwait(false);
         }
 
         [SlashCommand("flip", "Flips a coin", runMode: RunMode.Async)]
@@ -48,8 +48,7 @@ namespace Feliciabot.net._6._0.modules
         {
             int headsOrTails = CommandsHelper.GetRandomNumber(2);
             string coinFlipResult = (headsOrTails == 0) ? "Heads" : "Tails";
-
-            await RespondAsync($"{Context.User.Username} got *{coinFlipResult}*").ConfigureAwait(false);
+            await _interactingService.SendFlipResponseAsync(Context, coinFlipResult).ConfigureAwait(false);
         }
 
         [SlashCommand("roll-waifu", "Rolls a random waifu from the booru site", runMode: RunMode.Async)]

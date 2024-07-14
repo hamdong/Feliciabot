@@ -37,6 +37,7 @@ namespace FeliciabotTests.tests.modules
         [SetUp]
         public void Setup()
         {
+            _mockInteractingService.Reset();
             TestCommandContext.SetContext(_rollModule, _mockContext.Object);
         }
 
@@ -44,13 +45,42 @@ namespace FeliciabotTests.tests.modules
         public async Task EightBall_RollsResponse()
         {
             var flatResponses = Roll.Responses.SelectMany(response => response);
-            _mockInteractingService.Setup(s => s.SendRespondAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.IsAny<string>()));
 
             await _rollModule.EightBall("test");
 
-            _mockInteractingService.Verify(s => s.SendRespondAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
+            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
                 s.Contains("test") &&
                 flatResponses.Any(response => s.Contains(response))
+            )), Times.Once);
+        }
+
+        [Test]
+        public async Task DiceRoll_WithInvalidNumber_DoesntRoll()
+        {
+            await _rollModule.DiceRoll(0);
+
+            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
+                s.Equals("Please enter a positive number for the number of sides")
+            )), Times.Once);
+        }
+
+        [Test]
+        public async Task DiceRoll_WithValidNumber_Rolls()
+        {
+            await _rollModule.DiceRoll(6);
+
+            _mockInteractingService.Verify(s => s.SendRollResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<int>(i =>
+                i > 0
+            )), Times.Once);
+        }
+
+        [Test]
+        public async Task CoinFlip_Flips()
+        {
+            await _rollModule.CoinFlip();
+
+            _mockInteractingService.Verify(s => s.SendFlipResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
+                s.Equals("Heads") || s.Equals("Tails")
             )), Times.Once);
         }
     }

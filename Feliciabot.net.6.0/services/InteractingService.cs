@@ -6,9 +6,19 @@ namespace Feliciabot.net._6._0.services
 {
     public class InteractingService : IInteractingService
     {
-        public async Task SendRespondAsync(SocketInteractionContext<SocketInteraction> interaction, string message)
+        public async Task SendResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string message)
         {
             await interaction.Interaction.RespondAsync(message).ConfigureAwait(false);
+        }
+
+        public async Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> interaction, int roll)
+        {
+            await interaction.Interaction.RespondAsync($"{interaction.User.GlobalName} rolled *{roll}*").ConfigureAwait(false);
+        }
+
+        public async Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string flip)
+        {
+            await interaction.Interaction.RespondAsync($"{interaction.User.GlobalName} got *{flip}*").ConfigureAwait(false);
         }
     }
 }
