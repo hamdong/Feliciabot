@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Feliciabot.net._6._0.helpers;
+using Feliciabot.net._6._0.models;
+using Feliciabot.net._6._0.services.interfaces;
 using WaifuSharp;
 
 namespace Feliciabot.net._6._0.modules
@@ -9,25 +11,23 @@ namespace Feliciabot.net._6._0.modules
     {
         private const string OOC_CHANNEL_NAME = "out_of_context";
         private readonly WaifuClient _waifuClient;
+        private readonly IInteractingService _interactingService;
 
-        private readonly string[][] allReponses = [
-            [ "As I see it, yes", "It is certain!", "Most likely!", "Outlook good!", "Signs point to yes", "Without a doubt", "Yes", "Yes - definitely" ],
-            [ "Don't count on it", "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful" ],
-            [ "Reply hazy, try again", "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again" ]
-            ];
+        
 
-        public RollModule(WaifuClient waifuClient)
+        public RollModule(WaifuClient waifuClient, IInteractingService interactingService)
         {
             _waifuClient = waifuClient;
+            _interactingService = interactingService;
         }
 
         [SlashCommand("8ball", "Answers a question with yes/no/maybe responses", runMode: RunMode.Async)]
         public async Task EightBall(string question)
         {
             int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
-            string[] chosenResponse = allReponses[positiveOrNegativeResponse];
+            string[] chosenResponse = Roll.Responses[positiveOrNegativeResponse];
             int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
-            await RespondAsync($"Q: {question}\nA: {chosenResponse[randLineIndex]}").ConfigureAwait(false);
+            await _interactingService.SendRespondAsync(Context, $"Q: {question}\nA: {chosenResponse[randLineIndex]}").ConfigureAwait(false);
         }
 
         [SlashCommand("roll", "Rolls a 🎲 (default: 6 sided)", runMode: RunMode.Async)]

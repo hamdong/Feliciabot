@@ -50,6 +50,7 @@ try
     // Services
     builder.Services.AddSingleton<IClientService, ClientService>()
         .AddSingleton<IMessagingService, MessagingService>()
+        .AddSingleton<IInteractingService, InteractingService>()
         .AddHostedService<BirthdayService>()
         .AddSingleton<GuildService>()
         .AddSingleton<GreetingService>()
@@ -63,7 +64,7 @@ try
         .AddSingleton<Gelbooru>()
         .AddSingleton<YoutubeSearchClient>();
 
-    builder.Build().Run();
+    await builder.Build().RunAsync();
 }
 catch (FileNotFoundException e)
 {
