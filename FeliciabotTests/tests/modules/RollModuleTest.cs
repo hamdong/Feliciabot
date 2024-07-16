@@ -1,19 +1,11 @@
 ﻿using Discord;
-using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Feliciabot.net._6._0.commands;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.modules;
-using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WaifuSharp;
 
 namespace FeliciabotTests.tests.modules
@@ -82,6 +74,14 @@ namespace FeliciabotTests.tests.modules
             _mockInteractingService.Verify(s => s.SendFlipResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
                 s.Equals("Heads") || s.Equals("Tails")
             )), Times.Once);
+        }
+
+        [Test]
+        public async Task RollWaifu_RollSuccess_Posts()
+        {
+            await _rollModule.RollWaifu();
+
+            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.IsAny<string>()), Times.Once);
         }
     }
 }

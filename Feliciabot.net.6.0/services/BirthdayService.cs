@@ -91,7 +91,7 @@ namespace Feliciabot.net._6._0.services
                          (currentTime.Kind == DateTimeKind.Local && currentTime.TimeOfDay.Hours <= 5));
 
             // Calculate the next midnight, adjusting for daylight saving time
-            DateTime nextMidnight = currentTime.Date.AddHours(isDst ? 24 - currentTime.TimeOfDay.Hours : 24);
+            DateTime nextMidnight = currentTime.Date.AddHours(isDst ? 23 : 24);
 
             return nextMidnight;
         }

@@ -13,8 +13,6 @@ namespace Feliciabot.net._6._0.modules
         private readonly WaifuClient _waifuClient;
         private readonly IInteractingService _interactingService;
 
-        
-
         public RollModule(WaifuClient waifuClient, IInteractingService interactingService)
         {
             _waifuClient = waifuClient;
@@ -57,11 +55,11 @@ namespace Feliciabot.net._6._0.modules
             var waifuLink = _waifuClient.GetSfwImage(Endpoints.Sfw.Waifu);
             if (waifuLink is null)
             {
-                await RespondAsync("Unable to roll waifu :(").ConfigureAwait(false);
+                await _interactingService.SendResponseAsync(Context, "Unable to roll waifu :(").ConfigureAwait(false);
                 return;
             }
 
-            await RespondAsync(waifuLink).ConfigureAwait(false);
+            await _interactingService.SendResponseAsync(Context, waifuLink).ConfigureAwait(false);
         }
 
         [SlashCommand("ooc", "Posts a random image/post from out_of_context (Requires 'out_of_context' channel)", runMode: RunMode.Async)]
