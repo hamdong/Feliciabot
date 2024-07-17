@@ -12,17 +12,12 @@ namespace Feliciabot.net._6._0.services
         {
             do
             {
-                var now = CommandsHelper.GetCurrentTimeEastern();
-                var nextMidnight = CalculateNextMidnight(now);
+                var now = DateTime.UtcNow;
+                var nextMidnightOffset = CalculateNextMidnight(now);
+                var timeToCheck = now + nextMidnightOffset;
 
-                if (now >= nextMidnight)
-                {
-                    nextMidnight = nextMidnight.AddDays(1);
-                }
-
-                var delay = nextMidnight - now;
-                await Task.Delay(delay, stoppingToken); // for testing, change delay to TimeSpan.FromSeconds(10)
-                await CheckForBirthdaysAtTime(now);
+                await Task.Delay(nextMidnightOffset, stoppingToken);
+                await CheckForBirthdaysAtTime(timeToCheck);
             } while (!stoppingToken.IsCancellationRequested);
         }
 
@@ -84,16 +79,16 @@ namespace Feliciabot.net._6._0.services
             await channel.SendMessageAsync($"Happy birthday, {user.Mention}");
         }
 
-        private static DateTime CalculateNextMidnight(DateTime currentTime)
+        private static TimeSpan CalculateNextMidnight(DateTime utcCurrentTime)
         {
-            // Determine if daylight saving time is in effect
-            bool isDst = ((currentTime.Kind == DateTimeKind.Utc && currentTime.TimeOfDay.Hours <= 4) ||
-                         (currentTime.Kind == DateTimeKind.Local && currentTime.TimeOfDay.Hours <= 5));
+            TimeZoneInfo estTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            DateTime localNow = TimeZoneInfo.ConvertTimeFromUtc(utcCurrentTime, estTimeZone);
 
-            // Calculate the next midnight, adjusting for daylight saving time
-            DateTime nextMidnight = currentTime.Date.AddHours(isDst ? 23 : 24);
+            // Calculate the next midnight in Eastern Time
+            DateTime nextMidnight = localNow.Date.AddHours(localNow.TimeOfDay.Hours > 0 ? 24 : 0);
 
-            return nextMidnight;
+            // Calculate the duration until the next midnight
+            return nextMidnight - localNow;
         }
     }
 }
