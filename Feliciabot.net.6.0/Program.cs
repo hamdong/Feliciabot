@@ -51,7 +51,6 @@ try
     builder.Services.AddSingleton<IClientService, ClientService>()
         .AddSingleton<IMessagingService, MessagingService>()
         .AddSingleton<IInteractingService, InteractingService>()
-        .AddHostedService<BirthdayService>()
         .AddSingleton<GuildService>()
         .AddSingleton<GreetingService>()
         .AddSingleton<UserManagementService>()
