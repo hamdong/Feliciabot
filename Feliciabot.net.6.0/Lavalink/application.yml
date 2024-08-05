@@ -12,7 +12,7 @@ lavalink:
     # UPDATE Plugin at: https://github.com/lavalink-devs/youtube-source#plugin
     # Replace VERSION with the current version as shown by the Releases tab or a long commit hash for snapshots.
     # Note from Ham: Plugins can be the cause for failed playback so always check for newest Lavalink.jar and youtube-plugin.jar
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.4.0"
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.5.1"
       snapshot: false # Set to true if you want to use a snapshot version.
   youtube:
     enabled: true # Whether this source can be used.
