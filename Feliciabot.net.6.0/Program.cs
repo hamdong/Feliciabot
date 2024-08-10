@@ -18,55 +18,47 @@ using Microsoft.Extensions.Logging;
 using WaifuSharp;
 using YoutubeSearchApi.Net.Services;
 
-try
-{
-    var builder = new HostApplicationBuilder(args);
+var builder = new HostApplicationBuilder(args);
 
-    // Config
-    var config = Config.GenerateNewConfig();
-    var discordSocketClient = new DiscordSocketClient(config);
+// Config
+var config = Config.GenerateNewConfig();
+var discordSocketClient = new DiscordSocketClient(config);
 
-    // Discord
-    builder.Services.AddSingleton(discordSocketClient);
-    builder.Services.AddSingleton<CommandService>();
-    builder.Services.AddSingleton(new InteractionService(discordSocketClient.Rest, new InteractionServiceConfig { AutoServiceScopes = true }));
-    builder.Services.AddHostedService<DiscordClientHost>();
+// Discord
+builder.Services.AddSingleton(discordSocketClient);
+builder.Services.AddSingleton<CommandService>();
+builder.Services.AddSingleton(new InteractionService(discordSocketClient.Rest, new InteractionServiceConfig { AutoServiceScopes = true }));
+builder.Services.AddHostedService<DiscordClientHost>();
 
-    // Lavalink
-    builder.Services.AddLavalink();
-    builder.Services.AddInactivityTracking();
-    builder.Services.AddLogging(x => x.AddConsole().SetMinimumLevel(LogLevel.Trace));
-    builder.Services.ConfigureInactivityTracking(x => { })
-        .Configure<UsersInactivityTrackerOptions>(options =>
-        {
-            options.Threshold = 1;
-            options.Timeout = TimeSpan.FromSeconds(30);
-            options.ExcludeBots = true;
-        });
+// Lavalink
+builder.Services.AddLavalink();
+builder.Services.AddInactivityTracking();
+builder.Services.AddLogging(x => x.AddConsole().SetMinimumLevel(LogLevel.Trace));
+builder.Services.ConfigureInactivityTracking(x => { })
+    .Configure<UsersInactivityTrackerOptions>(options =>
+    {
+        options.Threshold = 1;
+        options.Timeout = TimeSpan.FromSeconds(30);
+        options.ExcludeBots = true;
+    });
 
-    // Abstractions
-    builder.Services.AddScoped<IGuildFactory, GuildFactory>();
+// Abstractions
+builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
-    // Services
-    builder.Services.AddSingleton<IClientService, ClientService>()
-        .AddSingleton<IMessagingService, MessagingService>()
-        .AddSingleton<IInteractingService, InteractingService>()
-        .AddSingleton<GuildService>()
-        .AddSingleton<GreetingService>()
-        .AddSingleton<UserManagementService>()
-        .AddSingleton<EmbedBuilderService>();
+// Services
+builder.Services.AddSingleton<IClientService, ClientService>()
+    .AddSingleton<IMessagingService, MessagingService>()
+    .AddSingleton<IInteractingService, InteractingService>()
+    .AddSingleton<GuildService>()
+    .AddSingleton<GreetingService>()
+    .AddSingleton<UserManagementService>()
+    .AddSingleton<EmbedBuilderService>();
 
-    // Misc.
-    builder.Services.AddSingleton<WaifuClient>()
-        .AddSingleton<HttpClient>()
-        .AddSingleton<InteractiveService>()
-        .AddSingleton<Gelbooru>()
-        .AddSingleton<YoutubeSearchClient>();
+// Misc.
+builder.Services.AddSingleton<WaifuClient>()
+    .AddSingleton<HttpClient>()
+    .AddSingleton<InteractiveService>()
+    .AddSingleton<Gelbooru>()
+    .AddSingleton<YoutubeSearchClient>();
 
-    await builder.Build().RunAsync();
-}
-catch (FileNotFoundException e)
-{
-    Console.WriteLine(e.Message);
-    Console.ReadLine();
-}
+await builder.Build().RunAsync();
