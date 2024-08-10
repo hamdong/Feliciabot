@@ -10,16 +10,16 @@
 
 	<ItemGroup>
 		<PackageReference Include="BooruSharp" Version="3.6.0" />
-		<PackageReference Include="Discord.Net" Version="3.15.2" />
+		<PackageReference Include="Discord.Net" Version="3.15.3" />
 		<PackageReference Include="Fergun.Interactive" Version="1.7.7" />
-		<PackageReference Include="Lavalink4NET.Discord.NET" Version="4.0.18" />
-		<PackageReference Include="Lavalink4NET.InactivityTracking" Version="4.0.18" />
+		<PackageReference Include="Lavalink4NET.Discord.NET" Version="4.0.20" />
+		<PackageReference Include="Lavalink4NET.InactivityTracking" Version="4.0.20" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
 		<PackageReference Include="NUnit" Version="4.1.0" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
 		<PackageReference Include="Ratquaza.Pokedex2" Version="1.0.0" />
 		<PackageReference Include="UwUfyer" Version="1.0.0" />
 		<PackageReference Include="WaifuSharp" Version="0.0.3" />
