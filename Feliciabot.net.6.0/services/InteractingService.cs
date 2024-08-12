@@ -1,4 +1,5 @@
-﻿using Discord.Interactions;
+﻿using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.services.interfaces;
 
@@ -19,6 +20,11 @@ namespace Feliciabot.net._6._0.services
         public async Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string flip)
         {
             await interaction.Interaction.RespondAsync($"{interaction.User.GlobalName} got *{flip}*").ConfigureAwait(false);
+        }
+
+        public async Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> interaction, Embed message)
+        {
+            await interaction.User.SendMessageAsync(embed: message).ContinueWith(r => interaction.Interaction.RespondAsync()).ConfigureAwait(false);
         }
     }
 }

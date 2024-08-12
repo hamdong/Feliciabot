@@ -50,5 +50,21 @@ namespace FeliciabotTests.tests.services
             _mockGuildFactory.Verify(u => u.FromSocketGuild(It.IsAny<SocketGuild>()), Times.Once);
             Assert.That(expectedUser.Id, Is.EqualTo(result?.Id));
         }
+
+        [Test]
+        public void GetChannelByGuildById_WithFoundChannel_ReturnsChannel()
+        {
+            Channel[] expectedChannel = [new(9999, "channel", 0, "guild")];
+            Guild expectedGuild = new(0, "guild")
+            {
+                Channels = expectedChannel
+            };
+            _mockGuildFactory.Setup(u => u.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
+
+            var result = _clientService.GetChannelByGuildById(It.IsAny<ulong>(), expectedChannel[0].Id);
+
+            _mockGuildFactory.Verify(u => u.FromSocketGuild(It.IsAny<SocketGuild>()), Times.Once);
+            Assert.That(expectedChannel[0].Id, Is.EqualTo(result?.Id));
+        }
     }
 }
