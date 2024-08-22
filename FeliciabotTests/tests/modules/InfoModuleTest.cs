@@ -11,6 +11,7 @@ namespace FeliciabotTests.tests.modules
     [TestFixture]
     public class InfoModuleTest
     {
+        private readonly Mock<IActivity> _mockActivity;
         private readonly Mock<IInteractionContext> _mockContext;
         private readonly Mock<IClientService> _mockClientService;
         private readonly Mock<IInteractingService> _mockInteractingService;
@@ -18,6 +19,7 @@ namespace FeliciabotTests.tests.modules
 
         public InfoModuleTest()
         {
+            _mockActivity = new Mock<IActivity>();
             _mockContext = new Mock<IInteractionContext>();
             _mockClientService = new Mock<IClientService>();
             _mockInteractingService = new Mock<IInteractingService>();
@@ -27,6 +29,7 @@ namespace FeliciabotTests.tests.modules
         [SetUp]
         public void Setup()
         {
+            _mockActivity.Setup(a => a.Name).Returns("Activity");
             _mockInteractingService.Reset();
             TestCommandContext.SetContext(_infoModule, _mockContext.Object);
         }
@@ -36,7 +39,7 @@ namespace FeliciabotTests.tests.modules
         {
             _mockClientService.Setup(c => c.GetUsername()).Returns("username");
             _mockClientService.Setup(c => c.GetStatus()).Returns(UserStatus.Online);
-            _mockClientService.Setup(c => c.GetActivities()).Returns([]);
+            _mockClientService.Setup(c => c.GetActivities()).Returns([_mockActivity.Object]);
 
             await _infoModule.Info();
 
