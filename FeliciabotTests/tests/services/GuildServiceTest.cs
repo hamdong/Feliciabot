@@ -2,7 +2,6 @@
 using Feliciabot.Abstractions.interfaces;
 using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services;
-using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -11,43 +10,72 @@ namespace FeliciabotTests.tests.services
     [TestFixture]
     public class GuildServiceTest
     {
-        private readonly ulong expectedGuildId = 1234567890123456789;
-        private readonly ulong expectedUserId = 9876543210987654321;
-        private readonly ulong expectedRoleId = 1111111111111111111;
-
-        private readonly Mock<Guild> _mockGuild;
+        private readonly Mock<DiscordSocketClient> _mockDiscordClient;
         private readonly Mock<User> _mockUser;
-        private readonly Mock<IClientService> _mockClientService;
+        private readonly Mock<IGuildFactory> _mockGuildFactory;
         private readonly GuildService _guildService;
+
+        private const ulong expectedGuildId = 9999;
+        private const ulong expectedChannelId = 2222;
+        private readonly Channel[] expectedChannel = [new(expectedChannelId, "channel", expectedGuildId, "guild")];
+        private readonly Role expectedRole = new(1111, "trouble", expectedGuildId, "guild");
 
         public GuildServiceTest()
         {
-            _mockGuild = new Mock<Guild>();
+            _mockDiscordClient = new Mock<DiscordSocketClient>();
             _mockUser = new Mock<User>();
-            _mockClientService = new Mock<IClientService>();
-            _guildService = new GuildService(_mockClientService.Object);
+            _mockGuildFactory = new Mock<IGuildFactory>();
+            _guildService = new GuildService(_mockDiscordClient.Object, _mockGuildFactory.Object);
         }
 
         [SetUp]
         public void Setup()
         {
             _mockUser.Reset();
+            _mockGuildFactory.Reset();
+        }
+
+        [Test]
+        public void GetChannelByGuildById_WithFoundChannel_ReturnsChannel()
+        {
+            Guild expectedGuild = new(0, "guild")
+            {
+                Channels = expectedChannel
+            };
+            _mockGuildFactory.Setup(u => u.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
+
+            var result = _guildService.GetChannelByGuildById(It.IsAny<ulong>(), expectedChannel[0].Id);
+
+            _mockGuildFactory.Verify(u => u.FromSocketGuild(It.IsAny<SocketGuild>()), Times.Once);
+            Assert.That(expectedChannel[0].Id, Is.EqualTo(result?.Id));
         }
 
         [Test]
         public async Task AddRoleToUserByIdAsync_WithFoundUser_AddsRoleToUser()
         {
-            _mockClientService.Setup(s => s.GetUserByGuildById(It.IsAny<ulong>(), It.IsAny<ulong>())).Returns(_mockUser.Object);
+            _mockUser.Setup(u => u.AddRoleByIdAsync(It.IsAny<ulong>())).Returns(Task.CompletedTask);
+            Guild expectedGuild = new(expectedGuildId, "guild")
+            {
+                Channels = expectedChannel,
+                Roles = [expectedRole],
+                Users = [_mockUser.Object]
+            };
+            _mockGuildFactory.Setup(s => s.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
 
-            await _guildService.AddRoleToUserByIdAsync(expectedGuildId, expectedUserId, expectedRoleId);
+            await _guildService.AddRoleToUserByIdAsync(expectedGuild.Id, _mockUser.Object.Id, expectedRole.Id);
 
-            _mockUser.Verify(u => u.AddRoleByIdAsync(expectedRoleId), Times.Once);
+            _mockUser.Verify(u => u.AddRoleByIdAsync(expectedRole.Id), Times.Once);
         }
 
         [Test]
         public async Task AddRoleToUserByIdAsync_WithNoFoundUser_DoesNotAddRoleToUser()
         {
-            _mockClientService.Setup(s => s.GetUserByGuildById(It.IsAny<ulong>(), It.IsAny<ulong>())).Returns((User?)null);
+            Guild expectedGuild = new(expectedGuildId, "guild")
+            {
+                Channels = expectedChannel,
+                Roles = [expectedRole]
+            };
+            _mockGuildFactory.Setup(s => s.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
 
             await _guildService.AddRoleToUserByIdAsync(It.IsAny<ulong>(), It.IsAny<ulong>(), It.IsAny<ulong>());
 
@@ -57,22 +85,28 @@ namespace FeliciabotTests.tests.services
         [Test]
         public void GetRoleIdByName_WithFoundRole_ReturnsCorrectRoleId()
         {
-            var expectedRole = new Role(expectedRoleId, "trouble", expectedGuildId, "guild");
-            _mockGuild.Setup(g => g.Roles).Returns([expectedRole]);
-            _mockClientService.Setup(s => s.GetGuildById(expectedGuildId)).Returns(_mockGuild.Object);
+            Guild expectedGuild = new(expectedGuildId, "guild")
+            {
+                Channels = expectedChannel,
+                Roles = [expectedRole]
+            };
+            _mockGuildFactory.Setup(s => s.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
 
-            ulong actualRoleId = _guildService.GetRoleIdByName(expectedGuildId, "trouble");
+            ulong actualRoleId = _guildService.GetRoleIdByName(expectedGuild.Id, "trouble");
 
-            Assert.That(actualRoleId, Is.EqualTo(expectedRoleId));
+            Assert.That(actualRoleId, Is.EqualTo(expectedRole.Id));
         }
 
         [Test]
         public void GetRoleIdByName_WithNoFoundRole_ReturnsZeroId()
         {
-            _mockGuild.Setup(g => g.Roles).Returns([]);
-            _mockClientService.Setup(s => s.GetGuildById(expectedGuildId)).Returns(_mockGuild.Object);
+            Guild expectedGuild = new(expectedGuildId, "guild")
+            {
+                Channels = expectedChannel
+            };
+            _mockGuildFactory.Setup(s => s.FromSocketGuild(It.IsAny<SocketGuild>())).Returns(expectedGuild);
 
-            ulong actualRoleId = _guildService.GetRoleIdByName(expectedGuildId, "trouble");
+            ulong actualRoleId = _guildService.GetRoleIdByName(expectedGuild.Id, "trouble");
 
             Assert.That(actualRoleId, Is.EqualTo(0));
         }
