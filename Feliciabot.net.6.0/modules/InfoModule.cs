@@ -14,7 +14,8 @@ namespace Feliciabot.net._6._0.modules
                 $"Created by: Ham#1185\n" +
                 $"Framework: Discord.NET C#\n" +
                 $"Status: {clientService.GetStatus()}\n" +
-                $"Currently playing: {clientService.GetActivities().FirstOrDefault(name => name.ToString() != "")}";
+                $"Currently playing: {clientService.GetActivities().FirstOrDefault(name => name.ToString() != "")}\n" +
+                $"Currently in: {clientService.GetGuildCount()} servers!";
 
             var builder = EmbedBuilderService.GetBotInfoAsEmbed(botInfo);
             await interactingService.SendResponseToUserAsync(Context, builder).ConfigureAwait(false);

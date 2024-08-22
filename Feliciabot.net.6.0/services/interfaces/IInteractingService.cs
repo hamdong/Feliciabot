@@ -6,9 +6,9 @@ namespace Feliciabot.net._6._0.services.interfaces
 {
     public interface IInteractingService
     {
-        Task SendResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string message);
-        Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> interaction, int roll);
-        Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string flip);
-        Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> interaction, Embed message);
+        Task SendResponseAsync(SocketInteractionContext<SocketInteraction> context, string message);
+        Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> context, int roll);
+        Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> context, string flip);
+        Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> context, Embed message);
     }
 }

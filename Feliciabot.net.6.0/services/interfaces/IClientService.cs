@@ -6,6 +6,7 @@ namespace Feliciabot.net._6._0.services.interfaces
     public interface IClientService
     {
         public string GetUsername();
+        public int GetGuildCount();
         public UserStatus GetStatus();
         public IReadOnlyCollection<IActivity> GetActivities();
         public Guild GetGuildById(ulong id);

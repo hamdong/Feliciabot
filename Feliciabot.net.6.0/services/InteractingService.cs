@@ -7,24 +7,26 @@ namespace Feliciabot.net._6._0.services
 {
     public class InteractingService : IInteractingService
     {
-        public async Task SendResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string message)
+        public async Task SendResponseAsync(SocketInteractionContext<SocketInteraction> context, string message)
         {
-            await interaction.Interaction.RespondAsync(message).ConfigureAwait(false);
+            await context.Interaction.RespondAsync(message).ConfigureAwait(false);
         }
 
-        public async Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> interaction, int roll)
+        public async Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> context, int roll)
         {
-            await interaction.Interaction.RespondAsync($"{interaction.User.GlobalName} rolled *{roll}*").ConfigureAwait(false);
+            await context.Interaction.RespondAsync($"{context.User.GlobalName} rolled *{roll}*").ConfigureAwait(false);
         }
 
-        public async Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string flip)
+        public async Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> context, string flip)
         {
-            await interaction.Interaction.RespondAsync($"{interaction.User.GlobalName} got *{flip}*").ConfigureAwait(false);
+            await context.Interaction.RespondAsync($"{context.User.GlobalName} got *{flip}*").ConfigureAwait(false);
         }
 
-        public async Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> interaction, Embed message)
+        public async Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> context, Embed message)
         {
-            await interaction.User.SendMessageAsync(embed: message).ContinueWith(r => interaction.Interaction.RespondAsync()).ConfigureAwait(false);
+            await context.Interaction.DeferAsync();
+            await context.User.SendMessageAsync(embed: message).ConfigureAwait(false);
+            await context.Interaction.FollowupAsync("DM sent!");
         }
     }
 }

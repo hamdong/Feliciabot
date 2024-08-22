@@ -13,6 +13,11 @@ namespace Feliciabot.net._6._0.services
             return client.CurrentUser.Username;
         }
 
+        public int GetGuildCount()
+        {
+            return client.Guilds.Count;
+        }
+
         public UserStatus GetStatus()
         {
             return client.CurrentUser.Status;
