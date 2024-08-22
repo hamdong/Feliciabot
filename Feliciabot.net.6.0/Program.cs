@@ -43,6 +43,7 @@ builder.Services.ConfigureInactivityTracking(x => { })
     });
 
 // Abstractions
+builder.Services.AddScoped<IClientFactory, ClientFactory>();
 builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
 // Services

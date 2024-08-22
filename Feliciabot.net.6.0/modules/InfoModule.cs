@@ -9,13 +9,14 @@ namespace Feliciabot.net._6._0.modules
         [SlashCommand("info", "Displays legacy information", runMode: RunMode.Async)]
         public async Task Info()
         {
+            var client = clientService.GetClient();
             string botInfo =
-                $"Name: {clientService.GetUsername()}\n" +
+                $"Name: {client.Username}\n" +
                 $"Created by: Ham#1185\n" +
                 $"Framework: Discord.NET C#\n" +
-                $"Status: {clientService.GetStatus()}\n" +
-                $"Currently playing: {clientService.GetActivities().FirstOrDefault(name => name.ToString() != "")}\n" +
-                $"Currently in: {clientService.GetGuildCount()} servers!";
+                $"Status: {client.Status}\n" +
+                $"Currently playing: {client.Activities.FirstOrDefault(name => name.ToString() != "")}\n" +
+                $"Currently in: {client.Guilds.Count} servers!";
 
             var builder = EmbedBuilderService.GetBotInfoAsEmbed(botInfo);
             await interactingService.SendResponseToUserAsync(Context, builder).ConfigureAwait(false);

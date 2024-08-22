@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.modules;
 using Feliciabot.net._6._0.services.interfaces;
 using Moq;
@@ -37,9 +38,7 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task Info_DmsUser()
         {
-            _mockClientService.Setup(c => c.GetUsername()).Returns("username");
-            _mockClientService.Setup(c => c.GetStatus()).Returns(UserStatus.Online);
-            _mockClientService.Setup(c => c.GetActivities()).Returns([_mockActivity.Object]);
+            _mockClientService.Setup(c => c.GetClient()).Returns(new Client("username", UserStatus.Online, _mockActivity.Object));
 
             await _infoModule.Info();
 

@@ -6,26 +6,11 @@ using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class ClientService(DiscordSocketClient client, IGuildFactory guildFactory) : IClientService
+    public class ClientService(DiscordSocketClient client, IGuildFactory guildFactory, IClientFactory clientFactory) : IClientService
     {
-        public string GetUsername()
+        public Client GetClient()
         {
-            return client.CurrentUser.Username;
-        }
-
-        public int GetGuildCount()
-        {
-            return client.Guilds.Count;
-        }
-
-        public UserStatus GetStatus()
-        {
-            return client.CurrentUser.Status;
-        }
-
-        public IReadOnlyCollection<IActivity> GetActivities()
-        {
-            return client.CurrentUser.Activities;
+            return clientFactory.FromDiscordSocketClient(client);
         }
 
         public Guild GetGuildById(ulong id)
