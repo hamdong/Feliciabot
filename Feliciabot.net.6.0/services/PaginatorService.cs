@@ -1,5 +1,6 @@
-﻿using Discord.Interactions;
-using Discord.WebSocket;
+﻿using System.Diagnostics.CodeAnalysis;
+using Discord;
+using Discord.Interactions;
 using Feliciabot.net._6._0.services.interfaces;
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
@@ -9,12 +10,9 @@ namespace Feliciabot.net._6._0.services
     public class PaginatorService(
         IInteractingService interactingService,
         InteractiveService interactiveService
-    ) : IPaginatorService
+    ) : InteractionModuleBase<SocketInteractionContext>, IPaginatorService
     {
-        public StaticPaginator BuildModulesPaginator(
-            SocketInteractionContext<SocketInteraction> context,
-            string moduleName
-        )
+        public StaticPaginator BuildModulesPaginator(IInteractionContext context, string moduleName)
         {
             List<string> commandList = [];
             string pageContent = string.Empty;
@@ -54,16 +52,12 @@ namespace Feliciabot.net._6._0.services
                 .Build();
         }
 
-        public async Task SendPaginatorAsync(
-            SocketInteractionContext<SocketInteraction> context,
-            StaticPaginator paginator
-        )
+        [ExcludeFromCodeCoverage]
+        public async Task SendPaginatorAsync(IInteractionContext context, StaticPaginator paginator)
         {
-            await interactiveService.SendPaginatorAsync(
-                paginator,
-                context.Channel,
-                TimeSpan.FromMinutes(5)
-            );
+            await interactiveService
+                .SendPaginatorAsync(paginator, context.Channel, TimeSpan.FromMinutes(5))
+                .ConfigureAwait(false);
         }
     }
 }

@@ -22,7 +22,10 @@ namespace FeliciabotTests.tests.modules
             _mockContext = new Mock<IInteractionContext>();
             _mockPaginatorService = new Mock<IPaginatorService>();
             _mockInteractingService = new Mock<IInteractingService>();
-            _helpModule = new HelpModule(_mockPaginatorService.Object, _mockInteractingService.Object);
+            _helpModule = new HelpModule(
+                _mockPaginatorService.Object,
+                _mockInteractingService.Object
+            );
         }
 
         [SetUp]
