@@ -7,16 +7,20 @@ using Fergun.Interactive.Pagination;
 namespace Feliciabot.net._6._0.services
 {
     public class PaginatorService(
-        InteractionService interactionService,
+        IInteractingService interactingService,
         InteractiveService interactiveService
     ) : IPaginatorService
     {
-        public StaticPaginator BuildPaginator(SocketInteractionContext<SocketInteraction> context, string moduleName)
+        public StaticPaginator BuildModulesPaginator(
+            SocketInteractionContext<SocketInteraction> context,
+            string moduleName
+        )
         {
             List<string> commandList = [];
             string pageContent = string.Empty;
-            var moduleCollection = interactionService
-                .SlashCommands.Where(c => c.Module.Name.Contains(moduleName))
+            var moduleCollection = interactingService
+                .GetSlashCommands()
+                .Where(c => c.ModuleName.Contains(moduleName))
                 .OrderBy(c => c.Name);
 
             foreach (var command in moduleCollection)
@@ -43,14 +47,17 @@ namespace Feliciabot.net._6._0.services
                 pagebuilder.Add(new PageBuilder().WithDescription(page));
             }
 
-            // Only the user that executed can interact
+            // Only the context user can interact
             return new StaticPaginatorBuilder()
                 .AddUser(context.User)
                 .WithPages(pagebuilder)
                 .Build();
         }
 
-        public async Task SendPaginatorAsync(SocketInteractionContext<SocketInteraction> context, StaticPaginator paginator)
+        public async Task SendPaginatorAsync(
+            SocketInteractionContext<SocketInteraction> context,
+            StaticPaginator paginator
+        )
         {
             await interactiveService.SendPaginatorAsync(
                 paginator,

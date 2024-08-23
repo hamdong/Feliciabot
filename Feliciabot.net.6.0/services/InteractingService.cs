@@ -1,12 +1,19 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
     public class InteractingService : IInteractingService
     {
+        private readonly InteractionService _interactionService;
+        public InteractingService(InteractionService interactionService)
+        {
+            _interactionService = interactionService;    
+        }
+
         public async Task SendResponseAsync(SocketInteractionContext<SocketInteraction> context, string message)
         {
             await context.Interaction.RespondAsync(message).ConfigureAwait(false);
@@ -27,6 +34,11 @@ namespace Feliciabot.net._6._0.services
             await context.Interaction.DeferAsync();
             await context.User.SendMessageAsync(embed: message).ConfigureAwait(false);
             await context.Interaction.FollowupAsync("DM sent!");
+        }
+
+        public IReadOnlyList<SlashCommand> GetSlashCommands()
+        {
+            return Interaction.FromSlashCommandList(_interactionService.SlashCommands).SlashCommands;
         }
     }
 }

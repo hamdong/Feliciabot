@@ -32,7 +32,7 @@ namespace Feliciabot.net._6._0.modules
 
         private async Task PostHelpInteraction(string moduleName)
         {
-            var paginator = paginatorService.BuildPaginator(Context, moduleName);
+            var paginator = paginatorService.BuildModulesPaginator(Context, moduleName);
             await interactingService.SendResponseAsync(Context, $"{moduleName} Commands");
             await paginatorService.SendPaginatorAsync(Context, paginator);
         }
