@@ -52,6 +52,7 @@ builder.Services.AddSingleton<IClientService, ClientService>()
     .AddSingleton<IMessagingService, MessagingService>()
     .AddSingleton<IInteractingService, InteractingService>()
     .AddSingleton<IPaginatorService, PaginatorService>()
+    .AddSingleton<IWaifuSharpService, WaifuSharpService>()
     .AddSingleton<GreetingService>()
     .AddSingleton<UserManagementService>()
     .AddSingleton<EmbedBuilderService>();

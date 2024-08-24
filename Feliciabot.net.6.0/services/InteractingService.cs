@@ -3,17 +3,14 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services.interfaces;
+using static System.Net.Mime.MediaTypeNames;
+using System;
+using WaifuSharp;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class InteractingService : IInteractingService
+    public class InteractingService(InteractionService interactionService) : IInteractingService
     {
-        private readonly InteractionService _interactionService;
-        public InteractingService(InteractionService interactionService)
-        {
-            _interactionService = interactionService;    
-        }
-
         public async Task SendResponseAsync(SocketInteractionContext<SocketInteraction> context, string message)
         {
             await context.Interaction.RespondAsync(message).ConfigureAwait(false);
@@ -38,7 +35,7 @@ namespace Feliciabot.net._6._0.services
 
         public IReadOnlyList<SlashCommand> GetSlashCommands()
         {
-            return Interaction.FromSlashCommandList(_interactionService.SlashCommands).SlashCommands;
+            return Interaction.FromSlashCommandList(interactionService.SlashCommands).SlashCommands;
         }
     }
 }
