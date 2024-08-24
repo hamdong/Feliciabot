@@ -7,13 +7,6 @@ plugins:
 #  name: # Name of the plugin
 #    some_key: some_value # Some key-value pair for the plugin
 #    another_key: another_value
-lavalink:
-  plugins:
-    # UPDATE Plugin at: https://github.com/lavalink-devs/youtube-source#plugin
-    # Replace VERSION with the current version as shown by the Releases tab or a long commit hash for snapshots.
-    # Note from Ham: Plugins can be the cause for failed playback so always check for newest Lavalink.jar and youtube-plugin.jar
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.5.2"
-      snapshot: false # Set to true if you want to use a snapshot version.
   youtube:
     enabled: true # Whether this source can be used.
     allowSearch: true # Whether "ytsearch:" and "ytmsearch:" can be used.
@@ -21,7 +14,21 @@ lavalink:
     allowDirectPlaylistIds: true # Whether just playlist IDs can match. If false, only complete URLs will be loaded.
     # The clients to use for track loading. See below for a list of valid clients.
     # Clients are queried in the order they are given (left-to-right)
-    clients: ["MUSIC", "ANDROID", "WEB"]
+    clients:
+      - MUSIC
+      - ANDROID_TESTSUITE
+      - WEB
+      - TVHTML5EMBEDDED
+    pot:
+      token: "[paste your po_token here]"
+      visitorData: "[paste your visitor_data here]"
+lavalink:
+  plugins:
+    # UPDATE Plugin at: https://github.com/lavalink-devs/youtube-source#plugin
+    # Replace VERSION with the current version as shown by the Releases tab or a long commit hash for snapshots.
+    # Note from Ham: Plugins can be the cause for failed playback so always check for newest Lavalink.jar and youtube-plugin.jar
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.6.0"
+      snapshot: false # Set to true if you want to use a snapshot version.
   server:
     password: "youshallnotpass"
     sources:
