@@ -49,7 +49,6 @@ builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 // Services
 builder.Services.AddSingleton<IClientService, ClientService>()
     .AddSingleton<IGuildService, GuildService>()
-    .AddSingleton<IMessagingService, MessagingService>()
     .AddSingleton<IInteractingService, InteractingService>()
     .AddSingleton<IPaginatorService, PaginatorService>()
     .AddSingleton<IWaifuSharpService, WaifuSharpService>()

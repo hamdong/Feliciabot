@@ -1,6 +1,6 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Feliciabot.net._6._0.commands;
-using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -9,42 +9,70 @@ namespace FeliciabotTests.tests.commands.fun
     [TestFixture]
     public class TroubleCommandTest
     {
+        private readonly Mock<IMessageChannel> _mockChannel;
         private readonly Mock<ICommandContext> _mockContext;
-        private readonly Mock<IMessagingService> _mockMessagingService;
         private readonly TroubleCommand _troubleCommand;
+
         public TroubleCommandTest()
         {
+            _mockChannel = new Mock<IMessageChannel>();
             _mockContext = new Mock<ICommandContext>();
-            _mockMessagingService = new Mock<IMessagingService>();
-            _troubleCommand = new TroubleCommand(_mockMessagingService.Object);
+            _troubleCommand = new TroubleCommand();
         }
 
         [SetUp]
         public void Setup()
         {
-            _mockMessagingService.Reset();
+            _mockContext.SetupGet(c => c.Channel).Returns(_mockChannel.Object);
+            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
         }
 
         [Test]
         public async Task Trouble_MessagesThreeTimes()
         {
-            _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
-
             await _troubleCommand.Trouble();
-
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Exactly(3));
+            _mockChannel.Verify(
+                c =>
+                    c.SendMessageAsync(
+                        It.Is<string>(s =>
+                            s.Equals("WE'VE") || s.Equals("GOT") || s.Equals("TROUBLE!")
+                        ),
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None,
+                        null
+                    ),
+                Times.Exactly(3)
+            );
         }
 
         [Test]
         public async Task Chairman_MessagesOnce()
         {
-            _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
-
-            await _troubleCommand.Chairman();
-
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Once);
+            await _troubleCommand.Chairman(false);
+            _mockChannel.Verify(
+                c =>
+                    c.SendMessageAsync(
+                        It.Is<string>(s => s.Equals("bana")),
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None,
+                        null
+                    ),
+                Times.Once
+            );
         }
     }
 }
