@@ -29,7 +29,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Trouble_MessagesThreeTimes()
         {
             _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-            TestCommandContext.SetContext(_troubleCommand, _mockContext.Object);
+            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
 
             await _troubleCommand.Trouble();
 
@@ -40,7 +40,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Chairman_MessagesOnce()
         {
             _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-            TestCommandContext.SetContext(_troubleCommand, _mockContext.Object);
+            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
 
             await _troubleCommand.Chairman();
 

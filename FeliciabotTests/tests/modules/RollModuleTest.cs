@@ -30,7 +30,7 @@ namespace FeliciabotTests.tests.modules
         public void Setup()
         {
             _mockInteractingService.Reset();
-            TestCommandContext.SetContext(_rollModule, _mockContext.Object);
+            MockContextHelper.SetContext(_rollModule, _mockContext.Object);
         }
 
         [Test]

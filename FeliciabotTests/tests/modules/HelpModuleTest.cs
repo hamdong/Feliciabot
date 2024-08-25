@@ -32,7 +32,7 @@ namespace FeliciabotTests.tests.modules
         public void Setup()
         {
             _mockPaginatorService.Reset();
-            TestCommandContext.SetContext(_helpModule, _mockContext.Object);
+            MockContextHelper.SetContext(_helpModule, _mockContext.Object);
         }
 
         [Test]

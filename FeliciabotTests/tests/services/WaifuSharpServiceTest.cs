@@ -25,12 +25,13 @@ namespace FeliciabotTests.tests.services
         [SetUp]
         public void Setup()
         {
+            _mockWaifuClient.Reset();
             Mock<IDiscordInteraction> mockInteraction = new();
             _mockUser.SetupGet(u => u.GlobalName).Returns("Caller");
             _mockUser.SetupGet(u => u.Mention).Returns("Receiver");
             _mockContext.SetupGet(c => c.User).Returns(_mockUser.Object);
             _mockContext.SetupGet(c => c.Interaction).Returns(mockInteraction.Object);
-            TestCommandContext.SetContext(_waifuSharpService, _mockContext.Object);
+            MockContextHelper.SetContext(_waifuSharpService, _mockContext.Object);
         }
 
         [Test]

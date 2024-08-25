@@ -39,7 +39,7 @@ namespace FeliciabotTests.tests.modules
             _mockUser.SetupGet(u => u.GlobalName).Returns("TestGlobalName");
             _mockUser.SetupGet(u => u.Mention).Returns("TestGlobalName");
             _mockContext.SetupGet(c => c.User).Returns(_mockUser.Object);
-            TestCommandContext.SetContext(_rolePlayModule, _mockContext.Object);
+            MockContextHelper.SetContext(_rolePlayModule, _mockContext.Object);
         }
 
         [Test]

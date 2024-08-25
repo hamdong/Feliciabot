@@ -24,7 +24,7 @@ namespace FeliciabotTests.tests.commands.fun
         [SetUp]
         public void Setup()
         {
-            TestCommandContext.SetContext(_emoteCommand, _mockContext.Object);
+            MockContextHelper.SetContext(_emoteCommand, _mockContext.Object);
             _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
         }
 

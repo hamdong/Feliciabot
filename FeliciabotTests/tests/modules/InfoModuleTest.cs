@@ -32,7 +32,7 @@ namespace FeliciabotTests.tests.modules
         {
             _mockActivity.Setup(a => a.Name).Returns("Activity");
             _mockInteractingService.Reset();
-            TestCommandContext.SetContext(_infoModule, _mockContext.Object);
+            MockContextHelper.SetContext(_infoModule, _mockContext.Object);
         }
 
         [Test]

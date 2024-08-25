@@ -16,7 +16,7 @@ namespace Feliciabot.net._6._0.commands
             EmoteCustom.Pyradog6, EmoteCustom.Pyradog7, EmoteCustom.Pyradog8, EmoteCustom.Pyradog9];
 
         [Command("civ", RunMode = RunMode.Async), Summary("Posts Feliciaciv emote")]
-        public async Task Civ() => await _msgingService.SendMessageToContextAsync(Context, EmoteCustom.FeliciaCiv);
+        public async Task Civ() => await Context.Channel.SendMessageAsync(EmoteCustom.FeliciaCiv);
 
         [Command("pad", RunMode = RunMode.Async), Summary("Posts Feliciadoru emote")]
         public async Task Padoru() => await _msgingService.SendMessageToContextAsync(Context, EmoteCustom.Padoru);
