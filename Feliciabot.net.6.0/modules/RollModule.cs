@@ -23,7 +23,7 @@ namespace Feliciabot.net._6._0.modules
         public async Task EightBall(string question)
         {
             int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
-            string[] chosenResponse = Roll.Responses[positiveOrNegativeResponse];
+            string[] chosenResponse = Responses.RollResponses[positiveOrNegativeResponse];
             int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
             await _interactingService.SendResponseAsync(Context, $"Q: {question}\nA: {chosenResponse[randLineIndex]}").ConfigureAwait(false);
         }

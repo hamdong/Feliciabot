@@ -1,8 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
-using Feliciabot.net._6._0.commands;
+using Moq;
 
 namespace FeliciabotTests.tests
 {
@@ -45,11 +46,36 @@ namespace FeliciabotTests.tests
                 {
                     Method = m,
                     Params = m.GetParameters(),
-                    Args = m.GetGenericArguments()
+                    Args = m.GetGenericArguments(),
                 })
                 .Select(x => x.Method)
                 .First();
             fieldInfo?.Invoke(module, [context]);
+        }
+
+        public static void VerifyMessageSentAsync(
+            Mock<IMessageChannel> channel,
+            Func<string, bool> msgPredicate
+        )
+        {
+            Expression<Func<string, bool>> expr = msg => msgPredicate(msg);
+            channel.Verify(
+                c =>
+                    c.SendMessageAsync(
+                        It.Is(expr),
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None,
+                        null
+                    ),
+                Times.Once
+            );
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Discord.Commands;
 using Feliciabot.net._6._0.helpers;
-using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.commands
 {
@@ -24,7 +23,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task Chairman(bool enableDelay = true)
         {
             int waitInterval = CommandsHelper.GetRandomNumber(30000);
-            if(enableDelay) await Task.Delay(waitInterval);
+            if (enableDelay) await Task.Delay(waitInterval);
             await Context.Channel.SendMessageAsync("bana");
         }
     }

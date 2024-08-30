@@ -36,7 +36,7 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task EightBall_RollsResponse()
         {
-            var flatResponses = Roll.Responses.SelectMany(response => response);
+            var flatResponses = Responses.RollResponses.SelectMany(response => response);
 
             await _rollModule.EightBall("test");
 
