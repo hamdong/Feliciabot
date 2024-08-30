@@ -1,12 +1,16 @@
-﻿using Discord.Interactions;
+﻿using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
+using Feliciabot.Abstractions.models;
 
 namespace Feliciabot.net._6._0.services.interfaces
 {
     public interface IInteractingService
     {
-        Task SendResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string message);
-        Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> interaction, int roll);
-        Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> interaction, string flip);
+        public Task SendResponseAsync(SocketInteractionContext<SocketInteraction> context, string message);
+        public Task SendRollResponseAsync(SocketInteractionContext<SocketInteraction> context, int roll);
+        public Task SendFlipResponseAsync(SocketInteractionContext<SocketInteraction> context, string flip);
+        public Task SendResponseToUserAsync(SocketInteractionContext<SocketInteraction> context, Embed message);
+        public IReadOnlyList<SlashCommand> GetSlashCommands();
     }
 }

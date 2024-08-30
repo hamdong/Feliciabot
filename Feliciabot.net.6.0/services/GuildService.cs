@@ -1,27 +1,28 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.WebSocket;
+using Feliciabot.Abstractions.interfaces;
+using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class GuildService(IClientService clientService) : IGuildService
+    public class GuildService(DiscordSocketClient client, IGuildFactory guildFactory) : IGuildService
     {
-        public virtual async Task AddRoleToUserByIdAsync(ulong guildId, ulong userId, ulong roleId)
+        public Channel? GetChannelByGuildById(ulong guildId, ulong channelId)
         {
-            var user = clientService.GetUserByGuildById(guildId, userId);
+            return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Channels.ToList().Find(c => c.Id == channelId);
+        }
+
+        public async Task AddRoleToUserByIdAsync(ulong guildId, ulong userId, ulong roleId)
+        {
+            var user = guildFactory.FromSocketGuild(client.GetGuild(guildId)).Users.ToList().Find(u => u.Id == userId);
             if (user == null) return;
             await user.AddRoleByIdAsync(roleId);
         }
 
-        public virtual ulong GetRoleIdByName(ulong guildId, string name)
+        public ulong GetRoleIdByName(ulong guildId, string name)
         {
-            var role = clientService.GetGuildById(guildId).Roles.ToList().Find(r => r.Name == name);
+            var role = guildFactory.FromSocketGuild(client.GetGuild(guildId)).Roles.ToList().Find(r => r.Name == name);
             return role?.Id ?? default; // 0 if not found
-        }
-
-        public virtual IReadOnlyCollection<GuildEmote> GetEmotesFromGuild(ICommandContext context)
-        {
-            return context.Guild.Emotes;
         }
     }
 }

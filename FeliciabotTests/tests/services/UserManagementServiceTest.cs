@@ -1,6 +1,5 @@
-﻿using Discord.WebSocket;
-using Feliciabot.Abstractions.interfaces;
-using Feliciabot.net._6._0.services;
+﻿using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -10,9 +9,7 @@ namespace FeliciabotTests.tests.services
     public class UserManagementServiceTest
     {
         private readonly UserManagementService _userManagementService;
-        private readonly Mock<IGuildFactory> _mockGuildFactory;
-        private readonly Mock<ClientService> _mockClientService;
-        private readonly Mock<GuildService> _mockGuildService;
+        private readonly Mock<IGuildService> _mockGuildService;
 
         private readonly ulong expectedGuildId = 1234567890123456789;
         private readonly ulong expectedUserId = 9876543210987654321;
@@ -20,10 +17,7 @@ namespace FeliciabotTests.tests.services
 
         public UserManagementServiceTest()
         {
-            var mockDiscordClient = new Mock<DiscordSocketClient>();
-            _mockGuildFactory = new Mock<IGuildFactory>();
-            _mockClientService = new Mock<ClientService>(mockDiscordClient.Object, _mockGuildFactory.Object);
-            _mockGuildService = new Mock<GuildService>(_mockClientService.Object);
+            _mockGuildService = new Mock<IGuildService>();
             _userManagementService = new UserManagementService(_mockGuildService.Object);
         }
 

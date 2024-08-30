@@ -1,10 +1,12 @@
 ﻿using Discord;
 using Discord.Interactions;
+using Feliciabot.Abstractions.models;
+using Feliciabot.net._6._0.services.interfaces;
 using WaifuSharp;
 
 namespace Feliciabot.net._6._0.modules
 {
-    public sealed class RolePlayModule(WaifuClient waifuClient) : InteractionModuleBase<SocketInteractionContext>
+    public sealed class RolePlayModule(IWaifuSharpService waifuSharpService) : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("bite", "Bite a user", runMode: RunMode.Async)]
         public async Task Bite(IUser user) => await PostAction(user, Endpoints.Sfw.Bite, "bit");
@@ -57,25 +59,14 @@ namespace Feliciabot.net._6._0.modules
         [SlashCommand("wink", "Wink", runMode: RunMode.Async)]
         public async Task Wink() => await PostAction(Endpoints.Sfw.Wink, "is winking");
 
-        private async Task PostAction(IUser user, Endpoints.Sfw action, string actionPastTense)
+        private async Task PostAction(IUser user, Endpoints.Sfw action, string actionOnUser)
         {
-            string text = $"{Context.User.GlobalName} {actionPastTense} {user.Mention}";
-            await PostTextWithAction(text, action);
+            await waifuSharpService.SendWaifuSharpResponseAsync(Context, action, $"{actionOnUser} {user.Mention}");
         }
 
-        private async Task PostAction(Endpoints.Sfw action, string actionPastTense)
+        private async Task PostAction(Endpoints.Sfw action, string actionOnUser)
         {
-            string text = $"{Context.User.GlobalName} {actionPastTense}";
-            await PostTextWithAction(text, action);
-        }
-
-        private async Task PostTextWithAction(string text, Endpoints.Sfw action)
-        {
-            var builder = new EmbedBuilder();
-            string imgURL = waifuClient.GetSfwImage(action);
-            builder.WithImageUrl(imgURL);
-
-            await RespondAsync(text, embed: builder.Build()).ConfigureAwait(false);
+            await waifuSharpService.SendWaifuSharpResponseAsync(Context, action, $"{actionOnUser}");
         }
     }
 }

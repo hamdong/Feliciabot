@@ -5,20 +5,11 @@ using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class ClientService(DiscordSocketClient client, IGuildFactory guildFactory) : IClientService
+    public class ClientService(DiscordSocketClient client, IClientFactory clientFactory) : IClientService
     {
-        public Guild GetGuildById(ulong id)
+        public Client GetClient()
         {
-            return guildFactory.FromSocketGuild(client.GetGuild(id));
-        }
-        public User? GetUserByGuildById(ulong guildId, ulong userId)
-        {
-            return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Users.ToList().Find(u => u.Id == userId);
-        }
-
-        public Channel? GetChannelByGuildById(ulong guildId, ulong channelId)
-        {
-            return guildFactory.FromSocketGuild(client.GetGuild(guildId)).Channels.ToList().Find(c => c.Id == channelId);
+            return clientFactory.FromDiscordSocketClient(client);
         }
     }
 }

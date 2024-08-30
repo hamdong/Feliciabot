@@ -43,13 +43,16 @@ builder.Services.ConfigureInactivityTracking(x => { })
     });
 
 // Abstractions
+builder.Services.AddScoped<IClientFactory, ClientFactory>();
 builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
 // Services
 builder.Services.AddSingleton<IClientService, ClientService>()
-    .AddSingleton<IMessagingService, MessagingService>()
+    .AddSingleton<IGuildService, GuildService>()
     .AddSingleton<IInteractingService, InteractingService>()
-    .AddSingleton<GuildService>()
+    .AddSingleton<IPaginatorService, PaginatorService>()
+    .AddSingleton<IWaifuSharpService, WaifuSharpService>()
+    .AddSingleton<IRandomizerService, RandomizerService>()
     .AddSingleton<GreetingService>()
     .AddSingleton<UserManagementService>()
     .AddSingleton<EmbedBuilderService>();

@@ -7,39 +7,72 @@ using NUnit.Framework;
 namespace FeliciabotTests.tests.commands.fun
 {
     [TestFixture]
-    public class TroubleCommandTest
+    public class VideoCommandTest
     {
         private readonly Mock<IMessageChannel> _mockChannel;
         private readonly Mock<ICommandContext> _mockContext;
-        private readonly TroubleCommand _troubleCommand;
+        private readonly VideoCommand _videoCommand;
 
-        public TroubleCommandTest()
+        public VideoCommandTest()
         {
             _mockChannel = new Mock<IMessageChannel>();
             _mockContext = new Mock<ICommandContext>();
-            _troubleCommand = new TroubleCommand();
+            _videoCommand = new VideoCommand();
         }
 
         [SetUp]
         public void Setup()
         {
             _mockContext.SetupGet(c => c.Channel).Returns(_mockChannel.Object);
-            MockContextHelper.SetContext(_troubleCommand, _mockContext.Object);
+            MockContextHelper.SetContext(_videoCommand, _mockContext.Object);
         }
 
         [Test]
-        public async Task Trouble_MessagesThreeTimes()
+        public async Task Alfred_PostsVideo()
         {
-            await _troubleCommand.Trouble();
+            await _videoCommand.Alfred();
+            VerifySendFile(@"videos\alfred.mov");
+        }
+
+        [Test]
+        public async Task GG_PostsVideo()
+        {
+            await _videoCommand.GG();
+            VerifySendMessage("https://www.youtube.com/watch?v=9nXYsmTv3Gg");
+        }
+
+        [Test]
+        public async Task Ganbare_PostsVideo()
+        {
+            await _videoCommand.Ganbare();
+            VerifySendMessage("https://www.youtube.com/watch?v=YoHq6DrWLSI");
+        }
+
+        [Test]
+        public async Task Huh_PostsVideo()
+        {
+            await _videoCommand.Huh();
+            VerifySendFile(@"videos\huh.mp4");
+        }
+
+        [Test]
+        public async Task Hi_PostsVideo()
+        {
+            await _videoCommand.Hi();
+            VerifySendFile(@"videos\video0.mov");
+        }
+
+        private void VerifySendFile(string filePath)
+        {
             _mockChannel.Verify(
                 c =>
-                    c.SendMessageAsync(
-                        It.Is<string>(s =>
-                            s.Equals("WE'VE") || s.Equals("GOT") || s.Equals("TROUBLE!")
-                        ),
+                    c.SendFileAsync(
+                        It.Is<string>(s => s.Contains(filePath)),
+                        null,
                         false,
                         null,
                         null,
+                        false,
                         null,
                         null,
                         null,
@@ -48,18 +81,16 @@ namespace FeliciabotTests.tests.commands.fun
                         MessageFlags.None,
                         null
                     ),
-                Times.Exactly(3)
+                Times.Once
             );
         }
 
-        [Test]
-        public async Task Chairman_MessagesOnce()
+        private void VerifySendMessage(string message)
         {
-            await _troubleCommand.Chairman(false);
             _mockChannel.Verify(
                 c =>
                     c.SendMessageAsync(
-                        It.Is<string>(s => s.Equals("bana")),
+                        It.Is<string>(s => s.Equals(message)),
                         false,
                         null,
                         null,

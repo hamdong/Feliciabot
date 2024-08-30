@@ -1,7 +1,9 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Feliciabot.net._6._0.commands;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.services.interfaces;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 using NUnit.Framework;
 using System.Text;
@@ -11,62 +13,57 @@ namespace FeliciabotTests.tests.commands.fun
     [TestFixture]
     public class EmoteCommandTest
     {
+        private readonly Mock<IMessageChannel> _mockChannel;
         private readonly Mock<ICommandContext> _mockContext;
-        private readonly Mock<IMessagingService> _mockMessagingService;
         private readonly EmoteCommand _emoteCommand;
+
         public EmoteCommandTest()
         {
+            _mockChannel = new Mock<IMessageChannel>();
             _mockContext = new Mock<ICommandContext>();
-            _mockMessagingService = new Mock<IMessagingService>();
-            _emoteCommand = new EmoteCommand(_mockMessagingService.Object);
+            _emoteCommand = new EmoteCommand();
         }
 
         [SetUp]
         public void Setup()
         {
-            TestCommandContext.SetContext(_emoteCommand, _mockContext.Object);
-            _mockMessagingService.Setup(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>())).Returns(Task.CompletedTask);
-        }
-
-        [TearDown]
-        public void Teardown()
-        {
-            _mockMessagingService.Reset();
+            _mockContext.SetupGet(c => c.Channel).Returns(_mockChannel.Object);
+            MockContextHelper.SetContext(_emoteCommand, _mockContext.Object);
         }
 
         [Test]
         public async Task Civ_MessagesWithEmote()
         {
             await _emoteCommand.Civ();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), EmoteCustom.FeliciaCiv), Times.Once);
+            VerifySendMessage(EmoteCustom.FeliciaCiv);
         }
 
         [Test]
         public async Task Pad_MessagesWithEmote()
         {
             await _emoteCommand.Padoru();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), EmoteCustom.Padoru), Times.Once);
+            VerifySendMessage(EmoteCustom.Padoru);
         }
 
         [Test]
         public async Task Sip_MessagesWithEmote()
         {
             await _emoteCommand.Sip();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), EmoteCustom.PyraSip), Times.Once);
+            VerifySendMessage(EmoteCustom.PyraSip);
         }
 
         [Test]
         public async Task Spin_MessagesWithEmote()
         {
             await _emoteCommand.Spin();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), EmoteCustom.FeliciaSpin), Times.Once);
+            VerifySendMessage(EmoteCustom.FeliciaSpin);
         }
 
         [Test]
         public async Task Clap_MessagesWithEmote()
         {
             await _emoteCommand.Clap();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), EmoteCustom.WiiClap), Times.Once);
+            VerifySendMessage(EmoteCustom.WiiClap);
         }
 
         [Test]
@@ -81,7 +78,7 @@ namespace FeliciabotTests.tests.commands.fun
             }
 
             await _emoteCommand.Clap(maxClaps);
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), sb.ToString()), Times.Once);
+            VerifySendMessage(sb.ToString());
         }
 
         [Test]
@@ -96,63 +93,79 @@ namespace FeliciabotTests.tests.commands.fun
             }
 
             await _emoteCommand.Clap(maxClaps);
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), sb.ToString()), Times.Once);
+            VerifySendMessage(sb.ToString());
         }
 
         [Test]
         public async Task Pyradog_MessagesWithEmote()
         {
             await _emoteCommand.Pyradog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.Pyradog2)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.Pyradog2));
         }
 
         [Test]
         public async Task Tatdog_MessagesWithEmote()
         {
             await _emoteCommand.Tatianadog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.Tatiana)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.Tatiana));
         }
 
         [Test]
         public async Task Aibadog_MessagesWithEmote()
         {
             await _emoteCommand.Aibadog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.Aiba)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.Aiba));
         }
 
         [Test]
         public async Task Ninodog_MessagesWithEmote()
         {
             await _emoteCommand.Ninodog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.Nino)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.Nino));
         }
 
         [Test]
         public async Task Pogdog_MessagesWithEmote()
         {
             await _emoteCommand.Pogdog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.PyraPoggers)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.PyraPoggers));
         }
 
         [Test]
         public async Task Okudog_MessagesWithEmote()
         {
             await _emoteCommand.Okudog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.Oku)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.Oku));
         }
 
         [Test]
         public async Task CowboyNinodog_MessagesWithEmote()
         {
             await _emoteCommand.Cowboyninodog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), WithPyraDog(EmoteCustom.CowboyNino)), Times.Once);
+            VerifySendMessage(WithPyraDog(EmoteCustom.CowboyNino));
         }
 
         [Test]
         public async Task Shuffledog_MessagesWithEmote()
         {
             await _emoteCommand.Shuffledog();
-            _mockMessagingService.Verify(s => s.SendMessageToContextAsync(It.IsAny<ICommandContext>(), It.IsAny<string>()), Times.Once);
+            _mockChannel.Verify(
+            c =>
+                    c.SendMessageAsync(
+                        It.IsAny<string>(),
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None,
+                        null
+                    ),
+                Times.Once
+            );
         }
 
         private static string WithPyraDog(string pyradogHead)
@@ -160,6 +173,27 @@ namespace FeliciabotTests.tests.commands.fun
             return $"{EmoteCustom.Pyradog1}{pyradogHead}{EmoteCustom.Pyradog3}\n" +
                 $"{EmoteCustom.Pyradog4}{EmoteCustom.Pyradog5}{EmoteCustom.Pyradog6}\n" +
                 $"{EmoteCustom.Pyradog7}{EmoteCustom.Pyradog8}{EmoteCustom.Pyradog9}";
+        }
+
+        private void VerifySendMessage(string message)
+        {
+            _mockChannel.Verify(
+                c =>
+                    c.SendMessageAsync(
+                        It.Is<string>(s => s.Equals(message)),
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None,
+                        null
+                    ),
+                Times.Once
+            );
         }
     }
 }
