@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.services.interfaces;

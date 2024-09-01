@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.services.interfaces;
 using WaifuSharp;
 
@@ -35,25 +34,32 @@ namespace Feliciabot.net._6._0.modules
             await CompileMessage(user, Endpoints.Sfw.Highfive, "high-fived");
 
         [SlashCommand("hug", "Hug a user", runMode: RunMode.Async)]
-        public async Task Hug(IUser user) => await CompileMessage(user, Endpoints.Sfw.Hug, "hugged");
+        public async Task Hug(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Hug, "hugged");
 
         [SlashCommand("kiss", "Kiss a user", runMode: RunMode.Async)]
-        public async Task Kiss(IUser user) => await CompileMessage(user, Endpoints.Sfw.Kiss, "kissed");
+        public async Task Kiss(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Kiss, "kissed");
 
         [SlashCommand("nom", "Nom a user", runMode: RunMode.Async)]
-        public async Task Nom(IUser user) => await CompileMessage(user, Endpoints.Sfw.Nom, "nommed");
+        public async Task Nom(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Nom, "nommed");
 
         [SlashCommand("lick", "Lick a user", runMode: RunMode.Async)]
-        public async Task Lick(IUser user) => await CompileMessage(user, Endpoints.Sfw.Lick, "licked");
+        public async Task Lick(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Lick, "licked");
 
         [SlashCommand("pat", "Pat a user", runMode: RunMode.Async)]
-        public async Task Pat(IUser user) => await CompileMessage(user, Endpoints.Sfw.Pat, "patted");
+        public async Task Pat(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Pat, "patted");
 
         [SlashCommand("poke", "Poke a user", runMode: RunMode.Async)]
-        public async Task Poke(IUser user) => await CompileMessage(user, Endpoints.Sfw.Poke, "poked");
+        public async Task Poke(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Poke, "poked");
 
         [SlashCommand("slap", "Slap a user", runMode: RunMode.Async)]
-        public async Task Slap(IUser user) => await CompileMessage(user, Endpoints.Sfw.Slap, "slapped");
+        public async Task Slap(IUser user) =>
+            await CompileMessage(user, Endpoints.Sfw.Slap, "slapped");
 
         [SlashCommand("smug", "Smug", runMode: RunMode.Async)]
         public async Task Smug() => await CompileMessage(Endpoints.Sfw.Smug, "is smug");

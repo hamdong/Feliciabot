@@ -33,8 +33,4 @@
 		<Folder Include="videos\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Feliciabot.Abstractions\Feliciabot.Abstractions.csproj" />
-	</ItemGroup>
-
 </Project>

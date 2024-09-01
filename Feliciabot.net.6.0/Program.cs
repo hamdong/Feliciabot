@@ -3,8 +3,6 @@ using BooruSharp.Booru;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Feliciabot.Abstractions.factories;
-using Feliciabot.Abstractions.interfaces;
 using Feliciabot.net._6._0;
 using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
@@ -47,9 +45,6 @@ builder
         options.Timeout = TimeSpan.FromSeconds(30);
         options.ExcludeBots = true;
     });
-
-// Abstractions
-builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
 // Services
 builder
