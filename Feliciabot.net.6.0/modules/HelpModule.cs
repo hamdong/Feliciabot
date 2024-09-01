@@ -3,8 +3,7 @@ using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.modules
 {
-    public class HelpModule(IPaginatorService paginatorService, IInteractingService interactingService)
-        : InteractionModuleBase<SocketInteractionContext>
+    public class HelpModule(IPaginatorService paginatorService) : InteractionModuleBase
     {
         [SlashCommand("help_info", "Lists info commands", runMode: RunMode.Async)]
         public async Task HelpInfo()
@@ -33,7 +32,7 @@ namespace Feliciabot.net._6._0.modules
         private async Task PostHelpInteraction(string moduleName)
         {
             var paginator = paginatorService.BuildModulesPaginator(Context, moduleName);
-            await interactingService.SendResponseAsync(Context, $"{moduleName} Commands");
+            await RespondAsync($"{moduleName} Commands").ConfigureAwait(false);
             await paginatorService.SendPaginatorAsync(Context, paginator);
         }
     }

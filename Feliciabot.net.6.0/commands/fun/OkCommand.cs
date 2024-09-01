@@ -1,15 +1,17 @@
 ﻿using Discord;
 using Discord.Commands;
 
-namespace Feliciabot.net._6._0.commands
+namespace Feliciabot.net._6._0.commands.fun
 {
-    public class OkayCommand : ModuleBase
+    public class OkCommand : ModuleBase
     {
         [Command("ok", RunMode = RunMode.Async)]
         [Summary("Posts ok [previous member username]")]
         public async Task Ok()
         {
-            IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(50).FlattenAsync();
+            IEnumerable<IMessage> messages = await Context
+                .Channel.GetMessagesAsync(50)
+                .FlattenAsync();
             string callOutUser = Context.Message.Author.Username;
 
             foreach (IMessage m in messages)
@@ -26,6 +28,7 @@ namespace Feliciabot.net._6._0.commands
 
         [Command("ok", RunMode = RunMode.Async)]
         [Summary("Posts ok [mentioned member username]")]
-        public async Task Ok(IUser user) => await Context.Channel.SendMessageAsync($"ok {user.Username}");
+        public async Task Ok(IUser user) =>
+            await Context.Channel.SendMessageAsync($"ok {user.Username}");
     }
 }

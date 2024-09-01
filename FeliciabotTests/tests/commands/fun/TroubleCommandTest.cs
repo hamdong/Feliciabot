@@ -31,24 +31,10 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Trouble_MessagesThreeTimes()
         {
             await _troubleCommand.Trouble();
-            _mockChannel.Verify(
-                c =>
-                    c.SendMessageAsync(
-                        It.Is<string>(s =>
-                            s.Equals("WE'VE") || s.Equals("GOT") || s.Equals("TROUBLE!")
-                        ),
-                        false,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        MessageFlags.None,
-                        null
-                    ),
-                Times.Exactly(3)
+            VerifyHelper.VerifyMessageSentAsync(
+                _mockChannel,
+                s => s.Equals("WE'VE") || s.Equals("GOT") || s.Equals("TROUBLE!"),
+                3
             );
         }
 
@@ -56,23 +42,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Chairman_MessagesOnce()
         {
             await _troubleCommand.Chairman(false);
-            _mockChannel.Verify(
-                c =>
-                    c.SendMessageAsync(
-                        It.Is<string>(s => s.Equals("bana")),
-                        false,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        MessageFlags.None,
-                        null
-                    ),
-                Times.Once
-            );
+            VerifyHelper.VerifyMessageSentAsync(_mockChannel, s => s.Equals("bana"));
         }
     }
 }

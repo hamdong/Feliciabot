@@ -27,14 +27,20 @@ var discordSocketClient = new DiscordSocketClient(config);
 // Discord
 builder.Services.AddSingleton(discordSocketClient);
 builder.Services.AddSingleton<CommandService>();
-builder.Services.AddSingleton(new InteractionService(discordSocketClient.Rest, new InteractionServiceConfig { AutoServiceScopes = true }));
+builder.Services.AddSingleton(
+    new InteractionService(
+        discordSocketClient.Rest,
+        new InteractionServiceConfig { AutoServiceScopes = true }
+    )
+);
 builder.Services.AddHostedService<DiscordClientHost>();
 
 // Lavalink
 builder.Services.AddLavalink();
 builder.Services.AddInactivityTracking();
 builder.Services.AddLogging(x => x.AddConsole().SetMinimumLevel(LogLevel.Trace));
-builder.Services.ConfigureInactivityTracking(x => { })
+builder
+    .Services.ConfigureInactivityTracking(x => { })
     .Configure<UsersInactivityTrackerOptions>(options =>
     {
         options.Threshold = 1;
@@ -43,12 +49,11 @@ builder.Services.ConfigureInactivityTracking(x => { })
     });
 
 // Abstractions
-builder.Services.AddScoped<IClientFactory, ClientFactory>();
 builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
 // Services
-builder.Services.AddSingleton<IClientService, ClientService>()
-    .AddSingleton<IGuildService, GuildService>()
+builder
+    .Services.AddSingleton<IGuildService, GuildService>()
     .AddSingleton<IInteractingService, InteractingService>()
     .AddSingleton<IPaginatorService, PaginatorService>()
     .AddSingleton<IWaifuSharpService, WaifuSharpService>()
@@ -58,7 +63,8 @@ builder.Services.AddSingleton<IClientService, ClientService>()
     .AddSingleton<EmbedBuilderService>();
 
 // Misc.
-builder.Services.AddSingleton<WaifuClient>()
+builder
+    .Services.AddSingleton<WaifuClient>()
     .AddSingleton<HttpClient>()
     .AddSingleton<InteractiveService>()
     .AddSingleton<Gelbooru>()

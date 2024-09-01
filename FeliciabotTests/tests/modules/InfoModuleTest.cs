@@ -1,9 +1,5 @@
 ﻿using Discord;
-using Discord.Interactions;
-using Discord.WebSocket;
-using Feliciabot.Abstractions.models;
 using Feliciabot.net._6._0.modules;
-using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -12,37 +8,61 @@ namespace FeliciabotTests.tests.modules
     [TestFixture]
     public class InfoModuleTest
     {
-        private readonly Mock<IActivity> _mockActivity;
-        private readonly Mock<IInteractionContext> _mockContext;
-        private readonly Mock<IClientService> _mockClientService;
-        private readonly Mock<IInteractingService> _mockInteractingService;
-        private readonly InfoModule _infoModule;
+        private readonly Mock<IGuild> mockGuild;
+        private readonly Mock<IActivity> mockActivity;
+        private readonly Mock<ISelfUser> mockSelfUser;
+        private readonly Mock<IDiscordClient> mockClient;
+        private readonly Mock<IDiscordInteraction> mockDiscordInteraction;
+        private readonly Mock<IInteractionContext> mockContext;
+        private readonly InfoModule infoModule;
 
         public InfoModuleTest()
         {
-            _mockActivity = new Mock<IActivity>();
-            _mockContext = new Mock<IInteractionContext>();
-            _mockClientService = new Mock<IClientService>();
-            _mockInteractingService = new Mock<IInteractingService>();
-            _infoModule = new InfoModule(_mockClientService.Object, _mockInteractingService.Object);
+            mockGuild = new Mock<IGuild>();
+            mockActivity = new Mock<IActivity>();
+            mockSelfUser = new Mock<ISelfUser>();
+            mockClient = new Mock<IDiscordClient>();
+            mockDiscordInteraction = new Mock<IDiscordInteraction>();
+            mockContext = new Mock<IInteractionContext>();
+            infoModule = new InfoModule();
         }
 
         [SetUp]
         public void Setup()
         {
-            _mockActivity.Setup(a => a.Name).Returns("Activity");
-            _mockInteractingService.Reset();
-            MockContextHelper.SetContext(_infoModule, _mockContext.Object);
+            mockActivity.SetupGet(a => a.Name).Returns("Activity");
+            List<IActivity> activities = [mockActivity.Object];
+            mockSelfUser.SetupGet(u => u.Username).Returns("Username");
+            mockSelfUser.SetupGet(u => u.Status).Returns(UserStatus.Online);
+            mockSelfUser.SetupGet(u => u.Activities).Returns(activities.AsReadOnly());
+            List<IGuild> guilds = [mockGuild.Object];
+            mockClient.Setup(c => c.GetGuildsAsync(CacheMode.AllowDownload, null)).ReturnsAsync(guilds.AsReadOnly());
+            mockClient.SetupGet(c => c.CurrentUser).Returns(mockSelfUser.Object);
+            mockContext.SetupGet(c => c.Client).Returns(mockClient.Object);
+            mockContext.SetupGet(c => c.Interaction).Returns(mockDiscordInteraction.Object);
+            MockContextHelper.SetContext(infoModule, mockContext.Object);
         }
 
         [Test]
         public async Task Info_DmsUser()
         {
-            _mockClientService.Setup(c => c.GetClient()).Returns(new Client("username", UserStatus.Online, _mockActivity.Object));
+            await infoModule.Info();
 
-            await _infoModule.Info();
-
-            _mockInteractingService.Verify(s => s.SendResponseToUserAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.IsAny<Embed>()), Times.Once);
+            mockContext.Verify(
+                c =>
+                    c.Interaction.RespondAsync(
+                        null,
+                        null,
+                        false,
+                        false,
+                        null,
+                        null,
+                        It.IsAny<Embed>(),
+                        null,
+                        null
+                    ),
+                Times.Once
+            );
         }
     }
 }

@@ -37,7 +37,7 @@ namespace FeliciabotTests.tests.services
             Mock<IMessageChannel> testChannel = new();
             _mockContext.SetupGet(c => c.User).Returns(testUser.Object);
             _mockContext.SetupGet(c => c.Channel).Returns(testChannel.Object);
-            MockContextHelper.SetContext(_paginatorService, _mockContext.Object);
+            //MockContextHelper.SetContext(_paginatorService, _mockContext.Object);
         }
 
         [Test]

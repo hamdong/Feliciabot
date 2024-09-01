@@ -1,7 +1,8 @@
 ﻿using Discord.Commands;
 using Feliciabot.net._6._0.helpers;
+using Feliciabot.net._6._0.services.interfaces;
 
-namespace Feliciabot.net._6._0.commands
+namespace Feliciabot.net._6._0.commands.fun
 {
     public class VideoCommand : ModuleBase
     {
@@ -18,6 +19,11 @@ namespace Feliciabot.net._6._0.commands
         private readonly string GG_VIDEO_LINK = "https://www.youtube.com/watch?v=9nXYsmTv3Gg";
         private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
         private readonly string YIPPEE_FOLDER_PATH = Path.Combine(Environment.CurrentDirectory, "videos", "yippee");
+
+        private readonly IRandomizerService _randomizerService;
+
+        public VideoCommand(IRandomizerService randomizerService) =>
+            _randomizerService = randomizerService;
 
         [Alias("alfie")]
         [Command("alfred", RunMode = RunMode.Async)]
@@ -61,7 +67,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task Indeed()
         {
             // 1 in 6 odds of posting the alternative video
-            int randIndex = CommandsHelper.GetRandomNumber(5);
+            int randIndex = _randomizerService.GetRandom(5);
             string videoToPost = randIndex < 1 ? INDEED_VIDEO_LINK_ALT : INDEED_VIDEO_LINK;
 
             await Context.Channel.SendMessageAsync(videoToPost);
@@ -78,7 +84,7 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Posts random wahaha video")]
         public async Task Wahaha()
         {
-            await Context.Channel.SendMessageAsync(BOCCHI_VIDEOS[CommandsHelper.GetRandomNumber(BOCCHI_VIDEOS.Count)]);
+            await Context.Channel.SendMessageAsync(BOCCHI_VIDEOS[_randomizerService.GetRandom(BOCCHI_VIDEOS.Count)]);
         }
 
         [Alias("whatareyoutalkingabout", "whatsgoinonhere")]
@@ -103,7 +109,7 @@ namespace Feliciabot.net._6._0.commands
                 await Context.Channel.SendMessageAsync("No yippee videos found...");
             }
 
-            var yippeeVideo = videoFiles.ElementAt(CommandsHelper.GetRandomNumber(videoFiles.Count()));
+            var yippeeVideo = videoFiles.ElementAt(_randomizerService.GetRandom(videoFiles.Count()));
             await Context.Channel.SendFileAsync(yippeeVideo);
         }
     }

@@ -51,7 +51,7 @@ namespace FeliciabotTests.tests.commands.fun
 
             await _teaCommand.Tea();
 
-            MockContextHelper.VerifyMessageSentAsync(
+            VerifyHelper.VerifyMessageSentAsync(
                 _mockChannel,
                 s => s.Contains("Served") && s.Contains(_mockUser.Object.GlobalName)
             );
@@ -66,7 +66,7 @@ namespace FeliciabotTests.tests.commands.fun
 
             await _teaCommand.Tea();
 
-            MockContextHelper.VerifyMessageSentAsync(
+            VerifyHelper.VerifyMessageSentAsync(
                 _mockChannel,
                 s =>
                     s.Contains("Spilled")
@@ -85,7 +85,7 @@ namespace FeliciabotTests.tests.commands.fun
 
             await _teaCommand.Tea(_mockUser.Object);
 
-            MockContextHelper.VerifyMessageSentAsync(
+            VerifyHelper.VerifyMessageSentAsync(
                 _mockChannel,
                 s =>
                     s.Contains("Served")
@@ -104,7 +104,7 @@ namespace FeliciabotTests.tests.commands.fun
 
             await _teaCommand.Tea(_mockUser.Object);
 
-            MockContextHelper.VerifyMessageSentAsync(
+            VerifyHelper.VerifyMessageSentAsync(
                 _mockChannel,
                 s =>
                     s.Contains("Spilled")
@@ -123,7 +123,7 @@ namespace FeliciabotTests.tests.commands.fun
 
             await _teaCommand.Tea(_mockUser.Object);
 
-            MockContextHelper.VerifyMessageSentAsync(
+            VerifyHelper.VerifyMessageSentAsync(
                 _mockChannel,
                 s =>
                     s.Contains("Served")

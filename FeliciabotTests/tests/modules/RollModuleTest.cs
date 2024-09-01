@@ -1,6 +1,4 @@
 ﻿using Discord;
-using Discord.Interactions;
-using Discord.WebSocket;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.modules;
 using Feliciabot.net._6._0.services.interfaces;
@@ -13,24 +11,33 @@ namespace FeliciabotTests.tests.modules
     [TestFixture]
     public class RollModuleTest
     {
-        private readonly Mock<IInteractionContext> _mockContext;
-        private readonly Mock<IInteractingService> _mockInteractingService;
-        private readonly Mock<WaifuClient> _mockWaifuClient;
-        private readonly RollModule _rollModule;
+        private readonly Mock<IUser> mockUser;
+        private readonly Mock<IUser> mockBotUser;
+        private readonly Mock<IDiscordInteraction> mockDiscordInteraction;
+        private readonly Mock<IInteractionContext> mockContext;
+        private readonly Mock<IWaifuSharpService> mockWaifuService;
+        private readonly RollModule rollModule;
 
         public RollModuleTest()
         {
-            _mockInteractingService = new Mock<IInteractingService>();
-            _mockContext = new Mock<IInteractionContext>();
-            _mockWaifuClient = new Mock<WaifuClient>();
-            _rollModule = new RollModule(_mockWaifuClient.Object, _mockInteractingService.Object);
+            mockUser = new Mock<IUser>();
+            mockBotUser = new Mock<IUser>();
+            mockDiscordInteraction = new Mock<IDiscordInteraction>();
+            mockContext = new Mock<IInteractionContext>();
+            mockWaifuService = new Mock<IWaifuSharpService>();
+            rollModule = new RollModule(mockWaifuService.Object);
         }
 
         [SetUp]
         public void Setup()
         {
-            _mockInteractingService.Reset();
-            MockContextHelper.SetContext(_rollModule, _mockContext.Object);
+            mockDiscordInteraction.Reset();
+            mockWaifuService.Setup(s => s.GetSfwImage(It.IsAny<Endpoints.Sfw>())).Returns("https://picsum.photos/200");
+            mockUser.SetupGet(u => u.GlobalName).Returns("GlobalName");
+            mockBotUser.SetupGet(u => u.IsBot).Returns(true);
+            mockContext.SetupGet(c => c.User).Returns(mockUser.Object);
+            mockContext.SetupGet(c => c.Interaction).Returns(mockDiscordInteraction.Object);
+            MockContextHelper.SetContext(rollModule, mockContext.Object);
         }
 
         [Test]
@@ -38,50 +45,60 @@ namespace FeliciabotTests.tests.modules
         {
             var flatResponses = Responses.RollResponses.SelectMany(response => response);
 
-            await _rollModule.EightBall("test");
+            await rollModule.EightBall("test");
 
-            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
-                s.Contains("test") &&
-                flatResponses.Any(response => s.Contains(response))
-            )), Times.Once);
+            VerifyHelper.VerifyInteractionAsync(
+                mockContext,
+                s => s.Contains("test") && flatResponses.Any(response => s.Contains(response))
+            );
         }
 
         [Test]
         public async Task DiceRoll_WithInvalidNumber_DoesntRoll()
         {
-            await _rollModule.DiceRoll(0);
+            await rollModule.DiceRoll(0);
 
-            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
-                s.Equals("Please enter a positive number for the number of sides")
-            )), Times.Once);
+            VerifyHelper.VerifyInteractionAsync(
+                mockContext,
+                s => s.Equals("Please enter a positive number for the number of sides")
+            );
         }
 
         [Test]
         public async Task DiceRoll_WithValidNumber_Rolls()
         {
-            await _rollModule.DiceRoll(6);
+            await rollModule.DiceRoll(6);
 
-            _mockInteractingService.Verify(s => s.SendRollResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<int>(i =>
-                i > 0
-            )), Times.Once);
+            VerifyHelper.VerifyInteractionAsync(mockContext, s => s.Contains("GlobalName rolled"));
         }
 
         [Test]
         public async Task CoinFlip_Flips()
         {
-            await _rollModule.CoinFlip();
+            await rollModule.CoinFlip();
 
-            _mockInteractingService.Verify(s => s.SendFlipResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.Is<string>(s =>
-                s.Equals("Heads") || s.Equals("Tails")
-            )), Times.Once);
+            VerifyHelper.VerifyInteractionAsync(
+                mockContext,
+                s => s.Equals("GlobalName got *Heads*") || s.Equals("GlobalName got *Tails*")
+            );
         }
 
         [Test]
         public async Task RollWaifu_RollSuccess_Posts()
         {
-            await _rollModule.RollWaifu();
+            await rollModule.RollWaifu();
 
-            _mockInteractingService.Verify(s => s.SendResponseAsync(It.IsAny<SocketInteractionContext<SocketInteraction>>(), It.IsAny<string>()), Times.Once);
+            VerifyHelper.VerifyInteractionAsync(mockContext, s => s.Length > 0);
+        }
+
+        [Test]
+        public async Task QuoteUser_WhenUserIsBot_ShouldNotQuote()
+        {
+            await rollModule.QuoteUser(mockBotUser.Object);
+            VerifyHelper.VerifyInteractionAsync(
+                mockContext,
+                s => s.Equals("Can't quote bots :shrug:")
+            );
         }
     }
 }
