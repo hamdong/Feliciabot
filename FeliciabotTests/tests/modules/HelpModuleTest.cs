@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Interactions;
 using Feliciabot.net._6._0.modules;
 using Feliciabot.net._6._0.services.interfaces;
 using Fergun.Interactive.Pagination;
@@ -10,24 +11,30 @@ namespace FeliciabotTests.tests.modules
     [TestFixture]
     public class HelpModuleTest
     {
+        private readonly Mock<IUser> mockUser;
         private readonly Mock<IDiscordInteraction> mockDiscordInteraction;
         private readonly Mock<IInteractionContext> mockContext;
-        private readonly Mock<IPaginatorService> mockPaginatorService;
+        private readonly Mock<IInteractiveHelperService> mockInteractiveHelperService;
         private readonly HelpModule helpModule;
 
         public HelpModuleTest()
         {
+            mockUser = new Mock<IUser>();
             mockDiscordInteraction = new Mock<IDiscordInteraction>();
             mockContext = new Mock<IInteractionContext>();
-            mockPaginatorService = new Mock<IPaginatorService>();
-            helpModule = new HelpModule(mockPaginatorService.Object);
+            mockInteractiveHelperService = new Mock<IInteractiveHelperService>();
+            helpModule = new HelpModule(mockInteractiveHelperService.Object);
         }
 
         [SetUp]
         public void Setup()
         {
             mockDiscordInteraction.Reset();
-            mockPaginatorService.Reset();
+            mockInteractiveHelperService.Reset();
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([("Name1", "Description1"), ("Name2", "Description2")]);
+            mockContext.SetupGet(c => c.User).Returns(mockUser.Object);
             mockContext.SetupGet(c => c.Interaction).Returns(mockDiscordInteraction.Object);
             MockContextHelper.SetContext(helpModule, mockContext.Object);
         }
@@ -35,6 +42,9 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task HelpInfo_Responds()
         {
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([("Info", "Description")]);
             await helpModule.HelpInfo();
             VerifyPaginator();
         }
@@ -42,6 +52,9 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task HelpMusic_Responds()
         {
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([("Music", "Description")]);
             await helpModule.HelpMusic();
             VerifyPaginator();
         }
@@ -49,6 +62,9 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task HelpRolePlay_Responds()
         {
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([("RolePlay", "Description")]);
             await helpModule.HelpRolePlay();
             VerifyPaginator();
         }
@@ -56,13 +72,46 @@ namespace FeliciabotTests.tests.modules
         [Test]
         public async Task HelpRoll_Responds()
         {
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([("Roll", "Description")]);
             await helpModule.HelpRoll();
             VerifyPaginator();
         }
 
+        [Test]
+        public async Task Help_WhenMultipleCommands_RespondsWithPages()
+        {
+            List<(string Name, string Description)> exampleCommands = new();
+            for (int i = 0; i < 13; i++)
+            {
+                exampleCommands.Add(("Name", "Description"));
+            }
+            var commands = exampleCommands.ToArray();
+
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns(commands);
+            await helpModule.HelpRoll();
+            VerifyPaginator();
+        }
+
+        [Test]
+        public async Task Help_WhenNoCommands_RespondsWithError()
+        {
+            mockInteractiveHelperService
+                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
+                .Returns([]);
+            await helpModule.HelpRoll();
+            VerifyHelper.VerifyInteractionAsync(
+                mockContext,
+                s => s.Contains("No modules found for 'Roll'")
+            );
+        }
+
         private void VerifyPaginator()
         {
-            mockPaginatorService.Verify(
+            mockInteractiveHelperService.Verify(
                 s =>
                     s.SendPaginatorAsync(
                         It.IsAny<IInteractionContext>(),

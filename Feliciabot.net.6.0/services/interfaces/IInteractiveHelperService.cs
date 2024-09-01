@@ -3,9 +3,9 @@ using Fergun.Interactive.Pagination;
 
 namespace Feliciabot.net._6._0.services.interfaces
 {
-    public interface IPaginatorService
+    public interface IInteractiveHelperService
     {
-        public StaticPaginator BuildModulesPaginator(IInteractionContext context, string moduleName);
+        public (string Name, string Description)[] GetNonHelpSlashCommandsByName(string query);
         public Task SendPaginatorAsync(IInteractionContext context, StaticPaginator paginator);
     }
 }
