@@ -1,5 +1,5 @@
-﻿using Feliciabot.net._6._0.services;
-using Feliciabot.net._6._0.services.interfaces;
+﻿using Discord;
+using Feliciabot.net._6._0.services;
 using Moq;
 using NUnit.Framework;
 
@@ -8,33 +8,58 @@ namespace FeliciabotTests.tests.services
     [TestFixture]
     public class UserManagementServiceTest
     {
-        private readonly UserManagementService _userManagementService;
-        private readonly Mock<IGuildService> _mockGuildService;
+        private readonly Mock<IRole> mockRole;
+        private readonly Mock<IGuild> mockGuild;
+        private readonly Mock<IGuildUser> mockUser;
+        private readonly UserManagementService userManagementService;
 
-        private readonly ulong expectedGuildId = 1234567890123456789;
-        private readonly ulong expectedUserId = 9876543210987654321;
         private readonly ulong expectedRoleId = 1111111111111111111;
 
         public UserManagementServiceTest()
         {
-            _mockGuildService = new Mock<IGuildService>();
-            _userManagementService = new UserManagementService(_mockGuildService.Object);
+            mockRole = new Mock<IRole>();
+            mockGuild = new Mock<IGuild>();
+            mockUser = new Mock<IGuildUser>();
+            userManagementService = new UserManagementService();
+        }
+
+        [SetUp]
+        public void Setup()
+        {
+            mockRole.SetupGet(r => r.Id).Returns(expectedRoleId);
+            mockRole.SetupGet(r => r.Name).Returns("trouble");
+            List<IRole> roles = [mockRole.Object];
+            mockGuild.SetupGet(g => g.Roles).Returns(roles.AsReadOnly());
+            mockUser.SetupGet(u => u.RoleIds).Returns([]);
+            mockUser.SetupGet(u => u.Guild).Returns(mockGuild.Object);
+        }
+
+        [Test]
+        public async Task AssignTroubleRoleToUserById_WithNoRoleFound_Exits()
+        {
+            mockGuild.SetupGet(g => g.Roles).Returns([]);
+
+            await userManagementService.AssignTroubleRoleToUserById(mockUser.Object);
+
+            mockUser.Verify(u => u.AddRoleAsync(It.IsAny<ulong>(), null), Times.Never);
+        }
+
+        [Test]
+        public async Task AssignTroubleRoleToUserById_WithUserHasRole_Exits()
+        {
+            mockUser.SetupGet(g => g.RoleIds).Returns([expectedRoleId]);
+
+            await userManagementService.AssignTroubleRoleToUserById(mockUser.Object);
+
+            mockUser.Verify(u => u.AddRoleAsync(It.IsAny<ulong>(), null), Times.Never);
         }
 
         [Test]
         public async Task AssignTroubleRoleToUserById_WithValidParameters_AssignsRole()
         {
-            _mockGuildService.Setup(g => g.GetRoleIdByName(It.IsAny<ulong>(), "trouble")).Returns(expectedRoleId);
-            await _userManagementService.AssignTroubleRoleToUserById(expectedGuildId, expectedUserId);
-            _mockGuildService.Verify(g => g.AddRoleToUserByIdAsync(expectedGuildId, expectedUserId, expectedRoleId), Times.Once);
-        }
+            await userManagementService.AssignTroubleRoleToUserById(mockUser.Object);
 
-        [Test]
-        public async Task AssignTroubleRoleToUserById_WithInvalidRoleName_DoesNotAssignRole()
-        {
-            _mockGuildService.Setup(g => g.GetRoleIdByName(It.IsAny<ulong>(), "bingus")).Returns(0);
-            await _userManagementService.AssignTroubleRoleToUserById(expectedGuildId, expectedUserId);
-            _mockGuildService.Verify(g => g.AddRoleToUserByIdAsync(It.IsAny<ulong>(), It.IsAny<ulong>(), It.IsAny<ulong>()), Times.Never);
+            mockUser.Verify(u => u.AddRoleAsync(It.IsAny<ulong>(), null), Times.Once);
         }
     }
 }

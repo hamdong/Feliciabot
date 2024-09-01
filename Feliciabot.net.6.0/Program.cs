@@ -53,8 +53,7 @@ builder.Services.AddScoped<IGuildFactory, GuildFactory>();
 
 // Services
 builder
-    .Services.AddSingleton<IGuildService, GuildService>()
-    .AddSingleton<IInteractiveHelperService, InteractiveHelperService>()
+    .Services.AddSingleton<IInteractiveHelperService, InteractiveHelperService>()
     .AddSingleton<IWaifuSharpService, WaifuSharpService>()
     .AddSingleton<IRandomizerService, RandomizerService>()
     .AddSingleton<GreetingService>()
