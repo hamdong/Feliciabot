@@ -1,11 +1,10 @@
-﻿using Discord;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class GreetingService
+    public class GreetingService : IGreetingService
     {
         private readonly string greetingsPath =
             Environment.CurrentDirectory + @"\data\greetings.txt";
@@ -13,9 +12,9 @@ namespace Feliciabot.net._6._0.services
 
         private static readonly (List<string>, string)[] Reactions =
         [
-            (new List<string> { "succ", "lewd" }, "L-lewd :scream:"),
-            (new List<string> { "love", "hug", "kiss" }, ":blush:"),
-            (new List<string> { "hi", "hello", "yo" }, "Hi N-Nice to see you!"),
+            (["succ", "lewd"], "L-lewd :scream:"),
+            (["love", "hug", "kiss"], ":blush:"),
+            (["hi", "hello", "yo"], "Hi N-Nice to see you!"),
         ];
 
         private readonly DiscordSocketClient _client;
@@ -27,7 +26,7 @@ namespace Feliciabot.net._6._0.services
 
         public GreetingService(
             DiscordSocketClient client,
-            UserManagementService userManagementService
+            IUserManagementService userManagementService
         )
         {
             _client = client;
@@ -44,20 +43,19 @@ namespace Feliciabot.net._6._0.services
             if (message.Channel is not SocketTextChannel channel)
                 return;
 
-            bool reacted = false;
-            var msgText = message.Content;
+            var matchingReaction = Reactions
+                .ToList()
+                .Find(reaction =>
+                    reaction.Item1.Exists(word =>
+                        message.Content.Contains(word, StringComparison.OrdinalIgnoreCase)
+                    )
+                );
 
-            foreach (var reaction in Reactions)
+            if (matchingReaction.Item2 != null)
             {
-                if (reaction.Item1.Exists(reaction => reaction.Any(word => msgText.Contains(word))))
-                {
-                    await channel.SendMessageAsync(reaction.Item2);
-                    reacted = true;
-                    break;
-                }
+                await channel.SendMessageAsync(matchingReaction.Item2);
             }
-
-            if (!reacted)
+            else
             {
                 int randIndex = randomSeedForDialogues.Next(quoteList.Length);
                 string quoteToPost = quoteList[randIndex];
@@ -65,7 +63,7 @@ namespace Feliciabot.net._6._0.services
             }
         }
 
-        public async Task AnnounceJoinedUser(SocketGuildUser user)
+        public async Task HandleOnUserJoined(SocketGuildUser user)
         {
             var guild = user.Guild;
             if (guild == null)
@@ -85,7 +83,7 @@ namespace Feliciabot.net._6._0.services
             await _userManagementService.AssignTroubleRoleToUserById(user);
         }
 
-        public static async Task AnnounceLeftUser(SocketGuild guild, SocketUser user)
+        public async Task HandleOnUserLeft(SocketGuild guild, SocketUser user)
         {
             if (guild == null)
                 return;
@@ -99,8 +97,10 @@ namespace Feliciabot.net._6._0.services
 
         private bool ShouldRespond(SocketMessage message)
         {
+            // message.Reference refers to replying to Discord messsages
             return message.MentionedUsers.Any(su => su.Username == _client.CurrentUser.Username)
-                && message.Author.Id != _client.CurrentUser.Id;
+                && message.Author.Id != _client.CurrentUser.Id
+                && message.Reference is null;
         }
     }
 }

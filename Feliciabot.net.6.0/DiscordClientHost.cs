@@ -1,24 +1,26 @@
-﻿using Discord;
+﻿using System.Reflection;
+using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace Feliciabot.net._6._0
 {
     internal sealed class DiscordClientHost : IHostedService
     {
-        private readonly string clientTokenPath = Environment.CurrentDirectory + @"\ignore\token.txt";
+        private readonly string clientTokenPath =
+            Environment.CurrentDirectory + @"\ignore\token.txt";
 
         private readonly DiscordSocketClient _client;
         private readonly ILogger<DiscordClientHost> _logger;
         private readonly CommandService _commands;
         private readonly InteractionService _interactionService;
         private readonly IServiceProvider _serviceProvider;
-        private readonly GreetingService _greetingService;
+        private readonly IGreetingService _greetingService;
 
         public DiscordClientHost(
             DiscordSocketClient discordSocketClient,
@@ -26,7 +28,8 @@ namespace Feliciabot.net._6._0
             CommandService commandService,
             InteractionService interactionService,
             IServiceProvider serviceProvider,
-            GreetingService greetingService)
+            IGreetingService greetingService
+        )
         {
             ArgumentNullException.ThrowIfNull(discordSocketClient);
             ArgumentNullException.ThrowIfNull(interactionService);
@@ -55,7 +58,8 @@ namespace Feliciabot.net._6._0
             {
                 // Check ex.CancellationToken.IsCancellationRequested here.
                 // If false, it's pretty safe to assume it was a timeout.
-                if (!e.CancellationToken.IsCancellationRequested) _logger.LogError("{Message}", e.Message);
+                if (!e.CancellationToken.IsCancellationRequested)
+                    _logger.LogError("{Message}", e.Message);
             }
         }
 
@@ -67,16 +71,16 @@ namespace Feliciabot.net._6._0
             _client.InteractionCreated += InteractionCreated;
             _client.Ready += ClientReady;
 
-            await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
-                services: _serviceProvider);
+            await _commands.AddModulesAsync(
+                assembly: Assembly.GetEntryAssembly(),
+                services: _serviceProvider
+            );
 
             await _client
                 .LoginAsync(TokenType.Bot, File.ReadAllText(clientTokenPath))
                 .ConfigureAwait(false);
 
-            await _client
-                .StartAsync()
-                .ConfigureAwait(false);
+            await _client.StartAsync().ConfigureAwait(false);
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
@@ -87,9 +91,7 @@ namespace Feliciabot.net._6._0
             _client.InteractionCreated -= InteractionCreated;
             _client.Ready -= ClientReady;
 
-            await _client
-                .StopAsync()
-                .ConfigureAwait(false);
+            await _client.StopAsync().ConfigureAwait(false);
         }
 
         private Task InteractionCreated(SocketInteraction interaction)
@@ -106,16 +108,18 @@ namespace Feliciabot.net._6._0
                 .AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider)
                 .ConfigureAwait(false);
 
-            await _interactionService
-                .RegisterCommandsGloballyAsync()
-                .ConfigureAwait(false);
+            await _interactionService.RegisterCommandsGloballyAsync().ConfigureAwait(false);
         }
 
         private async Task OnMessageReceived(SocketMessage messageParam)
         {
             // Don't process the command if it was a system message or bot
-            if (messageParam is not SocketUserMessage message ||
-                message.Channel == null || message.Author.IsBot) return;
+            if (
+                messageParam is not SocketUserMessage message
+                || message.Channel == null
+                || message.Author.IsBot
+            )
+                return;
 
             int argPos = 0;
             if (message.HasCharPrefix('!', ref argPos))
@@ -125,7 +129,8 @@ namespace Feliciabot.net._6._0
                 await _commands.ExecuteAsync(
                     context: context,
                     argPos: argPos,
-                    services: _serviceProvider);
+                    services: _serviceProvider
+                );
                 return;
             }
 
@@ -134,12 +139,12 @@ namespace Feliciabot.net._6._0
 
         public async Task OnUserJoined(SocketGuildUser user)
         {
-            await _greetingService.AnnounceJoinedUser(user);
+            await _greetingService.HandleOnUserJoined(user);
         }
 
         public async Task OnUserLeft(SocketGuild guild, SocketUser user)
         {
-            await GreetingService.AnnounceLeftUser(guild, user);
+            await _greetingService.HandleOnUserLeft(guild, user);
         }
 
         public static Task LogHandler(LogMessage message)
@@ -161,7 +166,8 @@ namespace Feliciabot.net._6._0
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
             }
-            string msg = $"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}";
+            string msg =
+                $"{DateTime.Now, -19} [{message.Severity, 8}] {message.Source}: {message.Message} {message.Exception}";
             Console.WriteLine(msg);
             Console.ResetColor();
             return Task.CompletedTask;
