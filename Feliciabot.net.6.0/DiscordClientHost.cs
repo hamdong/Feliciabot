@@ -115,7 +115,7 @@ namespace Feliciabot.net._6._0
         {
             // Don't process the command if it was a system message or bot
             if (
-                messageParam is not SocketUserMessage message
+                messageParam is not IUserMessage message
                 || message.Channel == null
                 || message.Author.IsBot
             )
@@ -125,7 +125,7 @@ namespace Feliciabot.net._6._0
             if (message.HasCharPrefix('!', ref argPos))
             {
                 // Execute the command with command context
-                var context = new SocketCommandContext(_client, message);
+                var context = new SocketCommandContext(_client, (SocketUserMessage)message);
                 await _commands.ExecuteAsync(
                     context: context,
                     argPos: argPos,

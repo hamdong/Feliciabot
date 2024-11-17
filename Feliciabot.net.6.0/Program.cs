@@ -51,6 +51,7 @@ builder
     .Services.AddSingleton<IInteractiveHelperService, InteractiveHelperService>()
     .AddSingleton<IWaifuSharpService, WaifuSharpService>()
     .AddSingleton<IRandomizerService, RandomizerService>()
+    .AddSingleton<IClientService, ClientService>()
     .AddSingleton<IGreetingService, GreetingService>()
     .AddSingleton<IUserManagementService, UserManagementService>()
     .AddSingleton<EmbedBuilderService>();

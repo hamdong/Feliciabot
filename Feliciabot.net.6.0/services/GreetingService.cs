@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord;
+using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.services.interfaces;
 
@@ -17,29 +18,31 @@ namespace Feliciabot.net._6._0.services
             (["hi", "hello", "yo"], "Hi N-Nice to see you!"),
         ];
 
-        private readonly DiscordSocketClient _client;
+        private readonly IClientService _clientService;
         private readonly IUserManagementService _userManagementService;
+        private readonly IRandomizerService _randomizerService;
 
-        private readonly Random randomSeedForDialogues;
         private readonly string[] greetingList;
         private readonly string[] quoteList;
 
         public GreetingService(
-            DiscordSocketClient client,
-            IUserManagementService userManagementService
+            IClientService clientService,
+            IUserManagementService userManagementService,
+            IRandomizerService randomizerService
         )
         {
-            _client = client;
+            _clientService = clientService;
             _userManagementService = userManagementService;
+            _randomizerService = randomizerService;
             quoteList = File.ReadAllLines(quotesPath);
             greetingList = File.ReadAllLines(greetingsPath);
-            randomSeedForDialogues = new Random();
         }
 
-        public async Task ReplyToNonCommand(SocketUserMessage message)
+        public async Task ReplyToNonCommand(IUserMessage message)
         {
             if (!ShouldRespond(message))
                 return;
+
             if (message.Channel is not SocketTextChannel channel)
                 return;
 
@@ -54,13 +57,12 @@ namespace Feliciabot.net._6._0.services
             if (matchingReaction.Item2 != null)
             {
                 await channel.SendMessageAsync(matchingReaction.Item2);
+                return;
             }
-            else
-            {
-                int randIndex = randomSeedForDialogues.Next(quoteList.Length);
-                string quoteToPost = quoteList[randIndex];
-                await channel.SendMessageAsync(quoteToPost);
-            }
+
+            int randIndex = _randomizerService.GetRandom(quoteList.Length);
+            string quoteToPost = quoteList[randIndex];
+            await channel.SendMessageAsync(quoteToPost);
         }
 
         public async Task HandleOnUserJoined(SocketGuildUser user)
@@ -73,7 +75,7 @@ namespace Feliciabot.net._6._0.services
             if (channel is null)
                 return;
 
-            int randIndex = randomSeedForDialogues.Next(greetingList.Length);
+            int randIndex = _randomizerService.GetRandom(greetingList.Length);
             string quoteToPost = greetingList[randIndex];
 
             await channel.SendMessageAsync(
@@ -95,11 +97,11 @@ namespace Feliciabot.net._6._0.services
             await channel.SendMessageAsync($"ok {user.Username}.");
         }
 
-        private bool ShouldRespond(SocketMessage message)
+        private bool ShouldRespond(IUserMessage message)
         {
             // message.Reference refers to replying to Discord messsages
-            return message.MentionedUsers.Any(su => su.Username == _client.CurrentUser.Username)
-                && message.Author.Id != _client.CurrentUser.Id
+            return message.MentionedUserIds.Any(id => id == _clientService.GetClientId())
+                && message.Author.Id != _clientService.GetClientId()
                 && message.Reference is null;
         }
     }
