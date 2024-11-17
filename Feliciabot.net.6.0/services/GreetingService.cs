@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.services.interfaces;
 
@@ -43,7 +42,7 @@ namespace Feliciabot.net._6._0.services
             if (!ShouldRespond(message))
                 return;
 
-            if (message.Channel is not SocketTextChannel channel)
+            if (message.Channel is not IMessageChannel channel)
                 return;
 
             var matchingReaction = Reactions
@@ -65,13 +64,13 @@ namespace Feliciabot.net._6._0.services
             await channel.SendMessageAsync(quoteToPost);
         }
 
-        public async Task HandleOnUserJoined(SocketGuildUser user)
+        public async Task HandleOnUserJoined(IGuildUser user)
         {
             var guild = user.Guild;
             if (guild == null)
                 return;
 
-            var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+            var channel = await CommandsHelper.GetSystemChannelFromGuildAsync(guild);
             if (channel is null)
                 return;
 
@@ -85,12 +84,12 @@ namespace Feliciabot.net._6._0.services
             await _userManagementService.AssignTroubleRoleToUserById(user);
         }
 
-        public async Task HandleOnUserLeft(SocketGuild guild, SocketUser user)
+        public async Task HandleOnUserLeft(IGuild guild, IUser user)
         {
             if (guild == null)
                 return;
 
-            var channel = CommandsHelper.GetSystemChannelFromGuild(guild);
+            var channel = await CommandsHelper.GetSystemChannelFromGuildAsync(guild);
             if (channel is null)
                 return;
 

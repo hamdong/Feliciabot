@@ -1,40 +1,46 @@
-﻿using Discord;
+﻿using System.Text.RegularExpressions;
+using Discord;
 using Discord.WebSocket;
-using System.Text.RegularExpressions;
 
 namespace Feliciabot.net._6._0.helpers
 {
     public static class CommandsHelper
     {
-        private static readonly Regex emoteRegex = new Regex("^a*:[a-zA-Z0-9_.-]*:[a-zA-Z0-9_.-]*>$");
+        private static readonly Regex emoteRegex = new Regex(
+            "^a*:[a-zA-Z0-9_.-]*:[a-zA-Z0-9_.-]*>$"
+        );
         private static readonly Random rand = new();
 
-        public static SocketTextChannel? GetSystemChannelFromGuild(SocketGuild guild)
+        public static async Task<ITextChannel?> GetSystemChannelFromGuildAsync(IGuild guild)
         {
-            var channel = GetSystemChannel(guild);
-            channel ??= GetChannelByName(guild, "greetings");
-            channel ??= GetChannelByName(guild, "general");
+            var channel = await GetSystemChannelAsync(guild);
+            channel ??= await GetChannelByNameAsync(guild, "greetings");
+            channel ??= await GetChannelByNameAsync(guild, "general");
 
             return channel;
         }
 
-        public static SocketTextChannel? GetGeneralChannelFromGuild(SocketGuild guild)
+        public static async Task<ITextChannel?> GetGeneralChannelFromGuildAsync(IGuild guild)
         {
-            var channel = GetSystemChannel(guild);
-            channel ??= GetChannelByName(guild, "general_felicia");
-            channel ??= GetChannelByName(guild, "general");
+            var channel = await GetSystemChannelAsync(guild);
+            channel ??= await GetChannelByNameAsync(guild, "general_felicia");
+            channel ??= await GetChannelByNameAsync(guild, "general");
 
             return channel;
         }
 
-        public static SocketTextChannel GetSystemChannel(SocketGuild guild)
+        public static async Task<ITextChannel?> GetSystemChannelAsync(IGuild guild)
         {
-            return guild.SystemChannel;
+            if (guild.SystemChannelId is null)
+                return null;
+
+            var channel = await guild.GetTextChannelAsync((ulong)guild.SystemChannelId);
+            return channel;
         }
 
-        public static SocketTextChannel? GetTestingChannel(SocketGuild guild)
+        public static async Task<IMessageChannel?> GetTestingChannel(SocketGuild guild)
         {
-            return GetChannelByName(guild, "betafelicia-testing");
+            return await GetChannelByNameAsync(guild, "betafelicia-testing");
         }
 
         public static DateTime GetCurrentTimeEastern()
@@ -49,13 +55,17 @@ namespace Feliciabot.net._6._0.helpers
         /// If more than one channel with the same name exists, return the first occurence in the list
         /// </summary>
         /// <param name="guild">Guild to check for channel</param>
-        /// <param name="channelName">Name to search for</param>
+        /// <param name="name">Name to search for</param>
         /// <returns>The channel object with the specified name</returns>
-        public static SocketTextChannel? GetChannelByName(SocketGuild guild, string channelName)
+        public static async Task<ITextChannel?> GetChannelByNameAsync(IGuild guild, string name)
         {
-            foreach (SocketTextChannel ch in guild.TextChannels)
+            var channels = await guild.GetTextChannelsAsync();
+            if (channels == null)
+                return null;
+
+            foreach (ITextChannel ch in channels.OfType<ITextChannel>())
             {
-                if (ch != null && ((ITextChannel)ch).Name == channelName)
+                if (ch != null && ch.Name == name)
                 {
                     return ch;
                 }
@@ -71,7 +81,11 @@ namespace Feliciabot.net._6._0.helpers
         /// <returns>True, if the specified query doesn't contain common bot commands</returns>
         public static bool IsNonCommandQuery(string query)
         {
-            return query != "" && !query.StartsWith('!') && !query.StartsWith('.') && !query.StartsWith("feh") && !query.Contains('@');
+            return query != ""
+                && !query.StartsWith('!')
+                && !query.StartsWith('.')
+                && !query.StartsWith("feh")
+                && !query.Contains('@');
         }
 
         /// <summary>
@@ -94,8 +108,9 @@ namespace Feliciabot.net._6._0.helpers
             if (message.Attachments.Count != 0)
             {
                 int randomAttachment = GetRandomNumber(message.Attachments.Count);
-                return message.Content != string.Empty ? $"{message.Content} {message.Attachments.ElementAt(randomAttachment).Url}" :
-                    message.Attachments.ElementAt(randomAttachment).Url;
+                return message.Content != string.Empty
+                    ? $"{message.Content} {message.Attachments.ElementAt(randomAttachment).Url}"
+                    : message.Attachments.ElementAt(randomAttachment).Url;
             }
 
             if (message.Content != string.Empty)

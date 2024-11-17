@@ -73,7 +73,7 @@ namespace Feliciabot.net._6._0.modules
         )]
         public async Task PostRandomOutOfContext()
         {
-            var outOfContextChannel = CommandsHelper.GetChannelByName(
+            var outOfContextChannel = await CommandsHelper.GetChannelByNameAsync(
                 (SocketGuild)Context.Guild,
                 OOC_CHANNEL_NAME
             );

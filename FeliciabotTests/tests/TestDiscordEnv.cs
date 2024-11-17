@@ -9,8 +9,12 @@ namespace FeliciabotTests.tests
     {
         public ulong selfUserId = 9999;
         public ulong otherUserId = 1111;
+        public ulong systemChannelId = 2222;
         public readonly Mock<IDiscordClient> mockClient;
         public readonly Mock<ISelfUser> mockSelfUser;
+        public readonly Mock<IGuildUser> mockGuildUser;
+        public readonly Mock<IGuild> mockGuild;
+        public readonly Mock<ITextChannel> mockSystemChannel;
         public readonly Mock<IUser> mockSelfUserAsIUser;
         public readonly Mock<IUser> mockUser;
         public readonly Mock<IUserMessage> mockUserMessage;
@@ -25,6 +29,9 @@ namespace FeliciabotTests.tests
 
             mockSelfUser = new Mock<ISelfUser>();
             mockSelfUserAsIUser = new Mock<IUser>();
+            mockGuildUser = new Mock<IGuildUser>();
+            mockGuild = new Mock<IGuild>();
+            mockSystemChannel = new Mock<ITextChannel>();
             mockUser = new Mock<IUser>();
             mockUserMessage = new Mock<IUserMessage>();
             mockMessageChannel = new Mock<IMessageChannel>();
@@ -38,7 +45,6 @@ namespace FeliciabotTests.tests
                 MessageReferenceType.Default
             );
 
-            mockMessageChannel.Reset();
             mockClient.SetupGet(c => c.CurrentUser).Returns(mockSelfUser.Object);
 
             mockSelfUser.SetupGet(u => u.GlobalName).Returns("SelfGlobalName");
@@ -49,6 +55,12 @@ namespace FeliciabotTests.tests
 
             mockUser.SetupGet(u => u.GlobalName).Returns("GlobalName");
             mockUser.SetupGet(u => u.Id).Returns(otherUserId);
+
+            mockGuildUser.SetupGet(u => u.Mention).Returns("User Mention");
+
+            mockSystemChannel.SetupGet(c => c.Id).Returns(systemChannelId);
+            mockSystemChannel.SetupGet(c => c.Name).Returns("System");
+            mockSystemChannel.SetupGet(c => c.Guild).Returns(mockGuild.Object);
 
             mockUserMessage.SetupGet(m => m.Channel).Returns(mockMessageChannel.Object);
             mockContext.SetupGet(c => c.Client).Returns(mockClient.Object);

@@ -6,7 +6,7 @@ namespace Feliciabot.net._6._0.services.interfaces
     public interface IGreetingService
     {
         public Task ReplyToNonCommand(IUserMessage message);
-        public Task HandleOnUserJoined(SocketGuildUser user);
-        public Task HandleOnUserLeft(SocketGuild guild, SocketUser user);
+        public Task HandleOnUserJoined(IGuildUser user);
+        public Task HandleOnUserLeft(IGuild guild, IUser user);
     }
 }
