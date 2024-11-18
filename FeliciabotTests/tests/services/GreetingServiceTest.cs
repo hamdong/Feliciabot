@@ -126,6 +126,7 @@ namespace FeliciabotTests.tests.services
         [Test]
         public async Task HandleOnUserJoined_WithNoGuild_ShouldExit()
         {
+            testDiscordEnv.ResetSystemChannel();
             testDiscordEnv.mockGuildUser.SetupGet(m => m.Guild).Returns((IGuild)null!);
 
             await greetingService.HandleOnUserJoined(testDiscordEnv.mockGuildUser.Object);
@@ -136,6 +137,7 @@ namespace FeliciabotTests.tests.services
         [Test]
         public async Task HandleOnUserJoined_WithNoSystemChannel_ShouldExit()
         {
+            testDiscordEnv.ResetSystemChannel();
             testDiscordEnv.mockGuild.SetupGet(g => g.SystemChannelId).Returns(0);
 
             await greetingService.HandleOnUserJoined(testDiscordEnv.mockGuildUser.Object);
@@ -146,6 +148,7 @@ namespace FeliciabotTests.tests.services
         [Test]
         public async Task HandleOnUserJoined_WithSystemChannel_ShouldWelcomeUser()
         {
+            testDiscordEnv.ResetSystemChannel();
             testDiscordEnv
                 .mockGuild.SetupGet(g => g.SystemChannelId)
                 .Returns(testDiscordEnv.systemChannelId);
@@ -164,6 +167,56 @@ namespace FeliciabotTests.tests.services
             VerifyHelper.VerifyMessageSentAsync(
                 testDiscordEnv.mockSystemChannel,
                 s => s.Contains("Welcome to")
+            );
+        }
+
+        [Test]
+        public async Task HandleOnUserLeft_WithNoGuild_ShouldExit()
+        {
+            await greetingService.HandleOnUserLeft(null!, testDiscordEnv.mockGuildUser.Object);
+
+            VerifyHelper.VerifyNoMessageSentAsync(testDiscordEnv.mockMessageChannel);
+        }
+
+        [Test]
+        public async Task HandleOnUserLeft_WithNoSystemChannel_ShouldExit()
+        {
+            testDiscordEnv.ResetSystemChannel();
+            testDiscordEnv.mockGuild.SetupGet(g => g.SystemChannelId).Returns(0);
+
+            await greetingService.HandleOnUserLeft(
+                testDiscordEnv.mockGuild.Object,
+                testDiscordEnv.mockGuildUser.Object
+            );
+
+            VerifyHelper.VerifyNoMessageSentAsync(testDiscordEnv.mockSystemChannel);
+        }
+
+        [Test]
+        public async Task HandleOnUserLeft_WithSystemChannel_ShouldOkUser()
+        {
+            testDiscordEnv.ResetSystemChannel();
+            testDiscordEnv
+                .mockGuild.SetupGet(g => g.SystemChannelId)
+                .Returns(testDiscordEnv.systemChannelId);
+            testDiscordEnv
+                .mockGuild.Setup(g =>
+                    g.GetTextChannelAsync(
+                        testDiscordEnv.systemChannelId,
+                        CacheMode.AllowDownload,
+                        null
+                    )
+                )
+                .ReturnsAsync(testDiscordEnv.mockSystemChannel.Object);
+
+            await greetingService.HandleOnUserLeft(
+                testDiscordEnv.mockGuild.Object,
+                testDiscordEnv.mockGuildUser.Object
+            );
+
+            VerifyHelper.VerifyMessageSentAsync(
+                testDiscordEnv.mockSystemChannel,
+                s => s.Contains("ok")
             );
         }
     }
