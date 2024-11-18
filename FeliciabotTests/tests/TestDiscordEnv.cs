@@ -58,14 +58,20 @@ namespace FeliciabotTests.tests
 
             mockGuildUser.SetupGet(u => u.Mention).Returns("User Mention");
 
-            mockSystemChannel.SetupGet(c => c.Id).Returns(systemChannelId);
-            mockSystemChannel.SetupGet(c => c.Name).Returns("System");
-            mockSystemChannel.SetupGet(c => c.Guild).Returns(mockGuild.Object);
+            ResetSystemChannel();
 
             mockUserMessage.SetupGet(m => m.Channel).Returns(mockMessageChannel.Object);
             mockContext.SetupGet(c => c.Client).Returns(mockClient.Object);
             mockContext.SetupGet(c => c.Channel).Returns(mockMessageChannel.Object);
             mockContext.SetupGet(c => c.User).Returns(mockUser.Object);
+        }
+
+        public void ResetSystemChannel()
+        {
+            mockSystemChannel.Reset();
+            mockSystemChannel.SetupGet(c => c.Id).Returns(systemChannelId);
+            mockSystemChannel.SetupGet(c => c.Name).Returns("System");
+            mockSystemChannel.SetupGet(c => c.Guild).Returns(mockGuild.Object);
         }
     }
 }
