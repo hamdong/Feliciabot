@@ -1,14 +1,19 @@
 ﻿using Discord;
 using Feliciabot.net._6._0.helpers;
+using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.services.interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace Feliciabot.net._6._0.services
 {
     public class GreetingService : IGreetingService
     {
-        private readonly string greetingsPath =
-            Environment.CurrentDirectory + @"\data\greetings.txt";
-        private readonly string quotesPath = Environment.CurrentDirectory + @"\data\quotes.txt";
+        private readonly IClientService _clientService;
+        private readonly IUserManagementService _userManagementService;
+        private readonly IRandomizerService _randomizerService;
+
+        private readonly string[] greetingList;
+        private readonly string[] quoteList;
 
         private static readonly (List<string>, string)[] Reactions =
         [
@@ -17,14 +22,8 @@ namespace Feliciabot.net._6._0.services
             (["hi", "hello", "yo"], "Hi N-Nice to see you!"),
         ];
 
-        private readonly IClientService _clientService;
-        private readonly IUserManagementService _userManagementService;
-        private readonly IRandomizerService _randomizerService;
-
-        private readonly string[] greetingList;
-        private readonly string[] quoteList;
-
         public GreetingService(
+            IConfiguration configuration,
             IClientService clientService,
             IUserManagementService userManagementService,
             IRandomizerService randomizerService
@@ -33,8 +32,8 @@ namespace Feliciabot.net._6._0.services
             _clientService = clientService;
             _userManagementService = userManagementService;
             _randomizerService = randomizerService;
-            quoteList = File.ReadAllLines(quotesPath);
-            greetingList = File.ReadAllLines(greetingsPath);
+            greetingList = Responses.GreetingResponses;
+            quoteList = File.ReadAllLines(configuration["QuotesPath"]!);
         }
 
         public async Task ReplyToNonCommand(IUserMessage message)

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using NUnit.Framework;
 
@@ -9,6 +10,7 @@ namespace FeliciabotTests.tests.services
     [TestFixture]
     public class GreetingServiceTest
     {
+        private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<IClientService> _mockClientService;
         private readonly Mock<IUserManagementService> _mockUserManagementService;
         private readonly Mock<IRandomizerService> _mockRandomizerService;
@@ -18,13 +20,18 @@ namespace FeliciabotTests.tests.services
         public GreetingServiceTest()
         {
             testDiscordEnv = new TestDiscordEnv();
+            _mockConfiguration = new Mock<IConfiguration>();
             _mockClientService = new Mock<IClientService>();
             _mockUserManagementService = new Mock<IUserManagementService>();
             _mockRandomizerService = new Mock<IRandomizerService>();
+            
+            _mockConfiguration.Setup(s => s["QuotesPath"]).Returns(Path.Combine(TestContext.CurrentContext.TestDirectory, "tests\\services\\test-data\\quotes.txt"));
+
             greetingService = new GreetingService(
+                _mockConfiguration.Object,
                 _mockClientService.Object,
                 _mockUserManagementService.Object,
-                _mockRandomizerService.Object
+                _mockRandomizerService.Object                
             );
         }
 

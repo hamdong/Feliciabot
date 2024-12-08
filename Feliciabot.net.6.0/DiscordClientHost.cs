@@ -77,7 +77,7 @@ namespace Feliciabot.net._6._0
             );
 
             await _client
-                .LoginAsync(TokenType.Bot, File.ReadAllText(clientTokenPath))
+                .LoginAsync(TokenType.Bot, await File.ReadAllTextAsync(clientTokenPath))
                 .ConfigureAwait(false);
 
             await _client.StartAsync().ConfigureAwait(false);

@@ -20,4 +20,13 @@
 		<ProjectReference Include="..\Feliciabot.net.6.0\Feliciabot.net.6.0.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="tests\services\test-data\greetings.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="tests\services\test-data\quotes.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

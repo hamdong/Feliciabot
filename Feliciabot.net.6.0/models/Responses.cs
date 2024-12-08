@@ -31,7 +31,7 @@
         ];
 
         public static readonly string[] TeaResponses =
-        {
+        [
             "Honey",
             "Green",
             "Oolong",
@@ -52,6 +52,23 @@
             "Rooibos",
             "Milk",
             "Frozen Milk",
-        };
+        ];
+
+        public static readonly string[] GreetingResponses =
+        [
+            "Nice to see you!",
+            "Can I get you something?",
+            "I'll do my best to be of service!",
+            "Whoa! Wh-whoa! Whoa!",
+            "We've got trouble!",
+            "Didn't expect that, did ya?",
+            "All right!",
+            "Hiho!",
+            "Greetings, comrade!",
+            "Welcome to maid hell, enjoy your stay!",
+            "OwO!",
+            "Here goes nothing!",
+            "Yay!",
+        ];
     }
 }
