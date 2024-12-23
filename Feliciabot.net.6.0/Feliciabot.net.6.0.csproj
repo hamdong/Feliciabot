@@ -30,7 +30,6 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
 		<PackageReference Include="NUnit" Version="4.3.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-		<PackageReference Include="Ratquaza.Pokedex2" Version="1.0.0" />
 		<PackageReference Include="UwUfyer" Version="1.0.0" />
 		<PackageReference Include="WaifuSharp" Version="0.0.3" />
 		<PackageReference Include="YoutubeSearchApi.Net" Version="1.1.1" />

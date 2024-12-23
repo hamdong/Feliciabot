@@ -3,18 +3,14 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
+using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using WaifuSharp;
 
 namespace Feliciabot.net._6._0.modules
 {
-    public sealed class RollModule : InteractionModuleBase
+    public sealed class RollModule(IWaifuSharpService _waifuService, IRandomizerService _randomizerService) : InteractionModuleBase
     {
-        private const string OOC_CHANNEL_NAME = "out_of_context";
-        private readonly IWaifuSharpService _waifuService;
-
-        public RollModule(IWaifuSharpService waifuService) => _waifuService = waifuService;
-
         [SlashCommand(
             "8ball",
             "Answers a question with yes/no/maybe responses",
@@ -22,9 +18,9 @@ namespace Feliciabot.net._6._0.modules
         )]
         public async Task EightBall(string question)
         {
-            int positiveOrNegativeResponse = CommandsHelper.GetRandomNumber(3);
+            int positiveOrNegativeResponse = _randomizerService.GetRandom(3);
             string[] chosenResponse = Responses.RollResponses[positiveOrNegativeResponse];
-            int randLineIndex = CommandsHelper.GetRandomNumber(chosenResponse.Length - 1);
+            int randLineIndex = _randomizerService.GetRandom(chosenResponse.Length - 1);
             await RespondAsync($"Q: {question}\nA: {chosenResponse[randLineIndex]}")
                 .ConfigureAwait(false);
         }
@@ -39,7 +35,7 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            int randomRoll = CommandsHelper.GetRandomNumber(sides + 1, 1);
+            int randomRoll = _randomizerService.GetRandom(sides + 1, 1);
             await RespondAsync($"{Context.User.GlobalName} rolled *{randomRoll}*")
                 .ConfigureAwait(false);
         }
@@ -47,7 +43,7 @@ namespace Feliciabot.net._6._0.modules
         [SlashCommand("flip", "Flips a coin", runMode: RunMode.Async)]
         public async Task CoinFlip()
         {
-            int headsOrTails = CommandsHelper.GetRandomNumber(2);
+            int headsOrTails = _randomizerService.GetRandom(2);
             string coinFlipResult = (headsOrTails == 0) ? "Heads" : "Tails";
             await RespondAsync($"{Context.User.GlobalName} got *{coinFlipResult}*")
                 .ConfigureAwait(false);
@@ -75,12 +71,12 @@ namespace Feliciabot.net._6._0.modules
         {
             var outOfContextChannel = await CommandsHelper.GetChannelByNameAsync(
                 (SocketGuild)Context.Guild,
-                OOC_CHANNEL_NAME
+                "out_of_context"
             );
 
             if (outOfContextChannel is null)
             {
-                await RespondAsync($"No **{OOC_CHANNEL_NAME}** channel found :shrug:")
+                await RespondAsync($"No **out_of_context** channel found :shrug:")
                     .ConfigureAwait(false);
                 return;
             }
@@ -101,10 +97,10 @@ namespace Feliciabot.net._6._0.modules
                     return;
                 }
 
-                int randomIndex = CommandsHelper.GetRandomNumber(maxMsg);
+                int randomIndex = _randomizerService.GetRandom(maxMsg);
                 IMessage foundMsg = oocMessages.ElementAt(randomIndex);
 
-                string extractedContents = CommandsHelper.ParseMessageWithAttachments(foundMsg);
+                string extractedContents = _randomizerService.GetRandomAttachmentWithMessageFromMessage(foundMsg);
                 await FollowupAsync($"{extractedContents}").ConfigureAwait(false);
             }
             catch (Exception)

@@ -1,18 +1,24 @@
 ﻿using Discord;
 using Discord.Commands;
-using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
+using Feliciabot.net._6._0.services.interfaces;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Feliciabot.net._6._0.commands
 {
-    public class EmoteCommand() : ModuleBase
+    public class EmoteCommand : ModuleBase
     {
         private const int MAX_CLAPS = 12;
         private static readonly string[] pyraDogArray = [
             EmoteCustom.Pyradog1, EmoteCustom.Pyradog2, EmoteCustom.Pyradog3, EmoteCustom.Pyradog4, EmoteCustom.Pyradog5,
             EmoteCustom.Pyradog6, EmoteCustom.Pyradog7, EmoteCustom.Pyradog8, EmoteCustom.Pyradog9];
+        private readonly IRandomizerService _randomizerService;
+
+        public EmoteCommand(IRandomizerService randomizerService)
+        {
+            _randomizerService = randomizerService;
+        }
 
         [Command("civ", RunMode = RunMode.Async), Summary("Posts Feliciaciv emote")]
         public async Task Civ() => await Context.Channel.SendMessageAsync(EmoteCustom.FeliciaCiv);
@@ -76,7 +82,7 @@ namespace Feliciabot.net._6._0.commands
         public async Task Randog()
         {
             IReadOnlyCollection<GuildEmote> emotes = Context.Guild.Emotes;
-            int randomIndex = CommandsHelper.GetRandomNumber(emotes.Count);
+            int randomIndex = _randomizerService.GetRandom(emotes.Count);
             GuildEmote emote = emotes.ElementAt(randomIndex);
             string emoteId = Regex.Match(emote.Url, @"\d+").Value;
             string emoteRef = emote.Name + ":" + emoteId + ">";

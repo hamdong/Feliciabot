@@ -9,7 +9,6 @@ namespace Feliciabot.net._6._0.helpers
         private static readonly Regex emoteRegex = new Regex(
             "^a*:[a-zA-Z0-9_.-]*:[a-zA-Z0-9_.-]*>$"
         );
-        private static readonly Random rand = new();
 
         public static async Task<ITextChannel?> GetSystemChannelFromGuildAsync(IGuild guild)
         {
@@ -96,43 +95,6 @@ namespace Feliciabot.net._6._0.helpers
         public static bool IsEmoteMessage(string message)
         {
             return emoteRegex.IsMatch(message);
-        }
-
-        /// <summary>
-        /// Parse specified message and return it with a random attachment if one exists
-        /// </summary>
-        /// <param name="message">Message contents to extract</param>
-        /// <returns>Message content as string with url to a random attachment</returns>
-        public static string ParseMessageWithAttachments(IMessage message)
-        {
-            if (message.Attachments.Count != 0)
-            {
-                int randomAttachment = GetRandomNumber(message.Attachments.Count);
-                return message.Content != string.Empty
-                    ? $"{message.Content} {message.Attachments.ElementAt(randomAttachment).Url}"
-                    : message.Attachments.ElementAt(randomAttachment).Url;
-            }
-
-            if (message.Content != string.Empty)
-            {
-                return message.Content;
-            }
-
-            return "Couldn't find a message to post :confused:";
-        }
-
-        /// <summary>
-        /// Generates a random number
-        /// </summary>
-        /// <param name="max">Hard limit on max value, exclusive</param>
-        /// <param name="min">Optional hard limit on min value</param>
-        /// <returns>Random number from 0 to the specified max (exclusive)(</returns>
-        public static int GetRandomNumber(int max, int min = 0)
-        {
-            lock (rand) // Ensure thread safety
-            {
-                return rand.Next(min, max);
-            }
         }
     }
 }

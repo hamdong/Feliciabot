@@ -16,6 +16,7 @@ namespace FeliciabotTests.tests.modules
         private readonly Mock<IDiscordInteraction> mockDiscordInteraction;
         private readonly Mock<IInteractionContext> mockContext;
         private readonly Mock<IWaifuSharpService> mockWaifuService;
+        private readonly Mock<IRandomizerService> mockRandomizerService;
         private readonly RollModule rollModule;
 
         public RollModuleTest()
@@ -25,7 +26,8 @@ namespace FeliciabotTests.tests.modules
             mockDiscordInteraction = new Mock<IDiscordInteraction>();
             mockContext = new Mock<IInteractionContext>();
             mockWaifuService = new Mock<IWaifuSharpService>();
-            rollModule = new RollModule(mockWaifuService.Object);
+            mockRandomizerService = new Mock<IRandomizerService>();
+            rollModule = new RollModule(mockWaifuService.Object, mockRandomizerService.Object);
         }
 
         [SetUp]
@@ -33,6 +35,7 @@ namespace FeliciabotTests.tests.modules
         {
             mockDiscordInteraction.Reset();
             mockWaifuService.Setup(s => s.GetSfwImage(It.IsAny<Endpoints.Sfw>())).Returns("https://picsum.photos/200");
+            mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(0);
             mockUser.SetupGet(u => u.GlobalName).Returns("GlobalName");
             mockBotUser.SetupGet(u => u.IsBot).Returns(true);
             mockContext.SetupGet(c => c.User).Returns(mockUser.Object);

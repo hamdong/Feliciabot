@@ -3,6 +3,7 @@ using Discord;
 using Discord.Commands;
 using Feliciabot.net._6._0.commands;
 using Feliciabot.net._6._0.models;
+using Feliciabot.net._6._0.services.interfaces;
 using Moq;
 using NUnit.Framework;
 
@@ -13,13 +14,15 @@ namespace FeliciabotTests.tests.commands.fun
     {
         private readonly Mock<IMessageChannel> _mockChannel;
         private readonly Mock<ICommandContext> _mockContext;
+        private readonly Mock<IRandomizerService> _mockRandomizerService;
         private readonly EmoteCommand _emoteCommand;
 
         public EmoteCommandTest()
         {
             _mockChannel = new Mock<IMessageChannel>();
             _mockContext = new Mock<ICommandContext>();
-            _emoteCommand = new EmoteCommand();
+            _mockRandomizerService = new Mock<IRandomizerService>();
+            _emoteCommand = new EmoteCommand(_mockRandomizerService.Object);
         }
 
         [SetUp]
@@ -28,6 +31,7 @@ namespace FeliciabotTests.tests.commands.fun
             _mockChannel.Reset();
             _mockContext.SetupGet(c => c.Channel).Returns(_mockChannel.Object);
             MockContextHelper.SetContext(_emoteCommand, _mockContext.Object);
+            _mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
         }
 
         [Test]

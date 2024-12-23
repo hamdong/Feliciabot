@@ -1,11 +1,18 @@
 ﻿using Discord.Commands;
 using Feliciabot.net._6._0.helpers;
+using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.commands
 {
     public class ImagePostCommand : ModuleBase
     {
         private readonly string env = $@"{Environment.CurrentDirectory}\img\";
+        private readonly IRandomizerService _randomizerService;
+
+        public ImagePostCommand(IRandomizerService randomizerService)
+        {
+            _randomizerService = randomizerService;
+        }
 
         [Command("awesome", RunMode = RunMode.Async)]
         [Summary("Posts 'AWESOME' meme")]
@@ -49,7 +56,7 @@ namespace Feliciabot.net._6._0.commands
 
         [Command("shez", RunMode = RunMode.Async)]
         [Summary("Posts 'shez!' meme")]
-        public async Task Shez() => await PostToChannel(CommandsHelper.GetRandomNumber(2) == 0 ? $@"{env}shez1.jpg" : $@"{env}shez2.jpg");
+        public async Task Shez() => await PostToChannel(_randomizerService.GetRandom(2) == 0 ? $@"{env}shez1.jpg" : $@"{env}shez2.jpg");
 
         [Command("shock", RunMode = RunMode.Async)]
         [Summary("Posts 'shock' meme")]
