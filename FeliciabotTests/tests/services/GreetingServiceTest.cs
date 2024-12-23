@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,7 @@ namespace FeliciabotTests.tests.services
     public class GreetingServiceTest
     {
         private readonly Mock<IConfiguration> _mockConfiguration;
-        private readonly Mock<IClientService> _mockClientService;
+        private readonly Mock<IDiscordClient> _mockClient;
         private readonly Mock<IUserManagementService> _mockUserManagementService;
         private readonly Mock<IRandomizerService> _mockRandomizerService;
         private readonly GreetingService greetingService;
@@ -21,7 +22,7 @@ namespace FeliciabotTests.tests.services
         {
             testDiscordEnv = new TestDiscordEnv();
             _mockConfiguration = new Mock<IConfiguration>();
-            _mockClientService = new Mock<IClientService>();
+            _mockClient = new Mock<IDiscordClient>();
             _mockUserManagementService = new Mock<IUserManagementService>();
             _mockRandomizerService = new Mock<IRandomizerService>();
             
@@ -29,7 +30,7 @@ namespace FeliciabotTests.tests.services
 
             greetingService = new GreetingService(
                 _mockConfiguration.Object,
-                _mockClientService.Object,
+                _mockClient.Object,
                 _mockUserManagementService.Object,
                 _mockRandomizerService.Object                
             );
@@ -51,7 +52,7 @@ namespace FeliciabotTests.tests.services
             testDiscordEnv
                 .mockGuildUser.SetupGet(m => m.Guild)
                 .Returns(testDiscordEnv.mockGuild.Object);
-            _mockClientService.Setup(s => s.GetClientId()).Returns(testDiscordEnv.selfUserId);
+            _mockClient.SetupGet(s => s.CurrentUser).Returns(testDiscordEnv.mockSelfUser.Object);
         }
 
         [Test]

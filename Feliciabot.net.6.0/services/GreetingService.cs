@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.services.interfaces;
@@ -8,7 +9,7 @@ namespace Feliciabot.net._6._0.services
 {
     public class GreetingService : IGreetingService
     {
-        private readonly IClientService _clientService;
+        private readonly IDiscordClient _client;
         private readonly IUserManagementService _userManagementService;
         private readonly IRandomizerService _randomizerService;
 
@@ -24,12 +25,12 @@ namespace Feliciabot.net._6._0.services
 
         public GreetingService(
             IConfiguration configuration,
-            IClientService clientService,
+            IDiscordClient client,
             IUserManagementService userManagementService,
             IRandomizerService randomizerService
         )
         {
-            _clientService = clientService;
+            _client = client;
             _userManagementService = userManagementService;
             _randomizerService = randomizerService;
             greetingList = Responses.GreetingResponses;
@@ -98,8 +99,8 @@ namespace Feliciabot.net._6._0.services
         private bool ShouldRespond(IUserMessage message)
         {
             // message.Reference refers to replying to Discord messsages
-            return message.MentionedUserIds.Any(id => id == _clientService.GetClientId())
-                && message.Author.Id != _clientService.GetClientId()
+            return message.MentionedUserIds.Any(id => id == _client.CurrentUser.Id)
+                && message.Author.Id != _client.CurrentUser.Id
                 && message.Reference is null;
         }
     }

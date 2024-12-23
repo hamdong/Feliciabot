@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using BooruSharp.Booru;
+using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
@@ -24,6 +25,7 @@ var discordSocketClient = new DiscordSocketClient(config);
 
 // Discord
 builder.Services.AddSingleton(discordSocketClient);
+builder.Services.AddSingleton<IDiscordClient>(discordSocketClient);
 builder.Services.AddSingleton<CommandService>();
 builder.Services.AddSingleton(
     new InteractionService(
@@ -51,7 +53,6 @@ builder
     .Services.AddSingleton<IInteractiveHelperService, InteractiveHelperService>()
     .AddSingleton<IWaifuSharpService, WaifuSharpService>()
     .AddSingleton<IRandomizerService, RandomizerService>()
-    .AddSingleton<IClientService, ClientService>()
     .AddSingleton<IGreetingService, GreetingService>()
     .AddSingleton<IUserManagementService, UserManagementService>()
     .AddSingleton<EmbedBuilderService>();
