@@ -60,7 +60,6 @@ builder
 // Misc.
 builder
     .Services.AddSingleton<WaifuClient>()
-    .AddSingleton<HttpClient>()
     .AddSingleton<InteractiveService>()
     .AddSingleton<Gelbooru>()
     .AddSingleton<YoutubeSearchClient>();

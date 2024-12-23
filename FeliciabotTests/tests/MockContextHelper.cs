@@ -2,7 +2,6 @@
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
-using Feliciabot.net._6._0.modules;
 using Moq;
 using WaifuSharp;
 

@@ -1,5 +1,4 @@
 ﻿using Discord.Commands;
-using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.commands.fun

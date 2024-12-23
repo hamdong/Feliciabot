@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.models;
 using Feliciabot.net._6._0.services.interfaces;
