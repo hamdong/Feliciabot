@@ -20,7 +20,6 @@ namespace FeliciabotTests.tests
         public readonly Mock<IUserMessage> mockUserMessage;
         public readonly Mock<IMessageChannel> mockMessageChannel;
         public readonly Mock<ICommandContext> mockContext;
-        public readonly Mock<IRandomizerService> mockRandomizerService;
         public readonly Mock<MessageReference> mockMessageReference;
 
         public TestDiscordEnv()
@@ -36,7 +35,6 @@ namespace FeliciabotTests.tests
             mockUserMessage = new Mock<IUserMessage>();
             mockMessageChannel = new Mock<IMessageChannel>();
             mockContext = new Mock<ICommandContext>();
-            mockRandomizerService = new Mock<IRandomizerService>();
             mockMessageReference = new Mock<MessageReference>(
                 null!,
                 null!,
