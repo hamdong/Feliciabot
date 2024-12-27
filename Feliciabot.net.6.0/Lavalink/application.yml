@@ -18,21 +18,22 @@ plugins:
     # The clients to use for track loading. See below for a list of valid clients.
     # Clients are queried in the order they are given (left-to-right)
     clients:
-      - WEBEMBEDDED
       - MUSIC
       - WEB
-      - ANDROID_TESTSUITE
-      - ANDROID_MUSIC
+      - MWEB
+      - WEBEMBEDDED
+      - TV
       - TVHTML5EMBEDDED
-      - ANDROID_LITE
-      - MEDIA_CONNECT
+      - ANDROID_VR
+      - ANDROID_MUSIC
+      - ANDROID
       - IOS
 lavalink:
   plugins:
     # UPDATE Plugin at: https://github.com/lavalink-devs/youtube-source#plugin
     # Replace VERSION with the current version as shown by the Releases tab or a long commit hash for snapshots.
     # Note from Ham: Plugins can be the cause for failed playback so always check for newest Lavalink.jar and youtube-plugin.jar
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.8.3"
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.3"
       snapshot: false # Set to true if you want to use a snapshot version.
   server:
     password: "youshallnotpass"
