@@ -32,6 +32,14 @@ namespace Feliciabot.net._6._0.commands.fun
             await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\alfred.mov");
         }
 
+        [Alias("arover, itsaruover, itsover")]
+        [Command("aruover", RunMode = RunMode.Async)]
+        [Summary("Posts 'Aruover' video")]
+        public async Task Aruover()
+        {
+            await Context.Channel.SendFileAsync(Environment.CurrentDirectory + @"\videos\aruover.mp4");
+        }
+
         [Command("gg", RunMode = RunMode.Async)]
         [Summary("Posts 'GG' video")]
         public async Task GG()
