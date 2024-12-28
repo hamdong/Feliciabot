@@ -71,7 +71,7 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            var loadedTracks = await _audioService.Tracks.LoadTracksAsync(query, TrackSearchMode.YouTube).ConfigureAwait(false);
+            var loadedTracks = await _audioService.Tracks.LoadTracksAsync(query, TrackSearchMode.Spotify).ConfigureAwait(false);
             var track = loadedTracks.Track;
 
             if (track is null)
