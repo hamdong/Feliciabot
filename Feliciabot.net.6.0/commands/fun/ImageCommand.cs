@@ -1,15 +1,14 @@
 ﻿using Discord.Commands;
-using Feliciabot.net._6._0.helpers;
 using Feliciabot.net._6._0.services.interfaces;
 
-namespace Feliciabot.net._6._0.commands
+namespace Feliciabot.net._6._0.commands.fun
 {
-    public class ImagePostCommand : ModuleBase
+    public class ImageCommand : ModuleBase
     {
         private readonly string env = $@"{Environment.CurrentDirectory}\img\";
         private readonly IRandomizerService _randomizerService;
 
-        public ImagePostCommand(IRandomizerService randomizerService)
+        public ImageCommand(IRandomizerService randomizerService)
         {
             _randomizerService = randomizerService;
         }
@@ -74,6 +73,6 @@ namespace Feliciabot.net._6._0.commands
         [Summary("Posts 'Holy s* it's the xenoblade' meme")]
         public async Task Xenoblade() => await PostToChannel($@"{env}xenoblade.png");
 
-        private async Task PostToChannel(string filePathToPost) => await Context.Channel.SendFileAsync(filePathToPost, "");
+        private async Task PostToChannel(string filePathToPost) => await Context.Channel.SendFileAsync(filePathToPost);
     }
 }
