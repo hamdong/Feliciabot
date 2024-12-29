@@ -290,7 +290,7 @@ namespace Feliciabot.net._6._0.modules
 
             if (track is not null)
             {
-                await RespondAsync($"Skipped. Now playing: {track.Track!.Uri}", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
+                await RespondAsync($"Skipped. Now playing: {track.Track!.Uri}", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player, true)).ConfigureAwait(false);
             }
             else
             {

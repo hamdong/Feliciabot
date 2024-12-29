@@ -29,7 +29,7 @@ namespace Feliciabot.net._6._0.services
             return builder.Build();
         }
 
-        internal Embed GetPlayingTrackInfoAsEmbed(LavalinkPlayer player)
+        internal Embed GetPlayingTrackInfoAsEmbed(LavalinkPlayer player, bool skipped = false)
         {
             var builder = new EmbedBuilder();
             var track = player.CurrentTrack;
@@ -38,16 +38,17 @@ namespace Feliciabot.net._6._0.services
 
             string trackUri = track.Uri is null ? "" : track.Uri.AbsoluteUri;
             string artworkUri = track.ArtworkUri is null ? "" : track.ArtworkUri.AbsoluteUri;
-            var position = player.Position?.Position ?? new TimeSpan();
+            var position = skipped ? new TimeSpan() : player.Position?.Position ?? new TimeSpan();
             var visual = GetPositionVisual(position, track.Duration);
             var displayPosition = position.ToString("hh\\:mm\\:ss");
             var displayDuration = track.Duration.ToString("hh\\:mm\\:ss");
 
             builder.WithAuthor(track.Author, MARIANNE_DANCE_LINK, trackUri);
             builder.WithTitle(track.Title);
-            builder.WithUrl($"{track.Uri}");
+            builder.WithUrl($"{track.Uri}" ?? "[no URL found]");
             builder.AddField("Track Position", $"{displayPosition} {visual} {displayDuration}", true);
             builder.WithThumbnailUrl(artworkUri);
+            builder.WithFooter(track.SourceName ?? "[no source found]");
             return builder.Build();
         }
 
