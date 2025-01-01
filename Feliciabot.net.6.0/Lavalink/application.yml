@@ -2,6 +2,27 @@
 #  name: # Name of the plugin
 #    some_key: some_value # Some key-value pair for the plugin
 #    another_key: another_value
+  youtube:
+    enabled: true # Whether this source can be used.
+    oauth:
+      enabled: true
+      # refreshToken: "paste your refresh token here if applicable"
+      # skipInitialization: true
+    allowSearch: true # Whether "ytsearch:" and "ytmsearch:" can be used.
+    allowDirectVideoIds: true # Whether just video IDs can match. If false, only complete URLs will be loaded.
+    allowDirectPlaylistIds: true # Whether just playlist IDs can match. If false, only complete URLs will be loaded.
+    # The clients to use for track loading. See below for a list of valid clients.
+    # Clients are queried in the order they are given (left-to-right)
+    clients:
+      - MUSIC
+      - WEB
+      - MWEB
+      - WEBEMBEDDED
+      - TV
+      - TVHTML5EMBEDDED
+      - ANDROID_VR
+      - ANDROID_MUSIC
+      - IOS
   lavasrc:
     sources:
       spotify: true # Enable Spotify source
@@ -19,27 +40,6 @@
       playlistLoadLimit: 6 # The number of pages at 100 tracks each
       albumLoadLimit: 6 # The number of pages at 50 tracks each
       localFiles: false #  Enable local files support with Spotify playlists. Please note `uri` & `isrc` will be `null` & `identifier` will be `"local"`
-  youtube:
-    enabled: true # Whether this source can be used.
-    oauth:
-      clientId: "XXXXX"
-      clientSecret: "XXXXX"
-    allowSearch: true # Whether "ytsearch:" and "ytmsearch:" can be used.
-    allowDirectVideoIds: true # Whether just video IDs can match. If false, only complete URLs will be loaded.
-    allowDirectPlaylistIds: true # Whether just playlist IDs can match. If false, only complete URLs will be loaded.
-    # The clients to use for track loading. See below for a list of valid clients.
-    # Clients are queried in the order they are given (left-to-right)
-    clients:
-      - MUSIC
-      - WEB
-      - MWEB
-      - WEBEMBEDDED
-      - TV
-      - TVHTML5EMBEDDED
-      - ANDROID_VR
-      - ANDROID_MUSIC
-      - ANDROID
-      - IOS
 
 server: # REST and WS server
   port: 2333

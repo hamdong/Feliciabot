@@ -13,7 +13,6 @@ using Lavalink4NET.InactivityTracking.Extensions;
 using Lavalink4NET.InactivityTracking.Trackers.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using WaifuSharp;
 using YoutubeSearchApi.Net.Services;
 
@@ -38,7 +37,7 @@ builder.Services.AddHostedService<DiscordClientHost>();
 // Lavalink
 builder.Services.AddLavalink();
 builder.Services.AddInactivityTracking();
-builder.Services.AddLogging(x => x.AddConsole().SetMinimumLevel(LogLevel.Trace));
+builder.Services.AddLogging();
 builder
     .Services.ConfigureInactivityTracking(x => { })
     .Configure<UsersInactivityTrackerOptions>(options =>
@@ -55,7 +54,7 @@ builder
     .AddSingleton<IRandomizerService, RandomizerService>()
     .AddSingleton<IGreetingService, GreetingService>()
     .AddSingleton<IUserManagementService, UserManagementService>()
-    .AddSingleton<EmbedBuilderService>();
+    .AddSingleton<IEmbedBuilderService, EmbedBuilderService>();
 
 // Misc.
 builder

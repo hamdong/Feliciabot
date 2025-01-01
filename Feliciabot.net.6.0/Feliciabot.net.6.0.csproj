@@ -30,6 +30,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
 		<PackageReference Include="NUnit" Version="4.3.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+		<PackageReference Include="Stax.GetImageColor" Version="1.0.0" />
 		<PackageReference Include="Uwuify.Humanizer" Version="1.2.5" />
 		<PackageReference Include="WaifuSharp" Version="0.0.3" />
 		<PackageReference Include="YoutubeSearchApi.Net" Version="1.1.1" />
@@ -98,6 +99,18 @@
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="img\towa.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Lavalink\application.yml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Lavalink\Lavalink.jar">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Lavalink\plugins\lavasrc-plugin-4.3.0.jar">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Lavalink\plugins\youtube-plugin-1.11.3.jar">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="videos\alfred.mov">

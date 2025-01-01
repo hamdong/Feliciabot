@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Feliciabot.net._6._0.services;
+using Feliciabot.net._6._0.services.interfaces;
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
 using Lavalink4NET;
@@ -17,7 +18,7 @@ namespace Feliciabot.net._6._0.modules
     public sealed class MusicModule : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly IAudioService _audioService;
-        private readonly EmbedBuilderService _embedBuilderService;
+        private readonly IEmbedBuilderService _embedBuilderService;
         private readonly InteractiveService _interactiveService;
 
         /// <summary>
@@ -27,7 +28,11 @@ namespace Feliciabot.net._6._0.modules
         /// <exception cref="ArgumentNullException">
         ///     thrown if the specified <paramref name="audioService"/> is <see langword="null"/>.
         /// </exception>
-        public MusicModule(IAudioService audioService, EmbedBuilderService embedBuilderService, InteractiveService interactiveService)
+        public MusicModule(
+            IAudioService audioService,
+            IEmbedBuilderService embedBuilderService,
+            InteractiveService interactiveService
+        )
         {
             ArgumentNullException.ThrowIfNull(audioService);
 
@@ -40,7 +45,7 @@ namespace Feliciabot.net._6._0.modules
         ///     Disconnects from the current voice channel connected to asynchronously.
         /// </summary>
         /// <returns>a task that represents the asynchronous operation</returns>
-        [SlashCommand("leave", "Disconnects from the current voice channel connected to", runMode: RunMode.Async)]
+        [SlashCommand("leave", "Disconnects from connected voice channel", runMode: RunMode.Async)]
         public async Task Leave()
         {
             var player = await GetPlayerAsync().ConfigureAwait(false);
@@ -71,7 +76,9 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            var loadedTracks = await _audioService.Tracks.LoadTracksAsync(query, TrackSearchMode.Spotify).ConfigureAwait(false);
+            var loadedTracks = await _audioService
+                .Tracks.LoadTracksAsync(query, TrackSearchMode.Spotify)
+                .ConfigureAwait(false);
             var track = loadedTracks.Track;
 
             if (track is null)
@@ -84,20 +91,36 @@ namespace Feliciabot.net._6._0.modules
 
             if (position is 0)
             {
-                await FollowupAsync($"🔈 Playing:", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
+                await FollowupAsync(
+                        $"🔈 Playing:",
+                        embed: await _embedBuilderService.GetTrackInfoFromPlayerAsEmbed(player)
+                    )
+                    .ConfigureAwait(false);
             }
             else
             {
-                if (!loadedTracks.IsPlaylist) await FollowupAsync($"🔈 Added to queue: {track.Title} [{track.Duration}]").ConfigureAwait(false);
+                if (!loadedTracks.IsPlaylist)
+                {
+                    string format =
+                        track.Duration >= TimeSpan.FromHours(1) ? "hh\\:mm\\:ss" : "mm\\:ss";
+                    await FollowupAsync(
+                            $"🔈 Added to queue: {track.Title} [{track.Duration.ToString(format)}]"
+                        )
+                        .ConfigureAwait(false);
+                }
             }
 
             if (loadedTracks.IsPlaylist)
             {
                 await FollowupAsync($"📃 Playlist found").ConfigureAwait(false);
                 List<LavalinkTrack> remainingTracks = loadedTracks.Tracks.Skip(1).ToList();
-                var queueableTracks = remainingTracks.Select(t => new TrackQueueItem(t)).ToList().AsReadOnly();
+                var queueableTracks = remainingTracks
+                    .Select(t => new TrackQueueItem(t))
+                    .ToList()
+                    .AsReadOnly();
                 await player.Queue.AddRangeAsync(queueableTracks);
-                await FollowupAsync($"🔈 Added {loadedTracks.Count} track(s) to queue").ConfigureAwait(false);
+                await FollowupAsync($"🔈 Added {loadedTracks.Count} track(s) to queue")
+                    .ConfigureAwait(false);
             }
         }
 
@@ -105,7 +128,7 @@ namespace Feliciabot.net._6._0.modules
         ///     Displays the current playing track
         /// </summary>
         /// <returns>a task that represents the asynchronous operation</returns>
-        [SlashCommand("now-playing", description: "Displays the currently playing track", runMode: RunMode.Async)]
+        [SlashCommand("now-playing", description: "Shows playing track", runMode: RunMode.Async)]
         public async Task NowPlaying()
         {
             var player = await GetPlayerAsync(connectToVoiceChannel: false).ConfigureAwait(false);
@@ -121,7 +144,11 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            await RespondAsync("Now playing:", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player)).ConfigureAwait(false);
+            await RespondAsync(
+                    "Now playing:",
+                    embed: await _embedBuilderService.GetTrackInfoFromPlayerAsEmbed(player)
+                )
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -144,9 +171,14 @@ namespace Feliciabot.net._6._0.modules
                 return;
             }
 
-            var paginatedQueue = GetPaginatedQueue(player.Queue, out TimeSpan totalDuration);
-            await RespondAsync($"Total Duration: {totalDuration}").ConfigureAwait(false);
-            await _interactiveService.SendPaginatorAsync(paginatedQueue, Context.Channel, TimeSpan.FromMinutes(5));
+            var paginatedQueue = GetPaginatedQueue(player.Queue);
+
+            // Not sure how to remove this response since it's required to complete the interaction...
+            await RespondAsync("Queue posted!").ConfigureAwait(false);
+
+            await _interactiveService
+                .SendPaginatorAsync(paginatedQueue, Context.Channel, TimeSpan.FromMinutes(5))
+                .ConfigureAwait(false);
         }
 
         [SlashCommand("clear", description: "Clears the current queue", runMode: RunMode.Async)]
@@ -169,7 +201,7 @@ namespace Feliciabot.net._6._0.modules
             await RespondAsync($"Queue cleared! Removed items: {cleared}").ConfigureAwait(false);
         }
 
-        [SlashCommand("remove", description: "Removes an item from the current queue", runMode: RunMode.Async)]
+        [SlashCommand("remove", description: "Removes item from queue", runMode: RunMode.Async)]
         public async Task Remove(int trackNumber)
         {
             var player = await GetPlayerAsync(connectToVoiceChannel: false).ConfigureAwait(false);
@@ -205,43 +237,19 @@ namespace Feliciabot.net._6._0.modules
 
             if (trackToRemove != null && trackToRemove.Track != null)
             {
-                await player.Queue.RemoveAsync(trackToRemove);
-                await RespondAsync($"Removed track: '{trackCount}. {trackToRemove.Track.Title}'").ConfigureAwait(false);
-            }
-            else
-            {
-                await RespondAsync($"Unable to remove track number ({trackNumber})").ConfigureAwait(false);
-            }
-        }
-
-        /// <summary>
-        ///     Shows the track position asynchronously.
-        /// </summary>
-        /// <returns>a task that represents the asynchronous operation</returns>
-        [SlashCommand("position", description: "Shows the track position", runMode: RunMode.Async)]
-        public async Task Position()
-        {
-            var player = await GetPlayerAsync(connectToVoiceChannel: false).ConfigureAwait(false);
-
-            if (player is null)
-            {
-                return;
+                var removed = await player.Queue.RemoveAsync(trackToRemove);
+                if (removed)
+                {
+                    await RespondAsync(
+                            $"Removed track: '{trackCount}. {trackToRemove.Track.Title}'"
+                        )
+                        .ConfigureAwait(false);
+                    return;
+                }
             }
 
-            if (player.CurrentItem is null || player.CurrentTrack is null)
-            {
-                await RespondAsync("Nothing playing!").ConfigureAwait(false);
-                return;
-            }
-
-            if (player.Position is null || player.Position?.Position is null)
-            {
-                await RespondAsync("No position found for this track").ConfigureAwait(false);
-                return;
-            }
-
-            var timespan = player.Position?.Position.ToString(@"hh\:mm\:ss");
-            await RespondAsync($"Position: {timespan} / {player.CurrentTrack.Duration}.").ConfigureAwait(false);
+            await RespondAsync($"Unable to remove track number ({trackNumber})")
+                .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -290,11 +298,19 @@ namespace Feliciabot.net._6._0.modules
 
             if (track is not null)
             {
-                await RespondAsync($"Skipped. Now playing: {track.Track!.Uri}", embed: _embedBuilderService.GetPlayingTrackInfoAsEmbed(player, true)).ConfigureAwait(false);
+                await RespondAsync(
+                        $"Skipped. Now playing: {track.Track!.Uri}",
+                        embed: await _embedBuilderService.GetTrackInfoFromPlayerAsEmbed(
+                            player,
+                            true
+                        )
+                    )
+                    .ConfigureAwait(false);
             }
             else
             {
-                await RespondAsync("Skipped. Stopped playing because the queue is now empty.").ConfigureAwait(false);
+                await RespondAsync("Skipped. Stopped playing because the queue is now empty.")
+                    .ConfigureAwait(false);
             }
         }
 
@@ -350,26 +366,39 @@ namespace Feliciabot.net._6._0.modules
         private async ValueTask<CustomPlayer?> GetPlayerAsync(bool connectToVoiceChannel = true)
         {
             var retrieveOptions = new PlayerRetrieveOptions(
-            ChannelBehavior: connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
+                ChannelBehavior: connectToVoiceChannel
+                    ? PlayerChannelBehavior.Join
+                    : PlayerChannelBehavior.None
+            );
 
-            var textChannel = Context.Channel as ITextChannel ?? Context.Guild.TextChannels.FirstOrDefault();
+            var textChannel =
+                Context.Channel as ITextChannel ?? Context.Guild.TextChannels.FirstOrDefault();
             var playerOptions = new CustomPlayerOptions(textChannel);
 
-            static ValueTask<CustomPlayer> CreatePlayer(IPlayerProperties<CustomPlayer, CustomPlayerOptions> properties, CancellationToken cancellationToken)
+            static ValueTask<CustomPlayer> CreatePlayer(
+                IPlayerProperties<CustomPlayer, CustomPlayerOptions> properties,
+                CancellationToken cancellationToken
+            )
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 return ValueTask.FromResult(new CustomPlayer(properties));
             }
 
-            var result = await _audioService.Players
-                .RetrieveAsync<CustomPlayer, CustomPlayerOptions>(Context, playerFactory: CreatePlayer, options: Options.Create(playerOptions), retrieveOptions)
+            var result = await _audioService
+                .Players.RetrieveAsync<CustomPlayer, CustomPlayerOptions>(
+                    Context,
+                    playerFactory: CreatePlayer,
+                    options: Options.Create(playerOptions),
+                    retrieveOptions
+                )
                 .ConfigureAwait(false);
 
             if (!result.IsSuccess)
             {
                 var errorMessage = result.Status switch
                 {
-                    PlayerRetrieveStatus.UserNotInVoiceChannel => "You are not connected to a voice channel.",
+                    PlayerRetrieveStatus.UserNotInVoiceChannel =>
+                        "You are not connected to a voice channel.",
                     PlayerRetrieveStatus.BotNotConnected => "The bot is currently not connected.",
                     _ => "Unknown error.",
                 };
@@ -384,42 +413,46 @@ namespace Feliciabot.net._6._0.modules
                 return null;
             }
 
-            if (voiceState.VoiceChannel is null || result.Player.VoiceChannelId != voiceState.VoiceChannel.Id)
+            if (
+                voiceState.VoiceChannel is null
+                || result.Player.VoiceChannelId != voiceState.VoiceChannel.Id
+            )
             {
-                await FollowupAsync($"You must be in the same voice channel as me!").ConfigureAwait(false);
+                await FollowupAsync($"You must be in the same voice channel as me!")
+                    .ConfigureAwait(false);
                 return null;
             }
             return result.Player;
         }
 
-        private StaticPaginator GetPaginatedQueue(ITrackQueue queue, out TimeSpan totalDuration)
+        private StaticPaginator GetPaginatedQueue(ITrackQueue queue)
         {
             List<string> trackList = [];
             string pageContent = string.Empty;
             int trackNum = 1;
-            TimeSpan ongoingDuration = new();
-            int trackOnPageCount = 1;
+            TimeSpan totalDuration = new();
 
             foreach (ITrackQueueItem t in queue)
             {
                 var track = t.Track;
 
-                if (track is null) continue;
+                if (track is null)
+                    continue;
+
                 var uri = track.Uri is null ? "" : track.Uri.AbsoluteUri;
+                string format =
+                    track.Duration >= TimeSpan.FromHours(1) ? "hh\\:mm\\:ss" : "mm\\:ss";
 
-                pageContent += $"{trackNum}. [{track.Title}]({uri}) [{track.Duration}]\n\n";
+                pageContent +=
+                    $"{trackNum}. [{track.Title}]({uri}) [{track.Duration.ToString(format)}]\n\n";
 
-                if (trackOnPageCount % 5 != 0)
-                {
-                    trackOnPageCount++;
-                }
-                else
+                if (BottomOfPage(trackNum))
                 {
                     trackList.Add(pageContent);
                     pageContent = string.Empty;
-                    trackOnPageCount = 1;
                 }
-                ongoingDuration += track.Duration;
+
+                totalDuration += track.Duration;
                 trackNum++;
             }
 
@@ -431,16 +464,26 @@ namespace Feliciabot.net._6._0.modules
             var pages = trackList.ToArray();
             List<PageBuilder> pagebuilder = [];
 
+            if (pages.Length > 0)
+            {
+                string format = totalDuration >= TimeSpan.FromHours(1) ? "hh\\:mm\\:ss" : "mm\\:ss";
+                pages[0] = $"📃 **Total Duration: {totalDuration.ToString(format)}**\n\n{pages[0]}";
+            }
+
             foreach (string page in pages)
             {
                 pagebuilder.Add(new PageBuilder().WithDescription(page));
             }
 
-            totalDuration = ongoingDuration;
             return new StaticPaginatorBuilder()
                 .AddUser(Context.User) // Only interacted user can parse pages
                 .WithPages(pagebuilder)
                 .Build();
+        }
+
+        private static bool BottomOfPage(int trackNum)
+        {
+            return trackNum % 5 == 0;
         }
     }
 }

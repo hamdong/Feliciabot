@@ -1,58 +1,63 @@
 ﻿using Discord;
+using Feliciabot.net._6._0.models;
+using Feliciabot.net._6._0.services.interfaces;
 using Lavalink4NET.Players;
+using Stax.GetAverageImageColor.GetAverageImageColor;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class EmbedBuilderService
+    public class EmbedBuilderService(IRandomizerService _randomizerService) : IEmbedBuilderService
     {
-        private readonly string MARIANNE_DANCE_LINK = "https://cdn.discordapp.com/emojis/899319530269061161.gif";
-
-        internal static Embed GetTestEmbed()
-        {
-            var builder = new EmbedBuilder();
-            builder.WithTitle("Example Embed")
-                .WithDescription("This is an example embed.")
-                .WithColor(Color.Blue)
-                .WithTimestamp(DateTimeOffset.UtcNow);
-
-            builder.AddField("Field Name", "Field Value", true);
-            return builder.Build();
-        }
-
         internal static Embed GetBotInfoAsEmbed(string botInfo)
         {
             var builder = new EmbedBuilder();
             builder.WithTitle("You want to know more about me?");
             builder.AddField("Bot Info", botInfo);
-            builder.WithThumbnailUrl("https://raw.githubusercontent.com/Andu2/FEH-Mass-Simulator/master/heroes/Felicia.png");
+            builder.WithThumbnailUrl(
+                "https://raw.githubusercontent.com/Andu2/FEH-Mass-Simulator/master/heroes/Felicia.png"
+            );
             builder.WithColor(Color.LightGrey);
             return builder.Build();
         }
 
-        internal Embed GetPlayingTrackInfoAsEmbed(LavalinkPlayer player, bool skipped = false)
+        public async Task<Embed> GetTrackInfoFromPlayerAsEmbed(
+            LavalinkPlayer player,
+            bool skipped = false
+        )
         {
             var builder = new EmbedBuilder();
             var track = player.CurrentTrack;
 
-            if (track is null) return builder.Build();
+            if (track is null)
+                return builder.Build();
 
             string trackUri = track.Uri is null ? "" : track.Uri.AbsoluteUri;
             string artworkUri = track.ArtworkUri is null ? "" : track.ArtworkUri.AbsoluteUri;
-            var position = skipped ? new TimeSpan() : player.Position?.Position ?? new TimeSpan();
-            var visual = GetPositionVisual(position, track.Duration);
-            var displayPosition = position.ToString("hh\\:mm\\:ss");
-            var displayDuration = track.Duration.ToString("hh\\:mm\\:ss");
+            string colorCode = await GetImageColor.AverageFromUrl(artworkUri);
 
-            builder.WithAuthor(track.Author, MARIANNE_DANCE_LINK, trackUri);
+            var colorParsed = Color.TryParse(colorCode[..7], out Color color);
+            var pos = skipped ? new TimeSpan() : player.Position?.Position ?? new TimeSpan();
+            string format = track.Duration >= TimeSpan.FromHours(1) ? "hh\\:mm\\:ss" : "mm\\:ss";
+            var trackPosition =
+                $"{pos.ToString(format)} {GetPosVisual(pos, track.Duration)} {track.Duration.ToString(format)}";
+
+            builder.WithAuthor(
+                track.Author,
+                Responses.DanceResponses[
+                    _randomizerService.GetRandom(Responses.DanceResponses.Length)
+                ],
+                trackUri
+            );
             builder.WithTitle(track.Title);
             builder.WithUrl($"{track.Uri}" ?? "[no URL found]");
-            builder.AddField("Track Position", $"{displayPosition} {visual} {displayDuration}", true);
+            builder.AddField("Track Position", $"{trackPosition}", true);
             builder.WithThumbnailUrl(artworkUri);
+            builder.WithColor(colorParsed ? color : Color.Default);
             builder.WithFooter(track.SourceName ?? "[no source found]");
             return builder.Build();
         }
 
-        private static string GetPositionVisual(TimeSpan position, TimeSpan duration)
+        private static string GetPosVisual(TimeSpan position, TimeSpan duration)
         {
             double progressPercentage = (position.TotalSeconds / duration.TotalSeconds) * 100;
             int filledCharacters = (int)(progressPercentage / 5);
