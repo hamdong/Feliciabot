@@ -9,13 +9,17 @@ namespace Feliciabot.net._6._0.services
     public sealed class CustomPlayer : QueuedLavalinkPlayer, IInactivityPlayerListener
     {
         private readonly ITextChannel? _textChannel;
+
         public CustomPlayer(IPlayerProperties<CustomPlayer, CustomPlayerOptions> properties)
             : base(properties)
         {
             _textChannel = properties.Options.Value.TextChannel;
         }
 
-        public async ValueTask NotifyPlayerActiveAsync(PlayerTrackingState trackingState, CancellationToken cancellationToken = default)
+        public async ValueTask NotifyPlayerActiveAsync(
+            PlayerTrackingState trackingState,
+            CancellationToken cancellationToken = default
+        )
         {
             if (_textChannel is not null)
             {
@@ -25,7 +29,10 @@ namespace Feliciabot.net._6._0.services
             }
         }
 
-        public async ValueTask NotifyPlayerInactiveAsync(PlayerTrackingState trackingState, CancellationToken cancellationToken = default)
+        public async ValueTask NotifyPlayerInactiveAsync(
+            PlayerTrackingState trackingState,
+            CancellationToken cancellationToken = default
+        )
         {
             if (_textChannel is not null)
             {
@@ -33,9 +40,15 @@ namespace Feliciabot.net._6._0.services
                     .SendMessageAsync("Player exceeded inactive timeout.")
                     .ConfigureAwait(false);
             }
+
+            if (ConnectionState.IsConnected)
+                await DisconnectAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public async ValueTask NotifyPlayerTrackedAsync(PlayerTrackingState trackingState, CancellationToken cancellationToken = default)
+        public async ValueTask NotifyPlayerTrackedAsync(
+            PlayerTrackingState trackingState,
+            CancellationToken cancellationToken = default
+        )
         {
             if (_textChannel is not null)
             {

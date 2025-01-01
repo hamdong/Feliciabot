@@ -70,5 +70,16 @@
             "Here goes nothing!",
             "Yay!",
         ];
+
+        private static readonly string DISCORD_CDN = "https://cdn.discordapp.com/emojis/";
+        public static readonly string[] DanceResponses =
+        [
+            $"{DISCORD_CDN}899319530269061161.gif", // Marianne
+            $"{DISCORD_CDN}1323820425439871047.gif", // Kirby
+            $"{DISCORD_CDN}1322694789124325498.gif", // Nekoarc
+            $"{DISCORD_CDN}1323819972253847582.gif", // Corrin
+            $"{DISCORD_CDN}1323837299221463132.gif", // Hutao
+            $"{DISCORD_CDN}1324007932035334225.gif", // Nezuko
+        ];
     }
 }

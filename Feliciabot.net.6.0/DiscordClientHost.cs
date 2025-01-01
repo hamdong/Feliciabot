@@ -3,7 +3,6 @@ using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -44,8 +43,8 @@ namespace Feliciabot.net._6._0
 
             try
             {
-                _client.Log += LogHandler;
-                _commands.Log += LogHandler;
+                _client.Log += LogAsync;
+                _commands.Log += LogAsync;
 
                 if (!File.Exists(clientTokenPath))
                 {
@@ -94,7 +93,7 @@ namespace Feliciabot.net._6._0
             await _client.StopAsync().ConfigureAwait(false);
         }
 
-        private Task InteractionCreated(SocketInteraction interaction)
+        private Task<Discord.Interactions.IResult> InteractionCreated(SocketInteraction interaction)
         {
             var interactionContext = new SocketInteractionContext(_client, interaction);
             return _interactionService!.ExecuteCommandAsync(interactionContext, _serviceProvider);
@@ -102,6 +101,9 @@ namespace Feliciabot.net._6._0
 
         private async Task ClientReady()
         {
+            if (_interactionService.Modules.Count > 0)
+                return;
+
             await _client.SetGameAsync("!icanhelp");
 
             await _interactionService
@@ -147,29 +149,19 @@ namespace Feliciabot.net._6._0
             await _greetingService.HandleOnUserLeft(guild, user);
         }
 
-        public static Task LogHandler(LogMessage message)
+        private Task LogAsync(LogMessage message)
         {
-            switch (message.Severity)
+            if (message.Exception is CommandException cmdException)
             {
-                case LogSeverity.Critical:
-                case LogSeverity.Error:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    break;
-                case LogSeverity.Warning:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    break;
-                case LogSeverity.Info:
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                case LogSeverity.Verbose:
-                case LogSeverity.Debug:
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    break;
+                Console.WriteLine(
+                    $"[Command/{message.Severity}] {cmdException.Command.Aliases[0]}"
+                        + $" failed to execute in {cmdException.Context.Channel}."
+                );
+                Console.WriteLine(cmdException);
             }
-            string msg =
-                $"{DateTime.Now, -19} [{message.Severity, 8}] {message.Source}: {message.Message} {message.Exception}";
-            Console.WriteLine(msg);
-            Console.ResetColor();
+            else
+                Console.WriteLine($"[General/{message.Severity}] {message}");
+
             return Task.CompletedTask;
         }
     }
