@@ -19,7 +19,7 @@ namespace Feliciabot.net._6._0.modules
     {
         private readonly IAudioService _audioService;
         private readonly IEmbedBuilderService _embedBuilderService;
-        private readonly InteractiveService _interactiveService;
+        private readonly IFergunInteractiveService _fergunInteractiveService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MusicModule"/> class.
@@ -31,14 +31,14 @@ namespace Feliciabot.net._6._0.modules
         public MusicModule(
             IAudioService audioService,
             IEmbedBuilderService embedBuilderService,
-            InteractiveService interactiveService
+            IFergunInteractiveService fergunInteractiveService
         )
         {
             ArgumentNullException.ThrowIfNull(audioService);
 
             _audioService = audioService;
             _embedBuilderService = embedBuilderService;
-            _interactiveService = interactiveService;
+            _fergunInteractiveService = fergunInteractiveService;
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Feliciabot.net._6._0.modules
             // Not sure how to remove this response since it's required to complete the interaction...
             await RespondAsync("Queue posted!").ConfigureAwait(false);
 
-            await _interactiveService
+            await _fergunInteractiveService
                 .SendPaginatorAsync(paginatedQueue, Context.Channel, TimeSpan.FromMinutes(5))
                 .ConfigureAwait(false);
         }

@@ -54,6 +54,7 @@ builder
     .AddSingleton<IRandomizerService, RandomizerService>()
     .AddSingleton<IGreetingService, GreetingService>()
     .AddSingleton<IUserManagementService, UserManagementService>()
+    .AddSingleton<IFergunInteractiveService, FergunInteractiveService>()
     .AddSingleton<IEmbedBuilderService, EmbedBuilderService>();
 
 // Misc.
