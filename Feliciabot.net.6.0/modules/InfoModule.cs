@@ -1,10 +1,9 @@
-﻿using Discord;
-using Discord.Interactions;
-using Feliciabot.net._6._0.services;
+﻿using Discord.Interactions;
+using Feliciabot.net._6._0.services.interfaces;
 
 namespace Feliciabot.net._6._0.modules
 {
-    public class InfoModule() : InteractionModuleBase
+    public class InfoModule(IEmbedBuilderService _embedBuilderService) : InteractionModuleBase
     {
         [SlashCommand("info", "Displays legacy information", runMode: RunMode.Async)]
         public async Task Info()
@@ -19,7 +18,7 @@ namespace Feliciabot.net._6._0.modules
                 + $"Currently playing: {client.Activities.FirstOrDefault(name => name.ToString() != "")}\n"
                 + $"Currently in: {guilds.Count} servers!";
 
-            var builder = EmbedBuilderService.GetBotInfoAsEmbed(botInfo);
+            var builder = _embedBuilderService.GetBotInfoAsEmbed(botInfo);
             await RespondAsync(embed: builder).ConfigureAwait(false);
         }
     }
