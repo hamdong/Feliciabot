@@ -14,14 +14,14 @@ namespace Feliciabot.net._6._0.commands.fun
             _randomizerService = randomizerService;
 
         [Command("tea", RunMode = RunMode.Async)]
-        [Summary("Felicia will serve a cup of tea to you. [Usage]: !tea")]
+        [Summary("Felicia will serve a cup of tea to you")]
         public async Task Tea()
         {
             await ServeTea(Context.User);
         }
 
         [Command("tea", RunMode = RunMode.Async)]
-        [Summary("Felicia will serve a cup of tea to a mentioned user. [Usage]: !tea @user")]
+        [Summary("Felicia will serve a cup of tea to a mentioned user")]
         public async Task Tea(IUser mentionedUser)
         {
             await ServeTea(mentionedUser);
