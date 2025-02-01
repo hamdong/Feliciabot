@@ -4,56 +4,43 @@ using Fergun.Interactive.Pagination;
 
 namespace Feliciabot.net._6._0.commands
 {
-    public class HelpCommand : ModuleBase
+    public class HelpCommand(CommandService _service, InteractiveService _interactiveService) : ModuleBase
     {
-        private const int NUM_ITEMS_PER_PAGE = 10;
-        private readonly string[] omittedCommands = ["thor", "boris"];
-        private readonly CommandService _service;
-        private readonly InteractiveService _interactiveService;
+        private const int NUM_ITEMS_PER_PAGE = 12;
 
-        public HelpCommand(CommandService service, InteractiveService interactiveService)
-        {
-            _service = service;
-            _interactiveService = interactiveService;
-        }
-
-        /// <summary>
-        /// Posts the list of commands and their functions
-        /// </summary>
         [Command("icanhelp", RunMode = RunMode.Async)]
-        [Summary("Lists all commands in an embedded paginator. [Usage]: !icanhelp")]
+        [Summary("Lists all commands in an embedded paginator")]
         public async Task ICanHelp()
         {
-            List<string> trackList = [];
-            string lastCommandAdded = string.Empty;
+            List<string> pageList = [];
             string pageContent = string.Empty;
-            int itemOnPageCount = 1;
-            foreach (CommandInfo command in _service.Commands.ToList())
+            int itemCount = 1;
+            var groupedCommands = _service.Commands.GroupBy(c => c.Name).Select(g => g.First()).ToList();
+
+            if (groupedCommands.Count == 0)
             {
-                if (!omittedCommands.Contains(command.Name) && lastCommandAdded != command.Name)
+                await Context.Channel.SendMessageAsync("Can't find any commands :confused:");
+                return;
+            }
+
+            foreach (CommandInfo command in groupedCommands)
+            {
+                pageContent += ($"!**{command.Name}**: {command.Summary}\n");
+                if (itemCount % NUM_ITEMS_PER_PAGE == 0)
                 {
-                    pageContent += ($"!**{command.Name}**\n{command.Summary}\n\n");
-                    if (itemOnPageCount % NUM_ITEMS_PER_PAGE != 0)
-                    {
-                        itemOnPageCount++;
-                    }
-                    else
-                    {
-                        trackList.Add(pageContent);
-                        pageContent = string.Empty;
-                        itemOnPageCount = 1;
-                    }
-                    lastCommandAdded = command.Name;
+                    pageList.Add(pageContent);
+                    pageContent = string.Empty;
                 }
+                itemCount++;
             }
 
             if (pageContent != string.Empty)
             {
-                trackList.Add(pageContent);
+                pageList.Add(pageContent);
             }
 
             // Create paginated message
-            var pages = trackList.ToArray();
+            var pages = pageList.ToArray();
             List<PageBuilder> pagebuilder = [];
 
             foreach (string page in pages)
@@ -62,11 +49,11 @@ namespace Feliciabot.net._6._0.commands
             }
 
             var paginator = new StaticPaginatorBuilder()
-                .AddUser(Context.User) // Only allow the user that executed the command to interact with the selection.
-                .WithPages(pagebuilder) // Set the pages the paginator will use. This is the only required component.
+                .AddUser(Context.User)  // Only interacted user can parse pages
+                .WithPages(pagebuilder)
                 .Build();
 
-            await _interactiveService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(10));
+            await _interactiveService.SendPaginatorAsync(paginator, Context.Channel, TimeSpan.FromMinutes(5));
         }
     }
 }

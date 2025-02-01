@@ -17,7 +17,7 @@ namespace Feliciabot.net._6._0.services
         {
             return interactionService
                 .SlashCommands.Where(c =>
-                    c.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+                    c.Module.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase)
                     && !c.Name.Contains("help_")
                 )
                 .OrderBy(c => c.Name)

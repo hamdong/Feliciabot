@@ -19,15 +19,6 @@ namespace Feliciabot.net._6._0.helpers
             return channel;
         }
 
-        public static async Task<ITextChannel?> GetGeneralChannelFromGuildAsync(IGuild guild)
-        {
-            var channel = await GetSystemChannelAsync(guild);
-            channel ??= await GetChannelByNameAsync(guild, "general_felicia");
-            channel ??= await GetChannelByNameAsync(guild, "general");
-
-            return channel;
-        }
-
         public static async Task<ITextChannel?> GetSystemChannelAsync(IGuild guild)
         {
             if (guild.SystemChannelId is null)

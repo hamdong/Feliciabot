@@ -6,15 +6,15 @@ using Stax.GetAverageImageColor.GetAverageImageColor;
 
 namespace Feliciabot.net._6._0.services
 {
-    public class EmbedBuilderService(IRandomizerService _randomizerService) : IEmbedBuilderService
+    public class EmbedBuilderService(IDiscordClient _client, IRandomizerService _randomizerService) : IEmbedBuilderService
     {
-        internal static Embed GetBotInfoAsEmbed(string botInfo)
+        public Embed GetBotInfoAsEmbed(string botInfo)
         {
             var builder = new EmbedBuilder();
             builder.WithTitle("You want to know more about me?");
             builder.AddField("Bot Info", botInfo);
             builder.WithThumbnailUrl(
-                "https://raw.githubusercontent.com/Andu2/FEH-Mass-Simulator/master/heroes/Felicia.png"
+                _client.CurrentUser.GetAvatarUrl()
             );
             builder.WithColor(Color.LightGrey);
             return builder.Build();

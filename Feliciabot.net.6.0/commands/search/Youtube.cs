@@ -8,7 +8,7 @@ namespace Feliciabot.net._6._0.commands.search
 {
     public class Youtube(YoutubeSearchClient ytClient, InteractiveService interactiveService) : ModuleBase
     {
-        [Command("youtube", RunMode = RunMode.Async), Alias("yt"), Summary("Performs a Youtube search and returns the first result")]
+        [Command("youtube", RunMode = RunMode.Async), Alias("yt"), Summary("Performs a Youtube search,  returns the first result")]
         public async Task SingleSearch([Remainder] string query)
         {
             var response = await ytClient.SearchAsync(query);
@@ -21,7 +21,7 @@ namespace Feliciabot.net._6._0.commands.search
             await ReplyAsync(response.Results.First().Url);
         }
 
-        [Command("youtubelist", RunMode = RunMode.Async), Alias("ytl"), Summary("Performs a Youtube search and returns all results in an embedded list")]
+        [Command("youtubelist", RunMode = RunMode.Async), Alias("ytl"), Summary("Performs a Youtube search, returns all results as embedded list")]
         public async Task MultiSearch([Remainder] string query)
         {
             var response = await ytClient.SearchAsync(query);
