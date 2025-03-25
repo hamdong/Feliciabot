@@ -54,8 +54,8 @@ lavalink:
     # Note from Ham: Plugins can be the cause for failed playback so always check for newest Lavalink.jar and youtube-plugin.jar
     - dependency: "dev.lavalink.youtube:youtube-plugin:1.11.5"
       snapshot: false # Set to true if you want to use a snapshot version.
-    - dependency: "com.github.topi314.lavasrc:lavasrc-plugin:4.3.0"
-      snapshot: false
+    - dependency: "https://maven.lavalink.dev/#/snapshots/dev/lavalink/youtube/youtube-plugin/294d3c50380705fe8de585aabd960f612f79d083"
+      snapshot: true
   server:
     password: "youshallnotpass"
     sources:
