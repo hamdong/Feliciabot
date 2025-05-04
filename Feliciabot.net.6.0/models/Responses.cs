@@ -80,6 +80,7 @@
             $"{DISCORD_CDN}1323819972253847582.gif", // Corrin
             $"{DISCORD_CDN}1323837299221463132.gif", // Hutao
             $"{DISCORD_CDN}1324007932035334225.gif", // Nezuko
+            $"{DISCORD_CDN}1368614949097570355.gif", // Nino
         ];
     }
 }
