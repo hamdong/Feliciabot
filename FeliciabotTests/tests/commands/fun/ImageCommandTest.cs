@@ -1,5 +1,5 @@
-﻿using Discord.Commands;
-using Discord;
+﻿using Discord;
+using Discord.Commands;
 using Feliciabot.net._6._0.commands.fun;
 using Feliciabot.net._6._0.services.interfaces;
 using Moq;
@@ -59,6 +59,13 @@ namespace FeliciabotTests.tests.commands.fun
         }
 
         [Test]
+        public async Task Chillin_PostsImage()
+        {
+            await imageCommand.Chillin();
+            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\chillin.jpg"));
+        }
+
+        [Test]
         public async Task Cruel_PostsImage()
         {
             await imageCommand.Cruel();
@@ -103,7 +110,9 @@ namespace FeliciabotTests.tests.commands.fun
         [Test]
         public async Task Shez_RandomIs0_PostsMaleImage()
         {
-            mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(0);
+            mockRandomizerService
+                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(0);
             await imageCommand.Shez();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\shez1.jpg"));
         }
@@ -111,7 +120,9 @@ namespace FeliciabotTests.tests.commands.fun
         [Test]
         public async Task Shez_RandomIs1_PostsFemaleImage()
         {
-            mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
+            mockRandomizerService
+                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(1);
             await imageCommand.Shez();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\shez2.jpg"));
         }

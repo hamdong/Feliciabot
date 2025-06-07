@@ -33,6 +33,11 @@ namespace Feliciabot.net._6._0.commands.fun
         [Summary("Posts 'It's a tentacruel world' meme")]
         public async Task Cruel() => await PostToChannel($@"{env}cruel.png");
 
+        [Alias("chilling", "koopa")]
+        [Command("chillin", RunMode = RunMode.Async)]
+        [Summary("Posts 'It's a tentacruel world' meme")]
+        public async Task Chillin() => await PostToChannel($@"{env}chillin.jpg");
+
         [Command("fireemblem", RunMode = RunMode.Async)]
         [Summary("Posts 'war crimes' meme")]
         public async Task FireEmblem() => await PostToChannel($@"{env}fireemblem.png");
@@ -55,7 +60,10 @@ namespace Feliciabot.net._6._0.commands.fun
 
         [Command("shez", RunMode = RunMode.Async)]
         [Summary("Posts 'shez!' meme")]
-        public async Task Shez() => await PostToChannel(_randomizerService.GetRandom(2) == 0 ? $@"{env}shez1.jpg" : $@"{env}shez2.jpg");
+        public async Task Shez() =>
+            await PostToChannel(
+                _randomizerService.GetRandom(2) == 0 ? $@"{env}shez1.jpg" : $@"{env}shez2.jpg"
+            );
 
         [Command("shock", RunMode = RunMode.Async)]
         [Summary("Posts 'shock' meme")]
@@ -73,6 +81,7 @@ namespace Feliciabot.net._6._0.commands.fun
         [Summary("Posts 'Holy s* it's the xenoblade' meme")]
         public async Task Xenoblade() => await PostToChannel($@"{env}xenoblade.png");
 
-        private async Task PostToChannel(string filePathToPost) => await Context.Channel.SendFileAsync(filePathToPost);
+        private async Task PostToChannel(string filePathToPost) =>
+            await Context.Channel.SendFileAsync(filePathToPost);
     }
 }
