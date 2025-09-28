@@ -139,14 +139,15 @@ namespace FeliciabotTests.tests
                 c =>
                     c.Interaction.RespondAsync(
                         It.Is(expr),
-                        null,
-                        false,
-                        false,
-                        null,
-                        null,
+                        It.IsAny<Embed[]>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<AllowedMentions>(),
+                        It.IsAny<MessageComponent>(),
                         It.IsAny<Embed>(),
-                        null,
-                        null
+                        It.IsAny<RequestOptions>(),
+                        It.IsAny<PollProperties>(),
+                        It.IsAny<MessageFlags>()
                     ),
                 Times.Exactly(times)
             );

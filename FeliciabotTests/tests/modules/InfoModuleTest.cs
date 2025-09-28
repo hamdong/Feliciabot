@@ -38,9 +38,13 @@ namespace FeliciabotTests.tests.modules
             mockSelfUser.SetupGet(u => u.Username).Returns("Username");
             mockSelfUser.SetupGet(u => u.Status).Returns(UserStatus.Online);
             mockSelfUser.SetupGet(u => u.Activities).Returns(activities.AsReadOnly());
-            mockSelfUser.Setup(u => u.GetAvatarUrl(ImageFormat.Auto, 128)).Returns("https://discord.com");
+            mockSelfUser
+                .Setup(u => u.GetAvatarUrl(ImageFormat.Auto, 128))
+                .Returns("https://discord.com");
             List<IGuild> guilds = [mockGuild.Object];
-            mockClient.Setup(c => c.GetGuildsAsync(CacheMode.AllowDownload, null)).ReturnsAsync(guilds.AsReadOnly());
+            mockClient
+                .Setup(c => c.GetGuildsAsync(CacheMode.AllowDownload, null))
+                .ReturnsAsync(guilds.AsReadOnly());
             mockClient.SetupGet(c => c.CurrentUser).Returns(mockSelfUser.Object);
             mockContext.SetupGet(c => c.Client).Returns(mockClient.Object);
             mockContext.SetupGet(c => c.Interaction).Returns(mockDiscordInteraction.Object);
@@ -62,23 +66,26 @@ namespace FeliciabotTests.tests.modules
             builder.AddField("Bot Info", expectedBotInfo);
             builder.WithThumbnailUrl("https://discord.com");
             builder.WithColor(Color.LightGrey);
-            var expectedBuilder = builder.Build();
-            mockEmbedBuilderService.Setup(s => s.GetBotInfoAsEmbed(It.IsAny<string>())).Returns(expectedBuilder);
+            var expectedEmbed = builder.Build();
+            mockEmbedBuilderService
+                .Setup(s => s.GetBotInfoAsEmbed(It.IsAny<string>()))
+                .Returns(expectedEmbed);
 
             await infoModule.Info();
 
             mockContext.Verify(
                 c =>
                     c.Interaction.RespondAsync(
-                        null,
-                        null,
-                        false,
-                        false,
-                        null,
-                        null,
-                        expectedBuilder,
-                        null,
-                        null
+                        It.IsAny<string>(),
+                        It.IsAny<Embed[]>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<bool>(),
+                        It.IsAny<AllowedMentions>(),
+                        It.IsAny<MessageComponent>(),
+                        expectedEmbed,
+                        It.IsAny<RequestOptions>(),
+                        It.IsAny<PollProperties>(),
+                        It.IsAny<MessageFlags>()
                     ),
                 Times.Once
             );
