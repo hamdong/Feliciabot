@@ -5,3 +5,5 @@ services:
       dockerfile: Dockerfile
     container_name: discord-feliciabot
     restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}

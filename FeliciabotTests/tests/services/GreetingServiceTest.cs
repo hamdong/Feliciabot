@@ -24,14 +24,12 @@ namespace FeliciabotTests.tests.services
             _mockClient = new Mock<IDiscordClient>();
             _mockUserManagementService = new Mock<IUserManagementService>();
             _mockRandomizerService = new Mock<IRandomizerService>();
-            
-            _mockConfiguration.Setup(s => s["QuotesPath"]).Returns(Path.Combine(TestContext.CurrentContext.TestDirectory, "tests\\services\\test-data\\quotes.txt"));
 
             greetingService = new GreetingService(
                 _mockConfiguration.Object,
                 _mockClient.Object,
                 _mockUserManagementService.Object,
-                _mockRandomizerService.Object                
+                _mockRandomizerService.Object
             );
         }
 

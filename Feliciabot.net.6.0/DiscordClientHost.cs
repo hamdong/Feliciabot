@@ -6,23 +6,19 @@ using Discord.WebSocket;
 using Feliciabot.net._6._0.services.interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Feliciabot.net._6._0
 {
     internal sealed class DiscordClientHost : IHostedService
     {
-        private readonly string clientTokenPath = Path.Combine(
-            Environment.CurrentDirectory,
-            "ignore",
-            "token.txt"
-        );
-
         private readonly DiscordSocketClient _client;
         private readonly ILogger<DiscordClientHost> _logger;
         private readonly CommandService _commands;
         private readonly InteractionService _interactionService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IGreetingService _greetingService;
+        private readonly BotSettings _botSettings;
 
         public DiscordClientHost(
             DiscordSocketClient discordSocketClient,
@@ -30,7 +26,8 @@ namespace Feliciabot.net._6._0
             CommandService commandService,
             InteractionService interactionService,
             IServiceProvider serviceProvider,
-            IGreetingService greetingService
+            IGreetingService greetingService,
+            IOptions<BotSettings> botSettings
         )
         {
             ArgumentNullException.ThrowIfNull(discordSocketClient);
@@ -43,16 +40,17 @@ namespace Feliciabot.net._6._0
             _interactionService = interactionService;
             _serviceProvider = serviceProvider;
             _greetingService = greetingService;
+            _botSettings = botSettings.Value;
 
             try
             {
                 _client.Log += LogAsync;
                 _commands.Log += LogAsync;
 
-                if (!File.Exists(clientTokenPath))
+                var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+                if (string.IsNullOrEmpty(token))
                 {
                     Console.WriteLine("Can't find token. Aborting.");
-                    Console.ReadLine();
                     return;
                 }
             }
@@ -78,9 +76,9 @@ namespace Feliciabot.net._6._0
                 services: _serviceProvider
             );
 
-            await _client
-                .LoginAsync(TokenType.Bot, await File.ReadAllTextAsync(clientTokenPath))
-                .ConfigureAwait(false);
+            var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+
+            await _client.LoginAsync(TokenType.Bot, token).ConfigureAwait(false);
 
             await _client.StartAsync().ConfigureAwait(false);
         }
@@ -127,9 +125,9 @@ namespace Feliciabot.net._6._0
                 return;
 
             int argPos = 0;
-            if (message.HasCharPrefix('!', ref argPos))
+
+            if (message.HasCharPrefix(_botSettings.CommandPrefix, ref argPos))
             {
-                // Execute the command with command context
                 var context = new SocketCommandContext(_client, (SocketUserMessage)message);
                 await _commands.ExecuteAsync(
                     context: context,

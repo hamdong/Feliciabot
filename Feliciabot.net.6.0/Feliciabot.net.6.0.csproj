@@ -9,20 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="appSettings.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="appSettings.json">
+		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="ignore/token.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -41,15 +30,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="data\" />
 		<Folder Include="img\" />
 		<Folder Include="videos\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="data\quotes.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="img\awesome.jpg">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

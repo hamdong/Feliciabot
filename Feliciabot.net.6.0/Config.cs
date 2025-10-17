@@ -10,7 +10,10 @@ namespace Feliciabot.net._6._0
             var config = new DiscordSocketConfig()
             {
                 LogLevel = LogSeverity.Info,
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.GuildMembers | GatewayIntents.MessageContent | GatewayIntents.GuildPresences,
+                GatewayIntents =
+                    GatewayIntents.AllUnprivileged
+                    | GatewayIntents.GuildMembers
+                    | GatewayIntents.MessageContent,
                 AlwaysDownloadUsers = true,
             };
             config.GatewayIntents &= ~GatewayIntents.GuildScheduledEvents;

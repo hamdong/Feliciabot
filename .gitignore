@@ -1,7 +1,11 @@
 .vs
 *.msi
 
-ignore/
+.env
+.env.dev
+.env.prod
+
+launchSettings.json
 
 Feliciabot.net.6.0/obj
 Feliciabot.net.6.0/bin
