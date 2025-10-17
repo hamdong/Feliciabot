@@ -66,13 +66,6 @@ namespace FeliciabotTests.tests.commands.fun
         }
 
         [Test]
-        public async Task Cruel_PostsImage()
-        {
-            await imageCommand.Cruel();
-            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\cruel.png"));
-        }
-
-        [Test]
         public async Task FireEmblem_PostsImage()
         {
             await imageCommand.FireEmblem();
@@ -87,24 +80,10 @@ namespace FeliciabotTests.tests.commands.fun
         }
 
         [Test]
-        public async Task Pathetic_PostsImage()
-        {
-            await imageCommand.Pathetic();
-            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\pathetic.png"));
-        }
-
-        [Test]
         public async Task Pog_PostsImage()
         {
             await imageCommand.Pog();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\pog.jpg"));
-        }
-
-        [Test]
-        public async Task Regressing_PostsImage()
-        {
-            await imageCommand.Regressing();
-            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\regressing.jpg"));
         }
 
         [Test]
@@ -139,13 +118,6 @@ namespace FeliciabotTests.tests.commands.fun
         {
             await imageCommand.Stare();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\stare.gif"));
-        }
-
-        [Test]
-        public async Task Stupid_PostsImage()
-        {
-            await imageCommand.Stupid();
-            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\stupid.png"));
         }
 
         [Test]

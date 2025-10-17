@@ -1,0 +1,19 @@
+# Ignore test projects
+
+FeliciabotTests/
+
+# Ignore version control and IDE folders/files
+
+.git/
+.gitignore
+.idea/
+.vscode/
+_.suo
+_.user
+\*.DS_Store
+Thumbs.db
+
+# Ignore bin and obj folders from local builds (optional)
+
+**/bin/
+**/obj/

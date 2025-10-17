@@ -14,12 +14,6 @@ namespace Feliciabot.net._6._0.modules
             await PostHelpInteraction("Info");
         }
 
-        [SlashCommand("help_music", "Lists music commands", runMode: RunMode.Async)]
-        public async Task HelpMusic()
-        {
-            await PostHelpInteraction("Music");
-        }
-
         [SlashCommand("help_roleplay", "Lists roleplay commands", runMode: RunMode.Async)]
         public async Task HelpRolePlay()
         {

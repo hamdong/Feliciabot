@@ -11,8 +11,11 @@ namespace Feliciabot.net._6._0
 {
     internal sealed class DiscordClientHost : IHostedService
     {
-        private readonly string clientTokenPath =
-            Environment.CurrentDirectory + @"\ignore\token.txt";
+        private readonly string clientTokenPath = Path.Combine(
+            Environment.CurrentDirectory,
+            "ignore",
+            "token.txt"
+        );
 
         private readonly DiscordSocketClient _client;
         private readonly ILogger<DiscordClientHost> _logger;
