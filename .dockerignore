@@ -1,19 +1,33 @@
-# Ignore test projects
+# Don't copy secrets
+.env*
 
-FeliciabotTests/
-
-# Ignore version control and IDE folders/files
-
+# Git
 .git/
 .gitignore
+
+# IDE settings
 .idea/
 .vscode/
-_.suo
-_.user
-\*.DS_Store
+.vs/
+*.suo
+*.user
+
+# OS system files
+*.DS_Store
 Thumbs.db
 
-# Ignore bin and obj folders from local builds (optional)
-
+# Build artifacts (already being built inside Docker)
 **/bin/
 **/obj/
+*.dll
+*.pdb
+
+# Test projects (not needed in the container)
+FeliciabotTests/
+
+# Docker/compose files
+Dockerfile
+docker-compose.yml
+
+# Editor/config files
+.editorconfig
