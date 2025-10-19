@@ -33,7 +33,7 @@ namespace Feliciabot.net._6._0.services
             _userManagementService = userManagementService;
             _randomizerService = randomizerService;
             greetingList = Responses.GreetingResponses;
-            quoteList = File.ReadAllLines(configuration["QuotesPath"]!);
+            quoteList = Responses.FeliciaQuotes;
         }
 
         public async Task ReplyToNonCommand(IUserMessage message)

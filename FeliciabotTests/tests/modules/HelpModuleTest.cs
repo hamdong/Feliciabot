@@ -50,16 +50,6 @@ namespace FeliciabotTests.tests.modules
         }
 
         [Test]
-        public async Task HelpMusic_Responds()
-        {
-            mockInteractiveHelperService
-                .Setup(s => s.GetNonHelpSlashCommandsByName(It.IsAny<string>()))
-                .Returns([("Music", "Description")]);
-            await helpModule.HelpMusic();
-            VerifyPaginator();
-        }
-
-        [Test]
         public async Task HelpRolePlay_Responds()
         {
             mockInteractiveHelperService

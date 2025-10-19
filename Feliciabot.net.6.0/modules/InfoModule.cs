@@ -12,7 +12,7 @@ namespace Feliciabot.net._6._0.modules
             var guilds = await Context.Client.GetGuildsAsync();
             string botInfo =
                 $"Name: {client.Username}\n"
-                + $"Created by: Ham#1185\n"
+                + $"Created by: Ham\n"
                 + $"Framework: Discord.NET C#\n"
                 + $"Status: {client.Status}\n"
                 + $"Currently playing: {client.Activities.FirstOrDefault(name => name.ToString() != "")}\n"

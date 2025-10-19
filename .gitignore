@@ -1,12 +1,15 @@
 .vs
 *.msi
 
+.env
+.env.dev
+.env.prod
+
+launchSettings.json
+
 Feliciabot.net.6.0/obj
 Feliciabot.net.6.0/bin
 Feliciabot.net.6.0/Lavalink/logs
-
-Feliciabot.Abstractions/bin
-Feliciabot.Abstractions/obj
 
 FeliciabotTests/bin
 FeliciabotTests/obj

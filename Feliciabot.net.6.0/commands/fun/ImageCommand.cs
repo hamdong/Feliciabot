@@ -29,10 +29,6 @@ namespace Feliciabot.net._6._0.commands.fun
         [Summary("Posts 'Something bugging you?' meme")]
         public async Task Buggin() => await PostToChannel($@"{env}buggin.png");
 
-        [Command("cruel", RunMode = RunMode.Async)]
-        [Summary("Posts 'It's a tentacruel world' meme")]
-        public async Task Cruel() => await PostToChannel($@"{env}cruel.png");
-
         [Alias("chilling", "koopa")]
         [Command("chillin", RunMode = RunMode.Async)]
         [Summary("Posts 'It's a tentacruel world' meme")]
@@ -46,17 +42,9 @@ namespace Feliciabot.net._6._0.commands.fun
         [Summary("Posts 'I wanna go home' meme")]
         public async Task Home() => await PostToChannel($@"{env}home.jpg");
 
-        [Command("pathetic", RunMode = RunMode.Async)]
-        [Summary("Posts 'pathetic' meme")]
-        public async Task Pathetic() => await PostToChannel($@"{env}pathetic.png");
-
         [Command("pog", RunMode = RunMode.Async)]
         [Summary("Posts 'pog' meme")]
         public async Task Pog() => await PostToChannel($@"{env}pog.jpg");
-
-        [Command("regressing", RunMode = RunMode.Async)]
-        [Summary("Posts 'regressing' meme")]
-        public async Task Regressing() => await PostToChannel($@"{env}regressing.jpg");
 
         [Command("shez", RunMode = RunMode.Async)]
         [Summary("Posts 'shez!' meme")]
@@ -72,10 +60,6 @@ namespace Feliciabot.net._6._0.commands.fun
         [Command("stare", RunMode = RunMode.Async)]
         [Summary("Posts 'stare' meme")]
         public async Task Stare() => await PostToChannel($@"{env}stare.gif");
-
-        [Command("stupid", RunMode = RunMode.Async)]
-        [Summary("Posts 'I may be stupid' meme")]
-        public async Task Stupid() => await PostToChannel($@"{env}stupid.png");
 
         [Command("xenoblade", RunMode = RunMode.Async)]
         [Summary("Posts 'Holy s* it's the xenoblade' meme")]

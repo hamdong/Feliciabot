@@ -8,15 +8,17 @@ using Feliciabot.net._6._0;
 using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using Fergun.Interactive;
-using Lavalink4NET.Extensions;
-using Lavalink4NET.InactivityTracking.Extensions;
-using Lavalink4NET.InactivityTracking.Trackers.Users;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WaifuSharp;
 using YoutubeSearchApi.Net.Services;
 
 var builder = new HostApplicationBuilder(args);
+
+// Register configuration file
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Services.Configure<BotSettings>(builder.Configuration.GetSection("Bot"));
 
 // Config
 var config = Config.GenerateNewConfig();
@@ -34,19 +36,6 @@ builder.Services.AddSingleton(
 );
 builder.Services.AddHostedService<DiscordClientHost>();
 
-// Lavalink
-builder.Services.AddLavalink();
-builder.Services.AddInactivityTracking();
-builder.Services.AddLogging();
-builder
-    .Services.ConfigureInactivityTracking(x => { })
-    .Configure<UsersInactivityTrackerOptions>(options =>
-    {
-        options.Threshold = 1;
-        options.Timeout = TimeSpan.FromSeconds(30);
-        options.ExcludeBots = true;
-    });
-
 // Services
 builder
     .Services.AddSingleton<IInteractiveHelperService, InteractiveHelperService>()
@@ -62,6 +51,7 @@ builder
     .Services.AddSingleton<WaifuClient>()
     .AddSingleton<InteractiveService>()
     .AddSingleton<Gelbooru>()
+    .AddSingleton<HttpClient>()
     .AddSingleton<YoutubeSearchClient>();
 
 await builder.Build().RunAsync();
