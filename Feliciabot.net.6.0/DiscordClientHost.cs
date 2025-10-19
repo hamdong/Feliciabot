@@ -41,26 +41,6 @@ namespace Feliciabot.net._6._0
             _serviceProvider = serviceProvider;
             _greetingService = greetingService;
             _botSettings = botSettings.Value;
-
-            try
-            {
-                _client.Log += LogAsync;
-                _commands.Log += LogAsync;
-
-                var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-                if (string.IsNullOrEmpty(token))
-                {
-                    Console.WriteLine("Can't find token. Aborting.");
-                    return;
-                }
-            }
-            catch (OperationCanceledException e)
-            {
-                // Check ex.CancellationToken.IsCancellationRequested here.
-                // If false, it's pretty safe to assume it was a timeout.
-                if (!e.CancellationToken.IsCancellationRequested)
-                    _logger.LogError("{Message}", e.Message);
-            }
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -71,16 +51,34 @@ namespace Feliciabot.net._6._0
             _client.InteractionCreated += InteractionCreated;
             _client.Ready += ClientReady;
 
+            _client.Log += LogAsync;
+            _commands.Log += LogAsync;
+
             await _commands.AddModulesAsync(
                 assembly: Assembly.GetEntryAssembly(),
                 services: _serviceProvider
             );
 
-            var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+            try
+            {
+                var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+                if (string.IsNullOrEmpty(token))
+                {
+                    Console.WriteLine("Can't find token. Aborting.");
+                    return;
+                }
 
-            await _client.LoginAsync(TokenType.Bot, token).ConfigureAwait(false);
+                await _client.LoginAsync(TokenType.Bot, token).ConfigureAwait(false);
 
-            await _client.StartAsync().ConfigureAwait(false);
+                await _client.StartAsync().ConfigureAwait(false);
+            }
+            catch (OperationCanceledException e)
+            {
+                // Check ex.CancellationToken.IsCancellationRequested here.
+                // If false, it's pretty safe to assume it was a timeout.
+                if (!e.CancellationToken.IsCancellationRequested)
+                    _logger.LogError("{Message}", e.Message);
+            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

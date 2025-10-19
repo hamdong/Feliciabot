@@ -28,11 +28,6 @@ namespace Feliciabot.net._6._0.helpers
             return channel;
         }
 
-        public static async Task<IMessageChannel?> GetTestingChannel(SocketGuild guild)
-        {
-            return await GetChannelByNameAsync(guild, "betafelicia-testing");
-        }
-
         public static DateTime GetCurrentTimeEastern()
         {
             var timeUtc = DateTime.UtcNow;

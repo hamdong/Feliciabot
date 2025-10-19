@@ -88,12 +88,8 @@
             "Oh, I wish people would clean up after themselves!",
             "Sorry, I can't really chat right now. Laundry and chores are backing up!",
             "I'm actually more confident on the battlefield than I am in the kitchen.",
-            "I spend most of my time just getting better at my job.",
             "Thanks for always being so nice to me... You've never made me feel like a servant.",
             "I know we're friends, but I'm still happy to work for you. Call me anytime!",
-            "I'll always walk by your side. And hopefully not trip you constantly.",
-            "Oh, thank you! If you ever need to cool off, I'll use my ice magic to help you.",
-            "You're so sweet to think of me.",
             "We've got trouble!",
             "Here goes nothing!",
             "I'm gonna break you!",
@@ -101,9 +97,6 @@
             "All taken care of!",
             "This looks like a job for Super Felicia!",
             "Why yes, I am a hardcore otaku.",
-            "One moment you're sexually harassing me, and then gone the next... Just what are you thinking?",
-            "You're always running ahead of me and teasing me.",
-            "Pathetic.",
             "Hi!",
             "Oof.",
             "Yeet.",
@@ -112,35 +105,25 @@
             "Make sure to pick up Fire Emblem Fates at your nearest Nintendo retailer.",
             "War. War never changes.",
             "wat",
-            "Huh.",
-            "????",
-            "Hello.",
-            "Ya.",
             "ICE to meet you.",
             "Aiba sus.",
             "Death.",
             "Hello! You know who asked me to stop by and say hello? It was Corrin! And now... I've said it twice!",
-            "Here, take this! I made you a pot of tea! It's basically a miracle! Don't laugh—it took me 14 tries!",
             "*nervous laugh*",
-            "Okay!",
             "Whoa.",
-            "Ready!",
             "Ganbare beam!",
             "Have you played Trails in the Sky?",
             "Even though Corrin is my master I actually main Ice Climbers in Smash Ultimate.",
             "I miss the Ice Tribe...Maybe I'm just looking through froze-colored glasses.",
-            "Remember, licking doorknobs is illegal on other planets.",
             "I was trying to tell you that I was choking on snow, but the snow melted and turned into water, and I drank all the water. Now I'm better.",
             "It's just a cruel reminder that I'm single and likely to remain that way forever.",
-            "Once upon a time, there was an ugly barnacle. He was so ugly that everyone died. The end!",
-            "Heck you!",
             "Corrin, comfy, wow!",
             "You apologize to Brave Comfy Corn Duelist Reversed right this instant!",
             "Lord Xander kind of scares me. He always has this disgusted look on his face.",
             "Lady Camilla is so kind, but a bit too close for comfort sometimes. She's always patting me on the head!",
             "Lord Leo is as talented as he is intimidating. He does have a soft side once you get to know him.",
             "Lady Elise is a bundle of joy! If I weren't on duty so much I'd try to play with her more.",
-            "Fire Emblem? Enga gay?",
+            "Fire Emblem? Enga-gay?",
             "Sephiroth? From Final Fantasy?",
             "Yeehaw! Look at me I'm a cowboy Felicia.",
             "Fug",
@@ -156,18 +139,12 @@
             "YOU THINK THIS IS A GAME!?",
             "Watch out, that doro do be flipping!",
             "Fire Emblem Fates was released in North America on February 19, 2016. Let that sink in.",
-        ];
-
-        private static readonly string DISCORD_CDN = "https://cdn.discordapp.com/emojis/";
-        public static readonly string[] DanceResponses =
-        [
-            $"{DISCORD_CDN}899319530269061161.gif", // Marianne
-            $"{DISCORD_CDN}1323820425439871047.gif", // Kirby
-            $"{DISCORD_CDN}1322694789124325498.gif", // Nekoarc
-            $"{DISCORD_CDN}1323819972253847582.gif", // Corrin
-            $"{DISCORD_CDN}1323837299221463132.gif", // Hutao
-            $"{DISCORD_CDN}1324007932035334225.gif", // Nezuko
-            $"{DISCORD_CDN}1368614949097570355.gif", // Nino
+            "I'm still waiting for my invitation to the next Nintendo Direct.",
+            "Did you know that in Japan, ice cream is often served with savory toppings like soy sauce or miso paste? Weird, right?",
+            "I really do miss the Ice Tribe sometimes. After all, there snow place like home!",
+            "I'm not the only one who thought Flora was recruitable in Chapter 8 of Conquest, right?",
+            "They don't call me Felicia because of my personality or anything. It's just that my full name is Felicia the Catgirl, and that's too long to fit on my nametag.",
+            "So is Revelation considered lost media now?",
         ];
     }
 }
