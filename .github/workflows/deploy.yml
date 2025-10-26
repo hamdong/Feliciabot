@@ -23,11 +23,13 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
 
-      - name: Run tests on host (before building container)
+      - name: Run tests inside Docker
         run: |
-          export PATH=$PATH:/usr/local/share/dotnet
-          cd ${{ secrets.APP_PATH }}/Feliciabot.net.6.0
-          dotnet test
+          cd ${{ secrets.APP_PATH }}
+          docker run --rm \
+            -v ${{ secrets.APP_PATH }}/Feliciabot.net.6.0:/src/Feliciabot.net.6.0 \
+            mcr.microsoft.com/dotnet/sdk:8.0 \
+            bash -c "cd /src/Feliciabot.net.6.0 && dotnet test"
 
       - name: Build new container
         run: |
