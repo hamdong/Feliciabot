@@ -25,6 +25,7 @@ jobs:
 
       - name: Run tests on host (before building container)
         run: |
+          export PATH=$PATH:/usr/local/share/dotnet
           cd ${{ secrets.APP_PATH }}/Feliciabot.net.6.0
           dotnet test
 
