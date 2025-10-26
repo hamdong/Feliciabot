@@ -1,0 +1,58 @@
+name: Deploy Feliciabot
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, feliciabot]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Backup current container
+        run: |
+          cd ${{ secrets.APP_PATH }}
+          docker image rm feliciabot:backup || true
+          docker commit feliciabot feliciabot:backup || echo "No existing container to backup"
+
+      - name: Pull latest code
+        run: |
+          cd ${{ secrets.APP_PATH }}
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Run tests on host (before building container)
+        run: |
+          cd ${{ secrets.APP_PATH }}/Feliciabot.net.6.0
+          dotnet test
+
+      - name: Build new container
+        run: |
+          cd ${{ secrets.APP_PATH }}
+          docker compose pull
+          docker compose --env-file .env.prod build
+
+      - name: Deploy new container
+        run: |
+          cd ${{ secrets.APP_PATH }}
+          docker compose --env-file .env.prod up -d
+
+      - name: Wait 5 seconds for container startup
+        run: sleep 5
+
+      - name: Verify container is running
+        run: |
+          cd ${{ secrets.APP_PATH }}
+          if docker compose ps | grep -q "feliciabot"; then
+            echo "✅ Feliciabot container is running"
+          else
+            echo "❌ Feliciabot failed to start, rolling back..."
+            docker rm -f feliciabot || true
+            docker run -d --name feliciabot feliciabot:backup
+            exit 1
+          fi
+
+      - name: Clean up old images
+        run: docker image prune -f
