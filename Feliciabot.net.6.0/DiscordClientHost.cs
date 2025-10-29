@@ -109,7 +109,10 @@ namespace Feliciabot.net._6._0
                 commandName = slashCommand.Data.Name;
             }
 
-            var result = await _interactionService.ExecuteCommandAsync(interactionContext, _serviceProvider);
+            var result = await _interactionService.ExecuteCommandAsync(
+                interactionContext,
+                _serviceProvider
+            );
 
             if (result.IsSuccess)
             {
@@ -117,9 +120,11 @@ namespace Feliciabot.net._6._0
             }
             else
             {
-                _metricsService.IncCommandError(commandName);
+                if (result.Error != InteractionCommandError.UnknownCommand)
+                {
+                    _metricsService.IncCommandError(commandName);
+                }
             }
-
 
             return result;
         }
@@ -166,9 +171,11 @@ namespace Feliciabot.net._6._0
                 }
                 else
                 {
-                    _metricsService.IncCommandError(commandName);
+                    if (result.Error != CommandError.UnknownCommand)
+                    {
+                        _metricsService.IncCommandError(commandName);
+                    }
                 }
-
 
                 return;
             }
