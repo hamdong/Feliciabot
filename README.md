@@ -73,6 +73,14 @@ docker-compose --env-file .env.prod up --build -d
 docker-compose down
 ```
 
+### Metrics
+
+For metrics gathering, run once:
+
+```bash
+docker network create feliciabot-metrics
+```
+
 ---
 
 ## 🧪 Local Development (without Docker)

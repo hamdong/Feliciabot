@@ -44,7 +44,8 @@ builder
     .AddSingleton<IGreetingService, GreetingService>()
     .AddSingleton<IUserManagementService, UserManagementService>()
     .AddSingleton<IFergunInteractiveService, FergunInteractiveService>()
-    .AddSingleton<IEmbedBuilderService, EmbedBuilderService>();
+    .AddSingleton<IEmbedBuilderService, EmbedBuilderService>()
+    .AddSingleton<MetricsService>();
 
 // Misc.
 builder
@@ -53,5 +54,8 @@ builder
     .AddSingleton<Gelbooru>()
     .AddSingleton<HttpClient>()
     .AddSingleton<YoutubeSearchClient>();
+
+// Metrics
+builder.Services.AddHostedService<MetricsService>();
 
 await builder.Build().RunAsync();

@@ -31,7 +31,7 @@ namespace Feliciabot.net._6._0.commands.fun
 
         [Alias("chilling", "koopa")]
         [Command("chillin", RunMode = RunMode.Async)]
-        [Summary("Posts 'It's a tentacruel world' meme")]
+        [Summary("Posts 'chilling' meme")]
         public async Task Chillin() => await PostToChannel(Path.Combine(env, "chillin.jpg"));
 
         [Command("fireemblem", RunMode = RunMode.Async)]

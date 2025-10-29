@@ -3,6 +3,7 @@ using Discord;
 using Discord.Commands;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Feliciabot.net._6._0.services;
 using Feliciabot.net._6._0.services.interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ namespace Feliciabot.net._6._0
         private readonly IServiceProvider _serviceProvider;
         private readonly IGreetingService _greetingService;
         private readonly BotSettings _botSettings;
+        private readonly MetricsService _metricsService;
 
         public DiscordClientHost(
             DiscordSocketClient discordSocketClient,
@@ -27,7 +29,8 @@ namespace Feliciabot.net._6._0
             InteractionService interactionService,
             IServiceProvider serviceProvider,
             IGreetingService greetingService,
-            IOptions<BotSettings> botSettings
+            IOptions<BotSettings> botSettings,
+            MetricsService metricsService
         )
         {
             ArgumentNullException.ThrowIfNull(discordSocketClient);
@@ -41,6 +44,7 @@ namespace Feliciabot.net._6._0
             _serviceProvider = serviceProvider;
             _greetingService = greetingService;
             _botSettings = botSettings.Value;
+            _metricsService = metricsService;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -92,24 +96,49 @@ namespace Feliciabot.net._6._0
             await _client.StopAsync().ConfigureAwait(false);
         }
 
-        private Task<Discord.Interactions.IResult> InteractionCreated(SocketInteraction interaction)
+        private async Task<Discord.Interactions.IResult> InteractionCreated(
+            SocketInteraction interaction
+        )
         {
             var interactionContext = new SocketInteractionContext(_client, interaction);
-            return _interactionService!.ExecuteCommandAsync(interactionContext, _serviceProvider);
+
+            string commandName = "unknown";
+
+            if (interaction is SocketSlashCommand slashCommand)
+            {
+                commandName = slashCommand.Data.Name;
+            }
+
+            var result = await _interactionService.ExecuteCommandAsync(interactionContext, _serviceProvider);
+
+            if (result.IsSuccess)
+            {
+                _metricsService.IncSlashCommand(commandName);
+            }
+            else
+            {
+                _metricsService.IncCommandError(commandName);
+            }
+
+
+            return result;
         }
 
         private async Task ClientReady()
         {
-            if (_interactionService.Modules.Count > 0)
-                return;
+            if (_interactionService.Modules.Count == 0)
+            {
+                await _interactionService.AddModulesAsync(
+                    Assembly.GetExecutingAssembly(),
+                    _serviceProvider
+                );
+                await _interactionService.RegisterCommandsGloballyAsync();
+            }
 
             await _client.SetGameAsync("!icanhelp");
 
-            await _interactionService
-                .AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider)
-                .ConfigureAwait(false);
-
-            await _interactionService.RegisterCommandsGloballyAsync().ConfigureAwait(false);
+            _metricsService.SetGuildCount(_client.Guilds.Count);
+            _metricsService.SetUserCount(_client.Guilds.Sum(g => g.MemberCount));
         }
 
         private async Task OnMessageReceived(SocketMessage messageParam)
@@ -127,11 +156,20 @@ namespace Feliciabot.net._6._0
             if (message.HasCharPrefix(_botSettings.CommandPrefix, ref argPos))
             {
                 var context = new SocketCommandContext(_client, (SocketUserMessage)message);
-                await _commands.ExecuteAsync(
-                    context: context,
-                    argPos: argPos,
-                    services: _serviceProvider
-                );
+                var commandName = context.Message.Content.Split(' ')[0];
+
+                var result = await _commands.ExecuteAsync(context, argPos, _serviceProvider);
+
+                if (result.IsSuccess)
+                {
+                    _metricsService.IncCommand(commandName);
+                }
+                else
+                {
+                    _metricsService.IncCommandError(commandName);
+                }
+
+
                 return;
             }
 

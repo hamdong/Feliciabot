@@ -7,3 +7,9 @@ services:
     restart: unless-stopped
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
+    networks:
+      - feliciabot-metrics
+
+networks:
+  feliciabot-metrics:
+    external: true
