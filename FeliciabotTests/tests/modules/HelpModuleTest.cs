@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.Interactions;
 using Feliciabot.modules;
 using Feliciabot.services.interfaces;
 using Fergun.Interactive.Pagination;

@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.Commands;
-using Feliciabot.services.interfaces;
 using Moq;
 
 namespace FeliciabotTests.tests

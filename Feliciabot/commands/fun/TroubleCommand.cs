@@ -1,7 +1,7 @@
 ﻿using Discord.Commands;
 using Feliciabot.services.interfaces;
 
-namespace Feliciabot.commands
+namespace Feliciabot.commands.fun
 {
     public class TroubleCommand : ModuleBase
     {

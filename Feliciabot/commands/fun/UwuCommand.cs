@@ -3,7 +3,7 @@ using Discord.Commands;
 using Feliciabot.helpers;
 using Uwuify.Humanizer;
 
-namespace Feliciabot.commands
+namespace Feliciabot.commands.fun
 {
     public class UwuCommand : ModuleBase
     {

@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Discord;
+﻿using Discord;
 using Discord.Interactions;
 using Feliciabot.services.interfaces;
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Feliciabot.services
 {

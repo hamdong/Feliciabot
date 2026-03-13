@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 
 namespace Feliciabot.services.interfaces
 {

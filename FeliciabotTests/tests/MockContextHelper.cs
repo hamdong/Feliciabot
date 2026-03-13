@@ -1,9 +1,7 @@
-﻿using System.Reflection;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.Interactions;
-using Moq;
-using WaifuSharp;
+using System.Reflection;
 
 namespace FeliciabotTests.tests
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Discord;
 using Discord.Commands;
-using Feliciabot.commands;
+using Feliciabot.commands.fun;
 using Feliciabot.models;
 using Feliciabot.services.interfaces;
 using Moq;

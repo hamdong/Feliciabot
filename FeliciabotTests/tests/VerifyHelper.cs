@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using Discord;
+﻿using Discord;
 using Moq;
+using System.Linq.Expressions;
 
 namespace FeliciabotTests.tests
 {

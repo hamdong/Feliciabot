@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Discord;
+﻿using Discord;
 using Feliciabot.modules;
 using Feliciabot.services.interfaces;
 using Moq;

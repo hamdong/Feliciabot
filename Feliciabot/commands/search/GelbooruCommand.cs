@@ -2,7 +2,7 @@
 using Discord;
 using Discord.Commands;
 
-namespace Feliciabot.commands
+namespace Feliciabot.commands.search
 {
     public class GelbooruCommand(Gelbooru booru) : ModuleBase
     {
@@ -44,7 +44,7 @@ namespace Feliciabot.commands
                 var searchQuery = new string[] { tag, string.Join(", ", cursedTags), rating };
                 BooruSharp.Search.Post.SearchResult result = await _booru.GetRandomPostAsync(searchQuery);
 
-                await Context.Channel.SendMessageAsync($":heart: Gelbooru: { result.FileUrl}");
+                await Context.Channel.SendMessageAsync($":heart: Gelbooru: {result.FileUrl}");
             }
             catch (Exception)
             {

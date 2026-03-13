@@ -2,7 +2,7 @@
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
 
-namespace Feliciabot.commands
+namespace Feliciabot.commands.info
 {
     public class HelpCommand(CommandService _service, InteractiveService _interactiveService) : ModuleBase
     {

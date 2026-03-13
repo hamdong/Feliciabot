@@ -3,7 +3,6 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Feliciabot.helpers;
 using Feliciabot.models;
-using Feliciabot.services;
 using Feliciabot.services.interfaces;
 using WaifuSharp;
 

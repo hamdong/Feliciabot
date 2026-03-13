@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using Feliciabot.services.interfaces;
 using Fergun.Interactive;
 using Fergun.Interactive.Pagination;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Feliciabot.services
 {

@@ -1,6 +1,5 @@
-﻿using System.Text.RegularExpressions;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
+using System.Text.RegularExpressions;
 
 namespace Feliciabot.helpers
 {

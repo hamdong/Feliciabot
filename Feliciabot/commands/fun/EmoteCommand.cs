@@ -5,7 +5,7 @@ using Feliciabot.services.interfaces;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Feliciabot.commands
+namespace Feliciabot.commands.fun
 {
     public class EmoteCommand : ModuleBase
     {

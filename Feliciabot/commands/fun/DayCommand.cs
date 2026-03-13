@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using Discord.Commands;
 using Feliciabot.helpers;
 
 namespace Feliciabot.commands
