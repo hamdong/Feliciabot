@@ -1,4 +1,4 @@
-﻿using Feliciabot.net._6._0.helpers;
+﻿using Feliciabot.helpers;
 using NUnit.Framework;
 
 namespace FeliciabotTests.tests.helpers

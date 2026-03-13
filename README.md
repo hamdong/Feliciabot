@@ -14,7 +14,6 @@ Feliciabot is a custom Discord bot with a quirky personality, themed after a clu
 - 🎲 **Randomized Games**: Roll dice, flip coins, and even… roll tea.
 - 😂 **Reaction GIFs**: Sends gifs for various emotes or roleplay scenarios.
 - 🔍 **Media Search**:
-
   - Booru-style image searching
   - Video lookup and quick-post
 
@@ -107,7 +106,7 @@ If you're running from Visual Studio or `dotnet run`:
 3. Then run:
 
    ```bash
-   dotnet run --project Feliciabot.net.6.0
+   dotnet run --project Feliciabot
    ```
 
 ---
@@ -116,7 +115,7 @@ If you're running from Visual Studio or `dotnet run`:
 
 ```bash
 Feliciabot/
-├── Feliciabot.net.6.0/       # Main project source code
+├── Feliciabot/               # Main project source code
 │   ├── Program.cs
 │   ├── DiscordClientHost.cs
 │   ├── ...

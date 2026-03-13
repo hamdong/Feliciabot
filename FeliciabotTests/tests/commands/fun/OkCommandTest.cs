@@ -1,6 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
-using Feliciabot.net._6._0.commands.fun;
+using Feliciabot.commands.fun;
 using Moq;
 using NUnit.Framework;
 

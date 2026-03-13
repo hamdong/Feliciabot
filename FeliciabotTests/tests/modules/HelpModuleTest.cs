@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
-using Feliciabot.net._6._0.modules;
-using Feliciabot.net._6._0.services.interfaces;
+using Feliciabot.modules;
+using Feliciabot.services.interfaces;
 using Fergun.Interactive.Pagination;
 using Moq;
 using NUnit.Framework;

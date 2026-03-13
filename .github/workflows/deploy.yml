@@ -27,9 +27,9 @@ jobs:
         run: |
           cd ${{ secrets.APP_PATH }}
           docker run --rm \
-            -v ${{ secrets.APP_PATH }}/Feliciabot.net.6.0:/src/Feliciabot.net.6.0 \
+            -v ${{ secrets.APP_PATH }}/Feliciabot:/src/Feliciabot \
             mcr.microsoft.com/dotnet/sdk:8.0 \
-            bash -c "cd /src/Feliciabot.net.6.0 && dotnet test"
+            bash -c "cd /src/Feliciabot && dotnet test"
 
       - name: Build new container
         run: |

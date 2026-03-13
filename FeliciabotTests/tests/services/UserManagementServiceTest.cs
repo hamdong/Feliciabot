@@ -1,5 +1,5 @@
 ﻿using Discord;
-using Feliciabot.net._6._0.services;
+using Feliciabot.services;
 using Moq;
 using NUnit.Framework;
 

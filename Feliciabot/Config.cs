@@ -1,0 +1,24 @@
+﻿using Discord;
+using Discord.WebSocket;
+
+namespace Feliciabot
+{
+    public static class Config
+    {
+        public static DiscordSocketConfig GenerateNewConfig()
+        {
+            var config = new DiscordSocketConfig()
+            {
+                LogLevel = LogSeverity.Info,
+                GatewayIntents =
+                    GatewayIntents.AllUnprivileged
+                    | GatewayIntents.GuildMembers
+                    | GatewayIntents.MessageContent,
+                AlwaysDownloadUsers = true,
+            };
+            config.GatewayIntents &= ~GatewayIntents.GuildScheduledEvents;
+            config.GatewayIntents &= ~GatewayIntents.GuildInvites;
+            return config;
+        }
+    }
+}

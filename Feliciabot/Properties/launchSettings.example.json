@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Feliciabot": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DISCORD_TOKEN": "your-token-goes-here"
+      }
+    }
+  }
+}

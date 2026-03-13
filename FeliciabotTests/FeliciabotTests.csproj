@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Feliciabot.net.6.0\Feliciabot.net.6.0.csproj" />
+		<ProjectReference Include="..\Feliciabot\Feliciabot.csproj" />
 	</ItemGroup>
 
 </Project>
