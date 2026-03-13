@@ -4,7 +4,7 @@
 ![Docker](https://img.shields.io/badge/Docker-Supported-%230db7ed?style=flat-square&logo=docker&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-Bot-%235865F2?style=flat-square&logo=discord&logoColor=white)
 
-Feliciabot is a custom Discord bot with a quirky personality, themed after a clumsy maid character from a tactical roleplaying game. She brings interactive fun and helpful utilities to your server — all powered by .NET and Discord.NET.
+Feliciabot is a custom Discord bot with a quirky personality, themed after a clumsy maid character from a tactical roleplaying game. She brings interactive fun and helpful utilities to your server — all powered by .NET 10 runtime.
 
 ---
 
@@ -23,7 +23,7 @@ Feliciabot is a custom Discord bot with a quirky personality, themed after a clu
 
 ## 🛠️ Tech Stack
 
-- [C# (.NET 8)](https://dotnet.microsoft.com/en-us/)
+- [C# (.NET 10)](https://dotnet.microsoft.com/en-us/)
 - [Discord.NET](https://github.com/discord-net/Discord.Net)
 - Docker for containerization
 
