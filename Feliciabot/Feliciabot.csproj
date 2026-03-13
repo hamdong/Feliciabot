@@ -18,7 +18,7 @@
 	<ItemGroup>
 		<PackageReference Include="BooruSharp" Version="3.6.0" />
 		<PackageReference Include="Discord.Net" Version="3.19.1" />
-		<PackageReference Include="Fergun.Interactive" Version="1.9.1" />
+		<PackageReference Include="Fergun.Interactive" Version="1.9.2-beta.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
