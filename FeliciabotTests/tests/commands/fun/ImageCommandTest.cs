@@ -90,7 +90,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Shez_RandomIs0_PostsMaleImage()
         {
             mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(0);
             await imageCommand.Shez();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\shez1.jpg"));
@@ -100,7 +100,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Shez_RandomIs1_PostsFemaleImage()
         {
             mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(1);
             await imageCommand.Shez();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"img\shez2.jpg"));

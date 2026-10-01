@@ -75,7 +75,8 @@ namespace Feliciabot.commands.fun
         [Summary("Posts 'Hi' video")]
         public async Task Hi()
         {
-            var filePath = Path.Combine(BASE_PATH, "videos", "video0.mov");
+            var videoFileName = _randomizerService.GetRandom(5) == 0 ? "hi.mp4" : "video0.mov";
+            var filePath = Path.Combine(BASE_PATH, "videos", videoFileName);
             await Context.Channel.SendFileAsync(filePath);
         }
 

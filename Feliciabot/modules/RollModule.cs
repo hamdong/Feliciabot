@@ -19,7 +19,7 @@ namespace Feliciabot.modules
         {
             int positiveOrNegativeResponse = _randomizerService.GetRandom(3);
             string[] chosenResponse = Responses.RollResponses[positiveOrNegativeResponse];
-            int randLineIndex = _randomizerService.GetRandom(chosenResponse.Length - 1);
+            int randLineIndex = _randomizerService.GetRandom(chosenResponse.Length);
             await RespondAsync($"Q: {question}\nA: {chosenResponse[randLineIndex]}")
                 .ConfigureAwait(false);
         }
@@ -34,7 +34,7 @@ namespace Feliciabot.modules
                 return;
             }
 
-            int randomRoll = _randomizerService.GetRandom(sides + 1, 1);
+            int randomRoll = _randomizerService.GetRandomInclusive(1, sides);
             await RespondAsync($"{Context.User.GlobalName} rolled *{randomRoll}*")
                 .ConfigureAwait(false);
         }
@@ -166,14 +166,13 @@ namespace Feliciabot.modules
             await FollowupAsync($"{formattedMessages}").ConfigureAwait(false);
         }
 
-        private static List<IMessage> SelectRandomMessages(List<IMessage> messages, int count)
+        private List<IMessage> SelectRandomMessages(List<IMessage> messages, int count)
         {
-            var rng = new Random();
             var selectedMessages = new List<IMessage>();
 
             for (int i = 0; i < count && i < messages.Count; i++)
             {
-                int randomIndex = rng.Next(messages.Count);
+                int randomIndex = _randomizerService.GetRandom(messages.Count);
                 selectedMessages.Add(messages[randomIndex]);
                 messages.RemoveAt(randomIndex); // Remove selected message to avoid duplicates
             }

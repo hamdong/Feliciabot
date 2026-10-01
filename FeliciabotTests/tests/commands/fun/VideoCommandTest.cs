@@ -65,8 +65,19 @@ namespace FeliciabotTests.tests.commands.fun
         }
 
         [Test]
-        public async Task Hi_PostsVideo()
+        public async Task Hi_WhenRandomRollIsZero_PostsAlternateVideo()
         {
+            mockRandomizerService.Setup(s => s.GetRandom(5)).Returns(0);
+
+            await videoCommand.Hi();
+            VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"videos\hi.mp4"));
+        }
+
+        [Test]
+        public async Task Hi_WhenRandomRollIsNonzero_PostsDefaultVideo()
+        {
+            mockRandomizerService.Setup(s => s.GetRandom(5)).Returns(1);
+
             await videoCommand.Hi();
             VerifyHelper.VerifyFileSentAsync(mockChannel, s => s.Contains(@"videos\video0.mov"));
         }
@@ -75,7 +86,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Indeed_WhenHighRoll_PostsVideo()
         {
             mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(5);
 
             await videoCommand.Indeed();
@@ -89,7 +100,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Indeed_WhenLowRoll_PostsVideoAlt()
         {
             mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(0);
 
             await videoCommand.Indeed();

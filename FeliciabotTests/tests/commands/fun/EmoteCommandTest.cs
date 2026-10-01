@@ -31,7 +31,7 @@ namespace FeliciabotTests.tests.commands.fun
             _mockChannel.Reset();
             _mockContext.SetupGet(c => c.Channel).Returns(_mockChannel.Object);
             MockContextHelper.SetContext(_emoteCommand, _mockContext.Object);
-            _mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(1);
+            _mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>())).Returns(1);
         }
 
         [Test]

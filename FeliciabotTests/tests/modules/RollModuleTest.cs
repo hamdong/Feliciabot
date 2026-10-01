@@ -35,7 +35,10 @@ namespace FeliciabotTests.tests.modules
         {
             mockDiscordInteraction.Reset();
             mockWaifuService.Setup(s => s.GetSfwImage(It.IsAny<Endpoints.Sfw>())).Returns("https://picsum.photos/200");
-            mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>())).Returns(0);
+            mockRandomizerService.Setup(s => s.GetRandom(It.IsAny<int>())).Returns(0);
+            mockRandomizerService
+                .Setup(s => s.GetRandomInclusive(It.IsAny<int>(), It.IsAny<int>()))
+                .Returns(1);
             mockUser.SetupGet(u => u.GlobalName).Returns("GlobalName");
             mockBotUser.SetupGet(u => u.IsBot).Returns(true);
             mockContext.SetupGet(c => c.User).Returns(mockUser.Object);
@@ -53,6 +56,10 @@ namespace FeliciabotTests.tests.modules
             VerifyHelper.VerifyInteractionAsync(
                 mockContext,
                 s => s.Contains("test") && flatResponses.Any(response => s.Contains(response))
+            );
+            mockRandomizerService.Verify(
+                s => s.GetRandom(Responses.RollResponses[0].Length),
+                Times.Once
             );
         }
 

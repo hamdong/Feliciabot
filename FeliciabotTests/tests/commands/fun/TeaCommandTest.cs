@@ -46,7 +46,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Tea_WhenNoUserAndHighRolls_ServesToCaller()
         {
             _mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(1);
 
             await _teaCommand.Tea();
@@ -61,7 +61,7 @@ namespace FeliciabotTests.tests.commands.fun
         public async Task Tea_WhenNoUserAndLowRolls_SpillsOnCaller()
         {
             _mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(0);
 
             await _teaCommand.Tea();
@@ -80,7 +80,7 @@ namespace FeliciabotTests.tests.commands.fun
         {
             _mockUser.SetupGet(u => u.GlobalName).Returns("SelfGlobalName");
             _mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(1);
 
             await _teaCommand.Tea(_mockUser.Object);
@@ -99,7 +99,7 @@ namespace FeliciabotTests.tests.commands.fun
         {
             _mockUser.SetupGet(u => u.GlobalName).Returns("SelfGlobalName");
             _mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(0);
 
             await _teaCommand.Tea(_mockUser.Object);
@@ -118,7 +118,7 @@ namespace FeliciabotTests.tests.commands.fun
         {
             _mockUser.SetupGet(u => u.GlobalName).Returns("SelfGlobalName");
             _mockRandomizerService
-                .Setup(s => s.GetRandom(It.IsAny<int>(), It.IsAny<int>()))
+                .Setup(s => s.GetRandom(It.IsAny<int>()))
                 .Returns(18);
 
             await _teaCommand.Tea(_mockUser.Object);

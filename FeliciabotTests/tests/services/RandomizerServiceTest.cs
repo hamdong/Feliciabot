@@ -44,10 +44,37 @@ namespace FeliciabotTests.tests.services
             const int max = 100;
             const int min = 1;
 
-            int result = randomizerService.GetRandom(max, min);
+            int result = randomizerService.GetRandom(min, max);
 
             Assert.That(result, Is.GreaterThanOrEqualTo(min));
-            Assert.That(result, Is.LessThanOrEqualTo(max));
+            Assert.That(result, Is.LessThan(max));
+        }
+
+        [Test]
+        public void GetRandom_WithSingleBound_ShouldReturnValueBelowExclusiveMaximum()
+        {
+            int result = randomizerService.GetRandom(1);
+
+            Assert.That(result, Is.Zero);
+        }
+
+        [Test]
+        public void GetRandomInclusive_ShouldReturnValueWithinInclusiveBounds()
+        {
+            const int min = 1;
+            const int max = 6;
+
+            int result = randomizerService.GetRandomInclusive(min, max);
+
+            Assert.That(result, Is.InRange(min, max));
+        }
+
+        [Test]
+        public void GetRandomInclusive_ShouldSupportIntMaxValueAsUpperBound()
+        {
+            int result = randomizerService.GetRandomInclusive(1, int.MaxValue);
+
+            Assert.That(result, Is.InRange(1, int.MaxValue));
         }
 
         [Test]

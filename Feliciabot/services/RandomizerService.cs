@@ -5,15 +5,13 @@ namespace Feliciabot.services
 {
     public class RandomizerService : IRandomizerService
     {
-        private static readonly Random rand = new();
+        public int GetRandom(int maxExclusive) => Random.Shared.Next(maxExclusive);
 
-        public int GetRandom(int max, int min = 0)
-        {
-            lock (rand) // Ensure thread safety
-            {
-                return rand.Next(min, max);
-            }
-        }
+        public int GetRandom(int minInclusive, int maxExclusive) =>
+            Random.Shared.Next(minInclusive, maxExclusive);
+
+        public int GetRandomInclusive(int minInclusive, int maxInclusive) =>
+            (int)Random.Shared.NextInt64(minInclusive, (long)maxInclusive + 1);
 
         public string GetRandomAttachmentWithMessageFromMessage(IMessage message)
         {
