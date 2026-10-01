@@ -90,9 +90,8 @@ namespace Feliciabot.modules
                 int maxMsg = oocMessages.Count();
                 if (maxMsg == 0)
                 {
-                    await Context.Channel.SendMessageAsync(
-                        "Couldn't find a message to post. :confused:"
-                    );
+                    await FollowupAsync("Couldn't find a message to post. :confused:")
+                        .ConfigureAwait(false);
                     return;
                 }
 
@@ -131,10 +130,14 @@ namespace Feliciabot.modules
                 .Where(msg => CommandsHelper.IsNonCommandQuery(msg.Content) && msg.Author == user)
                 .ToList();
             var messagesToQuote = SelectRandomMessages(userMessages, 3);
-            string formattedMessages =
-                messagesToQuote.Count != 0
-                    ? string.Join(Environment.NewLine, messagesToQuote)
-                    : "Couldn't find messages to quote :shrug:";
+            if (messagesToQuote.Count == 0)
+            {
+                await FollowupAsync("Couldn't find messages to quote :shrug:")
+                    .ConfigureAwait(false);
+                return;
+            }
+
+            string formattedMessages = string.Join(Environment.NewLine, messagesToQuote);
             await FollowupAsync(
                     $"\"{formattedMessages}\"\n-{user.GlobalName}, {messagesToQuote[0].Timestamp.Year}"
                 )

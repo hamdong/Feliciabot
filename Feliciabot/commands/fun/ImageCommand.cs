@@ -5,7 +5,7 @@ namespace Feliciabot.commands.fun
 {
     public class ImageCommand : ModuleBase
     {
-        private readonly string env = Path.Combine(Environment.CurrentDirectory, "img");
+        private readonly string env = Path.Combine(AppContext.BaseDirectory, "img");
         private readonly IRandomizerService _randomizerService;
 
         public ImageCommand(IRandomizerService randomizerService)

@@ -9,7 +9,7 @@ namespace Feliciabot.commands
 
         public DayCommand()
         {
-            string basePath = Environment.CurrentDirectory;
+            string basePath = AppContext.BaseDirectory;
 
             dayEvent =
             [

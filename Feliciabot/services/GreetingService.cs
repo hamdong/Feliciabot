@@ -1,8 +1,7 @@
-﻿using Discord;
+using Discord;
 using Feliciabot.helpers;
 using Feliciabot.models;
 using Feliciabot.services.interfaces;
-using Microsoft.Extensions.Configuration;
 
 namespace Feliciabot.services
 {
@@ -23,7 +22,6 @@ namespace Feliciabot.services
         ];
 
         public GreetingService(
-            IConfiguration configuration,
             IDiscordClient client,
             IUserManagementService userManagementService,
             IRandomizerService randomizerService
@@ -44,15 +42,13 @@ namespace Feliciabot.services
             if (message.Channel is not IMessageChannel channel)
                 return;
 
-            var matchingReaction = Reactions
-                .ToList()
-                .Find(reaction =>
+            var matchingReaction = Reactions.FirstOrDefault(reaction =>
                     reaction.Item1.Exists(word =>
                         message.Content.Contains(word, StringComparison.OrdinalIgnoreCase)
                     )
                 );
 
-            if (matchingReaction.Item2 != null)
+            if (matchingReaction.Item2 is not null)
             {
                 await channel.SendMessageAsync(matchingReaction.Item2);
                 return;

@@ -49,6 +49,14 @@ namespace Feliciabot
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new InvalidOperationException(
+                    "Required environment variable token is not set."
+                );
+            }
+
             _client.MessageReceived += OnMessageReceived;
             _client.UserJoined += OnUserJoined;
             _client.UserLeft += OnUserLeft;
@@ -65,13 +73,6 @@ namespace Feliciabot
 
             try
             {
-                var token = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-                if (string.IsNullOrEmpty(token))
-                {
-                    Console.WriteLine("Can't find token. Aborting.");
-                    return;
-                }
-
                 await _client.LoginAsync(TokenType.Bot, token).ConfigureAwait(false);
 
                 await _client.StartAsync().ConfigureAwait(false);

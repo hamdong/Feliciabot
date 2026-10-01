@@ -19,7 +19,7 @@ namespace Feliciabot.commands.fun
         private readonly string GG_VIDEO_LINK = "https://www.youtube.com/watch?v=9nXYsmTv3Gg";
         private readonly string GANBARE_VIDEO_LINK = "https://www.youtube.com/watch?v=YoHq6DrWLSI";
 
-        private readonly string BASE_PATH = Environment.CurrentDirectory;
+        private readonly string BASE_PATH = AppContext.BaseDirectory;
         private readonly string YIPPEE_FOLDER_PATH;
 
         private readonly IRandomizerService _randomizerService;

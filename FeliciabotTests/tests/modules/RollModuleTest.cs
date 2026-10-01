@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Commands;
 using Feliciabot.models;
 using Feliciabot.modules;
 using Feliciabot.services.interfaces;
@@ -15,6 +16,8 @@ namespace FeliciabotTests.tests.modules
         private readonly Mock<IUser> mockBotUser;
         private readonly Mock<IDiscordInteraction> mockDiscordInteraction;
         private readonly Mock<IInteractionContext> mockContext;
+        private readonly Mock<IMessageChannel> mockChannel;
+        private readonly Mock<IUser> mockQuoteUser;
         private readonly Mock<IWaifuSharpService> mockWaifuService;
         private readonly Mock<IRandomizerService> mockRandomizerService;
         private readonly RollModule rollModule;
@@ -25,6 +28,8 @@ namespace FeliciabotTests.tests.modules
             mockBotUser = new Mock<IUser>();
             mockDiscordInteraction = new Mock<IDiscordInteraction>();
             mockContext = new Mock<IInteractionContext>();
+            mockChannel = new Mock<IMessageChannel>();
+            mockQuoteUser = new Mock<IUser>();
             mockWaifuService = new Mock<IWaifuSharpService>();
             mockRandomizerService = new Mock<IRandomizerService>();
             rollModule = new RollModule(mockWaifuService.Object, mockRandomizerService.Object);
@@ -43,6 +48,15 @@ namespace FeliciabotTests.tests.modules
             mockBotUser.SetupGet(u => u.IsBot).Returns(true);
             mockContext.SetupGet(c => c.User).Returns(mockUser.Object);
             mockContext.SetupGet(c => c.Interaction).Returns(mockDiscordInteraction.Object);
+            mockContext.SetupGet(c => c.Channel).Returns(mockChannel.Object);
+            mockDiscordInteraction
+                .Setup(i => i.DeferAsync(false, null))
+                .Returns(Task.CompletedTask);
+            mockQuoteUser.SetupGet(u => u.IsBot).Returns(false);
+            mockQuoteUser.SetupGet(u => u.GlobalName).Returns("QuoteUser");
+            mockChannel
+                .Setup(c => c.GetMessagesAsync(300, CacheMode.AllowDownload, null))
+                .Returns(GetAsAsyncEnumerable(Array.Empty<IMessage>()));
             MockContextHelper.SetContext(rollModule, mockContext.Object);
         }
 
@@ -109,6 +123,37 @@ namespace FeliciabotTests.tests.modules
                 mockContext,
                 s => s.Equals("Can't quote bots :shrug:")
             );
+        }
+
+        [Test]
+        public async Task QuoteUser_WhenNoMessagesExist_ShouldReturnNoResultsFollowup()
+        {
+            await rollModule.QuoteUser(mockQuoteUser.Object);
+
+            mockDiscordInteraction.Verify(
+                i =>
+                    i.FollowupAsync(
+                        "Couldn't find messages to quote :shrug:",
+                        It.IsAny<Embed[]>(),
+                        false,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        MessageFlags.None
+                    ),
+                Times.Once
+            );
+        }
+
+        private static async IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetAsAsyncEnumerable(
+            IReadOnlyCollection<IMessage> messages
+        )
+        {
+            await Task.Yield();
+            yield return messages;
         }
     }
 }

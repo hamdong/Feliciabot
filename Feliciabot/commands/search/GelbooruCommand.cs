@@ -42,7 +42,7 @@ namespace Feliciabot.commands.search
             try
             {
                 var searchQuery = new string[] { tag, string.Join(", ", cursedTags), rating };
-                BooruSharp.Search.Post.SearchResult result = await _booru.GetRandomPostAsync(searchQuery);
+                BooruSharp.Search.Post.PostSearchResult result = await _booru.GetRandomPostAsync(searchQuery);
 
                 await Context.Channel.SendMessageAsync($":heart: Gelbooru: {result.FileUrl}");
             }
