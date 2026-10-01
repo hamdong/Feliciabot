@@ -1,6 +1,6 @@
 # Feliciabot 🍵
 
-![C#](https://img.shields.io/badge/C%23-.NET%208-%23239120?style=flat-square&logo=c-sharp&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-.NET%2010-%23239120?style=flat-square&logo=c-sharp&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Supported-%230db7ed?style=flat-square&logo=docker&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-Bot-%235865F2?style=flat-square&logo=discord&logoColor=white)
 
@@ -84,29 +84,17 @@ docker network create feliciabot-metrics
 
 ## 🧪 Local Development (without Docker)
 
-If you're running from Visual Studio or `dotnet run`:
+For local development:
 
-1. Create a `launchSettings.json` file under `Properties/`:
+1. Copy `Feliciabot/Properties/launchSettings.example.json` to
+   `Feliciabot/Properties/launchSettings.json`, then replace the placeholder
+   `DISCORD_TOKEN` with your bot token. Do not commit the copied file.
 
-   ```json
-   {
-     "profiles": {
-       "Feliciabot": {
-         "commandName": "Project",
-         "environmentVariables": {
-           "DISCORD_TOKEN": "your-token-here"
-         }
-       }
-     }
-   }
-   ```
-
-2. Or use a `.env` file with a tool like [DotNetEnv](https://github.com/tonerdo/dotnet-env) or load it manually.
-
-3. Then run:
+2. Run from the project directory so the app can find `appsettings.json`:
 
    ```bash
-   dotnet run --project Feliciabot
+   cd Feliciabot
+   dotnet run --launch-profile Feliciabot
    ```
 
 ---
@@ -119,24 +107,17 @@ Feliciabot/
 │   ├── Program.cs
 │   ├── DiscordClientHost.cs
 │   ├── ...
+│   ├── appsettings.json
 │   └── Properties/
-│       └── launchSettings.json
-├── appsettings.json
-├── .env.dev                  # Dev environment variables
-├── .env.prod                 # Prod environment variables
+│       └── launchSettings.example.json
+├── FeliciabotTests/          # Automated tests
+├── .env.example
 ├── docker-compose.yml
 └── Dockerfile
 ```
 
 ---
 
-## 📦 Deployment Notes
-
-- Production containers should use `.env.prod` and be run in detached mode.
-- You can build small Docker images by trimming the runtime image and avoiding unnecessary build artifacts.
-
----
-
 ## 🤝 Related Projects
 
-Check out [Florabot ❄️](https://github.com/your-username/Florabot) — a Node.js-based sister bot with a different personality and feature set!
+Check out [Florabot ❄️](https://github.com/hamdong/Florabot) — a Node.js-based sister bot with a different personality and feature set!
